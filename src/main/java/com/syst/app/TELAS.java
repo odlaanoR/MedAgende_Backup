@@ -74,12 +74,12 @@ public class TELAS {
 		panel_1.setLayout(null);
 		
 		JLabel lblNewLabel_1 = new JLabel("Digite aqui seu usuário:");
-		lblNewLabel_1.setBounds(348, 107, 143, 14);
+		lblNewLabel_1.setBounds(389, 105, 143, 14);
 		panel_1.add(lblNewLabel_1);
 		
 		txtUserId = new JTextField();
 		txtUserId.setToolTipText("Ex: costelinha123@gmail.com");
-		txtUserId.setBounds(344, 132, 160, 20);
+		txtUserId.setBounds(389, 130, 160, 20);
 		panel_1.add(txtUserId);
 		txtUserId.setColumns(10);
 		
@@ -102,21 +102,21 @@ public class TELAS {
 		panel_1.add(lblNewLabel_4);
 		
 		JLabel lblNewLabel = new JLabel("Digite aqui sua senha:");
-		lblNewLabel.setBounds(348, 178, 150, 14);
+		lblNewLabel.setBounds(389, 178, 150, 14);
 		panel_1.add(lblNewLabel);
 		
 		txtEx = new JTextField();
 		txtEx.setToolTipText("Ex:1234567...");
-		txtEx.setBounds(348, 209, 156, 20);
+		txtEx.setBounds(389, 203, 156, 20);
 		panel_1.add(txtEx);
 		txtEx.setColumns(10);
 		
 		JLabel lblNewLabel_5 = new JLabel("Digite aqui sua Matrícula:");
-		lblNewLabel_5.setBounds(348, 253, 150, 14);
+		lblNewLabel_5.setBounds(389, 252, 150, 14);
 		panel_1.add(lblNewLabel_5);
 		
 		textField = new JTextField();
-		textField.setBounds(348, 278, 156, 20);
+		textField.setBounds(389, 278, 156, 20);
 		panel_1.add(textField);
 		textField.setColumns(10);
 		
@@ -126,7 +126,7 @@ public class TELAS {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		btnNewButton.setBounds(405, 359, 129, 28);
+		btnNewButton.setBounds(420, 357, 129, 28);
 		panel_1.add(btnNewButton);
 		
 		JLabel lblNewLabel_6 = new JLabel("MedAgende");
@@ -135,7 +135,7 @@ public class TELAS {
 		lblNewLabel_6.setFont(new Font("Trebuchet MS", Font.BOLD, 32));
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_6.setVerticalAlignment(SwingConstants.TOP);
-		lblNewLabel_6.setBounds(0, 23, 308, 416);
+		lblNewLabel_6.setBounds(0, 0, 316, 440);
 		panel_1.add(lblNewLabel_6);
 	}
 	
