@@ -64,7 +64,7 @@ public class TelaSecretariaReagendar extends JFrame {
 		JButton btnProximo = new JButton("Próximo");
 		btnProximo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new TelaSecretariaAgendar().setVisible(true);
+				new TelaInfosAgendamento().setVisible(true);
 				dispose();
 				
 			}

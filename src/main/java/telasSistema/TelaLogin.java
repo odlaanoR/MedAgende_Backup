@@ -151,6 +151,9 @@ public class TelaLogin extends JFrame {
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				TelaCadastro tela = new TelaCadastro();
+				tela.setVisible(true);
+				 dispose();
 			}
 		});
 		btnCadastrar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
