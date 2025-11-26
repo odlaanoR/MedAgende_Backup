@@ -27,7 +27,8 @@ import javax.swing.JMenuItem;
 import java.awt.Checkbox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent; // Importação para Arrays.fill (boa prática de segurança)
+import java.awt.event.ActionEvent;
+import javax.swing.JComboBox; // Importação para Arrays.fill (boa prática de segurança)
 
 public class TelaCadastro extends JFrame {
 
@@ -40,18 +41,17 @@ public class TelaCadastro extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField textNome;
+	private JTextField textCPF;
+	private JTextField textEmail;
 	private JTextField textField_3;
-	private JTable table;
-	private JPasswordField passwordField;
-	private JPasswordField passwordField_1;
+	private JPasswordField passwordFieldSENHA;
+	private JPasswordField passwordCONFIRMARSENHA;
 	private JDateChooser dcDataNascimento;
     
     // NOVOS COMPONENTES PARA FEEDBACK
-    private JLabel lblStrengthFeedback; // Rótulo para texto (Fraca, Forte)
-    private JProgressBar progressBar; // Barra de progresso para visualização
+    private JLabel lblStrengthFeedbackNIVELSENHA; // Rótulo para texto (Fraca, Forte)
+    private JProgressBar progressBarBARRAdoNIVELSENHA; // Barra de progresso para visualização
 
 	/**
 	 * Launch the application.
@@ -85,59 +85,59 @@ public class TelaCadastro extends JFrame {
 		addPopup(contentPane, popupMenu);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Cadastro");
-		lblNewLabel.setBounds(313, -13, 181, 67);
-		lblNewLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 35));
-		contentPane.add(lblNewLabel);
+		JLabel LabelTítuloCadastro = new JLabel("Cadastro");
+		LabelTítuloCadastro.setBounds(313, -13, 181, 67);
+		LabelTítuloCadastro.setFont(new Font("Trebuchet MS", Font.PLAIN, 35));
+		contentPane.add(LabelTítuloCadastro);
 		
-		textField = new JTextField();
-		textField.setBounds(31, 115, 112, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		textNome = new JTextField();
+		textNome.setBounds(31, 115, 112, 20);
+		contentPane.add(textNome);
+		textNome.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(270, 115, 86, 20);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
+		textCPF = new JTextField();
+		textCPF.setBounds(270, 115, 86, 20);
+		contentPane.add(textCPF);
+		textCPF.setColumns(10);
 		
-		textField_2 = new JTextField();
-		textField_2.setToolTipText("Ex: costelinha123@gmail.com...");
-		textField_2.setBounds(31, 198, 125, 20);
-		contentPane.add(textField_2);
-		textField_2.setColumns(10);
+		textEmail = new JTextField();
+		textEmail.setToolTipText("Ex: costelinha123@gmail.com...");
+		textEmail.setBounds(31, 198, 125, 20);
+		contentPane.add(textEmail);
+		textEmail.setColumns(10);
 		
 		textField_3 = new JTextField();
-		textField_3.setBounds(677, 115, 86, 20);
+		textField_3.setBounds(408, 389, 86, 20);
 		contentPane.add(textField_3);
 		textField_3.setColumns(10);
 		
-		JLabel lblNewLabel_1 = new JLabel("Digite aqui seu Email:");
-		lblNewLabel_1.setBounds(21, 172, 189, 14);
-		contentPane.add(lblNewLabel_1);
+		JLabel LabelEmail = new JLabel("Digite aqui seu Email:");
+		LabelEmail.setBounds(21, 172, 189, 14);
+		contentPane.add(LabelEmail);
 		
-		JLabel lblNewLabel_2 = new JLabel("Digite aqui a senha que deseja usar:");
-		lblNewLabel_2.setBounds(223, 172, 206, 14);
-		contentPane.add(lblNewLabel_2);
+		JLabel LabelSENHA = new JLabel("Digite aqui a senha que deseja usar:");
+		LabelSENHA.setBounds(223, 172, 206, 14);
+		contentPane.add(LabelSENHA);
 		
-		JLabel lblNewLabel_3 = new JLabel("DIgite aqui seu CPF:");
-		lblNewLabel_3.setBounds(237, 89, 154, 14);
-		contentPane.add(lblNewLabel_3);
+		JLabel LabelCPF = new JLabel("DIgite aqui seu CPF:");
+		LabelCPF.setBounds(237, 89, 154, 14);
+		contentPane.add(LabelCPF);
 		
-		JLabel lblNewLabel_4 = new JLabel("Digite aqui seu Nome Completo:");
-		lblNewLabel_4.setBounds(21, 90, 206, 14);
-		contentPane.add(lblNewLabel_4);
+		JLabel LabelNome = new JLabel("Digite aqui seu Nome Completo:");
+		LabelNome.setBounds(21, 90, 206, 14);
+		contentPane.add(LabelNome);
 		
 		JLabel lblNewLabel_5 = new JLabel("Selecione como deseja se Cadastrar:");
 		lblNewLabel_5.setBounds(45, 336, 379, 14);
 		contentPane.add(lblNewLabel_5);
 		
-		JLabel lblNewLabel_6 = new JLabel("Digite aqui sua Matrícula");
-		lblNewLabel_6.setBounds(654, 89, 175, 14);
-		contentPane.add(lblNewLabel_6);
+		JLabel LabelMatrícula = new JLabel("Digite aqui sua Matrícula");
+		LabelMatrícula.setBounds(386, 363, 175, 14);
+		contentPane.add(LabelMatrícula);
 		
-		JLabel lblNewLabel_7 = new JLabel("Insira sua Data de Nascimento:");
-		lblNewLabel_7.setBounds(434, 89, 154, 14);
-		contentPane.add(lblNewLabel_7);
+		JLabel LabelDataNascimento = new JLabel("Insira sua Data de Nascimento:");
+		LabelDataNascimento.setBounds(434, 89, 154, 14);
+		contentPane.add(LabelDataNascimento);
         
         // --- JCALENDAR ---
         dcDataNascimento = new JDateChooser();
@@ -146,35 +146,31 @@ public class TelaCadastro extends JFrame {
         dcDataNascimento.setBounds(444, 115, 120, 20); 
         contentPane.add(dcDataNascimento);
 		
-		table = new JTable();
-		table.setBounds(508, 303, 1, 1);
-		contentPane.add(table);
+		passwordFieldSENHA = new JPasswordField();
+		passwordFieldSENHA.setToolTipText("Ex: 40028922...");
+		passwordFieldSENHA.setBounds(233, 198, 160, 20);
+		contentPane.add(passwordFieldSENHA);
 		
-		passwordField = new JPasswordField();
-		passwordField.setToolTipText("Ex: 40028922...");
-		passwordField.setBounds(233, 198, 160, 20);
-		contentPane.add(passwordField);
+		passwordCONFIRMARSENHA = new JPasswordField();
+		passwordCONFIRMARSENHA.setBounds(457, 198, 135, 20);
+		contentPane.add(passwordCONFIRMARSENHA);
 		
-		passwordField_1 = new JPasswordField();
-		passwordField_1.setBounds(457, 198, 135, 20);
-		contentPane.add(passwordField_1);
-		
-		JLabel lblNewLabel_8 = new JLabel("Confirme sua senha:");
-		lblNewLabel_8.setBounds(468, 172, 124, 14);
-		contentPane.add(lblNewLabel_8);
+		JLabel LabelCONFIRMARSENHA = new JLabel("Confirme sua senha:");
+		LabelCONFIRMARSENHA.setBounds(468, 172, 124, 14);
+		contentPane.add(LabelCONFIRMARSENHA);
 		
 		
 		// configuração dos novos componentes 
         // Rótulo para feedback de texto
-		lblStrengthFeedback = new JLabel("Nível da Senha:");
-		lblStrengthFeedback.setBounds(203, 229, 100, 14); // Posição ajustada
-		contentPane.add(lblStrengthFeedback);
+		lblStrengthFeedbackNIVELSENHA = new JLabel("Nível da Senha:");
+		lblStrengthFeedbackNIVELSENHA.setBounds(203, 229, 100, 14); // Posição ajustada
+		contentPane.add(lblStrengthFeedbackNIVELSENHA);
         
         // Barra de progresso para feedback visual
-        progressBar = new JProgressBar(0, 5); // Valor mínimo 0, máximo 5 (pontuação máxima)
-        progressBar.setBounds(293, 228, 72, 20); // Posição ajustada
-        progressBar.setStringPainted(true); // Exibir o texto de progresso (opcional)
-        contentPane.add(progressBar);
+        progressBarBARRAdoNIVELSENHA = new JProgressBar(0, 5); // Valor mínimo 0, máximo 5 (pontuação máxima)
+        progressBarBARRAdoNIVELSENHA.setBounds(293, 228, 72, 20); // Posição ajustada
+        progressBarBARRAdoNIVELSENHA.setStringPainted(true); // Exibir o texto de progresso (opcional)
+        contentPane.add(progressBarBARRAdoNIVELSENHA);
         
         Checkbox checkbox = new Checkbox("Médico");
         checkbox.setBounds(31, 363, 95, 22);
@@ -193,21 +189,37 @@ public class TelaCadastro extends JFrame {
         contentPane.add(checkbox_2);
         
         JLabel lblNewLabel_10 = new JLabel("Já possui Cadastro? ");
-        lblNewLabel_10.setBounds(279, 53, 112, 14);
+        lblNewLabel_10.setBounds(279, 53, 135, 14);
         contentPane.add(lblNewLabel_10);
         
-        JButton btnNewButton = new JButton("CADASTRAR-SE");
-        btnNewButton.setForeground(new Color(13, 242, 219));
-        btnNewButton.addActionListener(new ActionListener() {
+        JButton btnCadastro = new JButton("CADASTRAR-SE");
+        btnCadastro.setForeground(new Color(13, 242, 219));
+        btnCadastro.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         	}
         });
-        btnNewButton.setBounds(628, 363, 120, 32);
-        contentPane.add(btnNewButton);
+        btnCadastro.setBounds(628, 363, 120, 32);
+        contentPane.add(btnCadastro);
         
-        JButton brnLogin = new JButton("Realizar Login");
-        brnLogin.setBounds(386, 53, 108, 19);
-        contentPane.add(brnLogin);
+        JButton btnLogin = new JButton("Realizar Login");
+        btnLogin.setBounds(405, 50, 135, 20);
+        contentPane.add(btnLogin);
+        
+        JLabel LabelEstados = new JLabel("Estado(UF):");
+        LabelEstados.setBounds(699, 85, 72, 22);
+        contentPane.add(LabelEstados);
+        
+        JLabel LabelMunicípios = new JLabel("Município:");
+        LabelMunicípios.setBounds(699, 162, 59, 35);
+        contentPane.add(LabelMunicípios);
+        
+        JComboBox comboBoxEstados = new JComboBox();
+        comboBoxEstados.setBounds(699, 114, 72, 22);
+        contentPane.add(comboBoxEstados);
+        
+        JComboBox comboBoxMunicípios = new JComboBox();
+        comboBoxMunicípios.setBounds(691, 197, 95, 22);
+        contentPane.add(comboBoxMunicípios);
 
 		JLabel lblNewLabel_9 = new JLabel("Senha:");
 		lblNewLabel_9.setBounds(285, 224, 46, 14);
@@ -282,7 +294,7 @@ public class TelaCadastro extends JFrame {
      */
     private void implementPasswordStrengthCheck() {
         
-        passwordField.getDocument().addDocumentListener(new DocumentListener() {
+        passwordFieldSENHA.getDocument().addDocumentListener(new DocumentListener() {
             
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -301,14 +313,14 @@ public class TelaCadastro extends JFrame {
 
             private void checkAndUpdateUI() {
                 // recebe a senha como String (uso temporário)
-                String password = new String(passwordField.getPassword());
+                String password = new String(passwordFieldSENHA.getPassword());
                 
                 // 1. verifica se está vazio e limpa o feedback
                 if (password.isEmpty()) {
-                    lblStrengthFeedback.setText("Nível da Senha:");
-                    lblStrengthFeedback.setForeground(Color.BLACK);
-                    progressBar.setValue(0);
-                    progressBar.setString("");
+                    lblStrengthFeedbackNIVELSENHA.setText("Nível da Senha:");
+                    lblStrengthFeedbackNIVELSENHA.setForeground(Color.BLACK);
+                    progressBarBARRAdoNIVELSENHA.setValue(0);
+                    progressBarBARRAdoNIVELSENHA.setString("");
                     return;
                 }
                 
@@ -316,30 +328,30 @@ public class TelaCadastro extends JFrame {
                 PasswordStrength strength = checkPasswordStrength(password);
                 
                 // Limpa o array char[] da senha da memória imediatamente (boa prática de segurança)
-                Arrays.fill(passwordField.getPassword(), ' '); 
+                Arrays.fill(passwordFieldSENHA.getPassword(), ' '); 
 
                 // 3. Atualiza o JLabel e JProgressBar
                 switch (strength) {
                     case WEAK:
-                        lblStrengthFeedback.setText("FRACA");
-                        lblStrengthFeedback.setForeground(Color.RED);
-                        progressBar.setValue(1); // 1 de 5
-                        progressBar.setForeground(Color.RED);
-                        progressBar.setString("Fraca");
+                        lblStrengthFeedbackNIVELSENHA.setText("FRACA");
+                        lblStrengthFeedbackNIVELSENHA.setForeground(Color.RED);
+                        progressBarBARRAdoNIVELSENHA.setValue(1); // 1 de 5
+                        progressBarBARRAdoNIVELSENHA.setForeground(Color.RED);
+                        progressBarBARRAdoNIVELSENHA.setString("Fraca");
                         break;
                     case MEDIUM:
-                        lblStrengthFeedback.setText("MÉDIA");
-                        lblStrengthFeedback.setForeground(Color.ORANGE.darker());
-                        progressBar.setValue(3); // 3 de 5
-                        progressBar.setForeground(Color.ORANGE.darker());
-                        progressBar.setString("Média");
+                        lblStrengthFeedbackNIVELSENHA.setText("MÉDIA");
+                        lblStrengthFeedbackNIVELSENHA.setForeground(Color.ORANGE.darker());
+                        progressBarBARRAdoNIVELSENHA.setValue(3); // 3 de 5
+                        progressBarBARRAdoNIVELSENHA.setForeground(Color.ORANGE.darker());
+                        progressBarBARRAdoNIVELSENHA.setString("Média");
                         break;
                     case STRONG:
-                        lblStrengthFeedback.setText("FORTE");
-                        lblStrengthFeedback.setForeground(Color.GREEN.darker());
-                        progressBar.setValue(5); // 5 de 5
-                        progressBar.setForeground(Color.GREEN.darker());
-                        progressBar.setString("Forte");
+                        lblStrengthFeedbackNIVELSENHA.setText("FORTE");
+                        lblStrengthFeedbackNIVELSENHA.setForeground(Color.GREEN.darker());
+                        progressBarBARRAdoNIVELSENHA.setValue(5); // 5 de 5
+                        progressBarBARRAdoNIVELSENHA.setForeground(Color.GREEN.darker());
+                        progressBarBARRAdoNIVELSENHA.setString("Forte");
                         break;
                 }
             }
