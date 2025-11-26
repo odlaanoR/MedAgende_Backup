@@ -18,6 +18,8 @@ import java.awt.Button;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Label;
+import javax.swing.ImageIcon;
+import java.awt.Dimension;
 
 public class TelaLogin extends JFrame {
 
@@ -57,38 +59,38 @@ public class TelaLogin extends JFrame {
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
-		panel.setBounds(356, 0, 372, 417);
+		panel.setBounds(357, 1, 372, 417);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Digite aqui seu e-mail:");
 		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblNewLabel.setBounds(46, 116, 105, 13);
+		lblNewLabel.setBounds(95, 94, 156, 32);
 		panel.add(lblNewLabel);
 		
 		textField = new JTextField();
-		textField.setBounds(168, 114, 120, 19);
+		textField.setBounds(95, 126, 175, 19);
 		panel.add(textField);
 		textField.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Digite aqui sua senha:");
 		lblNewLabel_1.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblNewLabel_1.setBounds(43, 151, 91, 12);
+		lblNewLabel_1.setBounds(95, 145, 175, 31);
 		panel.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Digite aqui sua matrícula:");
 		lblNewLabel_2.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblNewLabel_2.setBounds(43, 192, 120, 15);
+		lblNewLabel_2.setBounds(95, 198, 175, 15);
 		panel.add(lblNewLabel_2);
 		
 		textField_2 = new JTextField();
-		textField_2.setBounds(173, 191, 117, 18);
+		textField_2.setBounds(95, 224, 178, 18);
 		panel.add(textField_2);
 		textField_2.setColumns(10);
 		
 		
 		//BOTAO LOGIN: AO APERTAR, ELA VAI P TELA PRINCIPAL
-		JButton btnNewButton = new JButton("Login");
+		JButton btnNewButton = new JButton("LOGIN");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			setVisible(false);
@@ -101,17 +103,17 @@ public class TelaLogin extends JFrame {
 		panel.add(btnNewButton);
 		
 		JLabel lblNewLabel_3 = new JLabel("LOGIN");
-		lblNewLabel_3.setFont(new Font("Segoe UI", Font.BOLD, 23));
-		lblNewLabel_3.setBounds(161, 23, 79, 39);
+		lblNewLabel_3.setFont(new Font("Segoe UI", Font.BOLD, 26));
+		lblNewLabel_3.setBounds(128, 11, 105, 39);
 		panel.add(lblNewLabel_3);
 		
 		JLabel lblNewLabel_4 = new JLabel("Realize o login para continuar");
-		lblNewLabel_4.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblNewLabel_4.setBounds(108, 60, 159, 19);
+		lblNewLabel_4.setFont(new Font("Serif", Font.PLAIN, 16));
+		lblNewLabel_4.setBounds(81, 61, 189, 19);
 		panel.add(lblNewLabel_4);
 		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(171, 149, 117, 18);
+		passwordField.setBounds(95, 179, 175, 18);
 		panel.add(passwordField);
 		
 		JLabel lblNewLabel_4_2 = new JLabel("Ainda não possui cadastro no sistema?");
@@ -131,19 +133,13 @@ public class TelaLogin extends JFrame {
 		
 		JLabel lblNewLabel_3_1 = new JLabel("Bem-vindo(a) ao MedAgende!");
 		lblNewLabel_3_1.setFont(new Font("Trebuchet MS", Font.BOLD, 25));
-		lblNewLabel_3_1.setBounds(10, 10, 349, 68);
+		lblNewLabel_3_1.setBounds(10, 0, 349, 68);
 		contentPane.add(lblNewLabel_3_1);
 		
 		JLabel lblNewLabel_3_1_1 = new JLabel("Seu sistema de gerenciamento de consultas");
-		lblNewLabel_3_1_1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblNewLabel_3_1_1.setBounds(20, 36, 349, 68);
+		lblNewLabel_3_1_1.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+		lblNewLabel_3_1_1.setBounds(20, 46, 349, 39);
 		contentPane.add(lblNewLabel_3_1_1);
-		
-		JLabel lblNewLabel_3_1_2 = new JLabel("falta adc imagem!");
-		lblNewLabel_3_1_2.setForeground(new Color(255, 0, 0));
-		lblNewLabel_3_1_2.setFont(new Font("Segoe UI", Font.BOLD, 23));
-		lblNewLabel_3_1_2.setBounds(51, 170, 349, 68);
-		contentPane.add(lblNewLabel_3_1_2);
 
 	}
 }
