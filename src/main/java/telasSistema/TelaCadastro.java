@@ -91,64 +91,71 @@ public class TelaCadastro extends JFrame {
 		contentPane.add(LabelTítuloCadastro);
 		
 		textNome = new JTextField();
-		textNome.setBounds(31, 115, 112, 20);
+		textNome.setBounds(21, 142, 206, 20);
 		contentPane.add(textNome);
 		textNome.setColumns(10);
 		
 		textCPF = new JTextField();
-		textCPF.setBounds(270, 115, 86, 20);
+		textCPF.setBounds(279, 142, 86, 20);
 		contentPane.add(textCPF);
 		textCPF.setColumns(10);
 		
 		textEmail = new JTextField();
 		textEmail.setToolTipText("Ex: costelinha123@gmail.com...");
-		textEmail.setBounds(31, 198, 125, 20);
+		textEmail.setBounds(21, 198, 206, 20);
 		contentPane.add(textEmail);
 		textEmail.setColumns(10);
 		
 		textField_3 = new JTextField();
-		textField_3.setBounds(408, 389, 86, 20);
+		textField_3.setBounds(385, 357, 86, 20);
 		contentPane.add(textField_3);
 		textField_3.setColumns(10);
 		
 		JLabel LabelEmail = new JLabel("Digite aqui seu Email:");
+		LabelEmail.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		LabelEmail.setBounds(21, 172, 189, 14);
 		contentPane.add(LabelEmail);
 		
 		JLabel LabelSENHA = new JLabel("Digite aqui a senha que deseja usar:");
-		LabelSENHA.setBounds(223, 172, 206, 14);
+		LabelSENHA.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		LabelSENHA.setBounds(232, 172, 206, 14);
 		contentPane.add(LabelSENHA);
 		
-		JLabel LabelCPF = new JLabel("DIgite aqui seu CPF:");
-		LabelCPF.setBounds(237, 89, 154, 14);
+		JLabel LabelCPF = new JLabel("Digite aqui seu CPF:");
+		LabelCPF.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		LabelCPF.setBounds(260, 118, 154, 14);
 		contentPane.add(LabelCPF);
 		
 		JLabel LabelNome = new JLabel("Digite aqui seu Nome Completo:");
-		LabelNome.setBounds(21, 90, 206, 14);
+		LabelNome.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		LabelNome.setBounds(21, 118, 206, 14);
 		contentPane.add(LabelNome);
 		
 		JLabel lblNewLabel_5 = new JLabel("Selecione como deseja se Cadastrar:");
-		lblNewLabel_5.setBounds(45, 336, 379, 14);
+		lblNewLabel_5.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		lblNewLabel_5.setBounds(31, 322, 379, 14);
 		contentPane.add(lblNewLabel_5);
 		
 		JLabel LabelMatrícula = new JLabel("Digite aqui sua Matrícula");
-		LabelMatrícula.setBounds(386, 363, 175, 14);
+		LabelMatrícula.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		LabelMatrícula.setBounds(364, 322, 175, 14);
 		contentPane.add(LabelMatrícula);
 		
 		JLabel LabelDataNascimento = new JLabel("Insira sua Data de Nascimento:");
-		LabelDataNascimento.setBounds(434, 89, 154, 14);
+		LabelDataNascimento.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		LabelDataNascimento.setBounds(438, 118, 154, 14);
 		contentPane.add(LabelDataNascimento);
         
         // --- JCALENDAR ---
         dcDataNascimento = new JDateChooser();
         dcDataNascimento.setToolTipText("Ex: 25/06/2003...");
         dcDataNascimento.setDateFormatString("dd/MM/yyyy"); // Formato da data
-        dcDataNascimento.setBounds(444, 115, 120, 20); 
+        dcDataNascimento.setBounds(441, 142, 120, 20); 
         contentPane.add(dcDataNascimento);
 		
 		passwordFieldSENHA = new JPasswordField();
 		passwordFieldSENHA.setToolTipText("Ex: 40028922...");
-		passwordFieldSENHA.setBounds(233, 198, 160, 20);
+		passwordFieldSENHA.setBounds(254, 198, 160, 20);
 		contentPane.add(passwordFieldSENHA);
 		
 		passwordCONFIRMARSENHA = new JPasswordField();
@@ -156,6 +163,7 @@ public class TelaCadastro extends JFrame {
 		contentPane.add(passwordCONFIRMARSENHA);
 		
 		JLabel LabelCONFIRMARSENHA = new JLabel("Confirme sua senha:");
+		LabelCONFIRMARSENHA.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		LabelCONFIRMARSENHA.setBounds(468, 172, 124, 14);
 		contentPane.add(LabelCONFIRMARSENHA);
 		
@@ -163,6 +171,7 @@ public class TelaCadastro extends JFrame {
 		// configuração dos novos componentes 
         // Rótulo para feedback de texto
 		lblStrengthFeedbackNIVELSENHA = new JLabel("Nível da Senha:");
+		lblStrengthFeedbackNIVELSENHA.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		lblStrengthFeedbackNIVELSENHA.setBounds(203, 229, 100, 14); // Posição ajustada
 		contentPane.add(lblStrengthFeedbackNIVELSENHA);
         
@@ -173,32 +182,37 @@ public class TelaCadastro extends JFrame {
         contentPane.add(progressBarBARRAdoNIVELSENHA);
         
         Checkbox checkbox = new Checkbox("Médico");
-        checkbox.setBounds(31, 363, 95, 22);
+        checkbox.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        checkbox.setBounds(40, 363, 86, 14);
         contentPane.add(checkbox);
         
         Checkbox checkbox_1 = new Checkbox("Secretária");
-        checkbox_1.setBounds(132, 363, 95, 22);
+        checkbox_1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        checkbox_1.setBounds(132, 357, 95, 22);
         contentPane.add(checkbox_1);
         
         Checkbox checkbox_1_1 = new Checkbox("Administrador");
-        checkbox_1_1.setBounds(232, 363, 95, 22);
+        checkbox_1_1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        checkbox_1_1.setBounds(232, 355, 95, 22);
         contentPane.add(checkbox_1_1);
         
         Checkbox checkbox_2 = new Checkbox("Paciente");
-        checkbox_2.setBounds(31, 401, 95, 22);
+        checkbox_2.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        checkbox_2.setBounds(31, 389, 95, 22);
         contentPane.add(checkbox_2);
         
         JLabel lblNewLabel_10 = new JLabel("Já possui Cadastro? ");
         lblNewLabel_10.setBounds(279, 53, 135, 14);
         contentPane.add(lblNewLabel_10);
         
-        JButton btnCadastro = new JButton("CADASTRAR-SE");
+        JButton btnCadastro = new JButton("Cadastrar-se");
+        btnCadastro.setFont(new Font("Segoe UI", Font.BOLD, 12));
         btnCadastro.setForeground(new Color(13, 242, 219));
         btnCadastro.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         	}
         });
-        btnCadastro.setBounds(628, 363, 120, 32);
+        btnCadastro.setBounds(528, 406, 135, 35);
         contentPane.add(btnCadastro);
         
         JButton btnLogin = new JButton("Realizar Login");
@@ -206,7 +220,8 @@ public class TelaCadastro extends JFrame {
         contentPane.add(btnLogin);
                
         JLabel LabelEstados = new JLabel("Estado(UF):");
-        LabelEstados.setBounds(699, 85, 72, 22);
+        LabelEstados.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        LabelEstados.setBounds(699, 114, 72, 22);
         contentPane.add(LabelEstados);
         
         JLabel LabelMunicípios = new JLabel("Município:");
@@ -214,12 +229,24 @@ public class TelaCadastro extends JFrame {
         contentPane.add(LabelMunicípios);
         
         JComboBox comboBoxEstados = new JComboBox();
-        comboBoxEstados.setBounds(699, 114, 72, 22);
+        comboBoxEstados.setBounds(699, 140, 72, 22);
         contentPane.add(comboBoxEstados);
         
         JComboBox comboBoxMunicípios = new JComboBox();
         comboBoxMunicípios.setBounds(691, 197, 95, 22);
         contentPane.add(comboBoxMunicípios);
+        
+        JButton btnVoltar = new JButton("Voltar");
+        btnVoltar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		TelaLogin tela = new TelaLogin();
+				tela.setVisible(true);
+				 dispose();
+        	}
+        });
+        btnVoltar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        btnVoltar.setBounds(686, 407, 125, 32);
+        contentPane.add(btnVoltar);
 
 		JLabel lblNewLabel_9 = new JLabel("Senha:");
 		lblNewLabel_9.setBounds(285, 224, 46, 14);
