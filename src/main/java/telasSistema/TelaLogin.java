@@ -92,15 +92,15 @@ public class TelaLogin extends JFrame {
 	//BOTOES SELECAO PROFISSIONAL
 		
 		JRadioButton rdbtnSecretaria = new JRadioButton("Secretária");
-		rdbtnSecretaria.setBounds(19, 297, 102, 20);
+		rdbtnSecretaria.setBounds(20, 277, 102, 20);
 		panel.add(rdbtnSecretaria);
 		
 		JRadioButton rdbtnMedico = new JRadioButton("Médico");
-		rdbtnMedico.setBounds(131, 297, 102, 20);
+		rdbtnMedico.setBounds(128, 277, 102, 20);
 		panel.add(rdbtnMedico);
 		
 		JRadioButton rdbtnAdministrador = new JRadioButton("Administrador");
-		rdbtnAdministrador.setBounds(244, 297, 102, 20);
+		rdbtnAdministrador.setBounds(247, 277, 102, 20);
 		panel.add(rdbtnAdministrador);
 		
 		ButtonGroup grupoBotoes= new ButtonGroup();
@@ -132,7 +132,7 @@ public class TelaLogin extends JFrame {
 		});
 		btnLogin.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnLogin.setBackground(new Color(0, 159, 255));
-		btnLogin.setBounds(149, 329, 84, 20);
+		btnLogin.setBounds(149, 313, 84, 20);
 		panel.add(btnLogin);
 		
 		JLabel lblLogin = new JLabel("LOGIN");
@@ -151,7 +151,7 @@ public class TelaLogin extends JFrame {
 		
 		JLabel Cadastro = new JLabel("Ainda não possui cadastro no sistema?");
 		Cadastro.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		Cadastro.setBounds(20, 359, 220, 19);
+		Cadastro.setBounds(20, 343, 220, 19);
 		panel.add(Cadastro);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
@@ -164,13 +164,32 @@ public class TelaLogin extends JFrame {
 		});
 		btnCadastrar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnCadastrar.setBackground(new Color(255, 255, 255));
-		btnCadastrar.setBounds(238, 360, 97, 16);
+		btnCadastrar.setBounds(236, 344, 97, 16);
 		panel.add(btnCadastrar);
 		
 		JLabel LogarComo = new JLabel("Logar como:");
 		LogarComo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		LogarComo.setBounds(149, 252, 97, 19);
 		panel.add(LogarComo);
+		
+		JLabel EsqueceuSenha = new JLabel("Esqueceu a senha?");
+		EsqueceuSenha.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		EsqueceuSenha.setBounds(20, 372, 210, 19);
+		panel.add(EsqueceuSenha);
+		
+		JButton btnRecuperarSenha = new JButton("Recuperar Senha");
+		btnRecuperarSenha.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaRecuperaçãoSenha tela = new TelaRecuperaçãoSenha();
+				tela.setVisible(true);
+				 dispose();
+				
+			}
+		});
+		btnRecuperarSenha.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnRecuperarSenha.setBackground(Color.WHITE);
+		btnRecuperarSenha.setBounds(207, 375, 126, 16);
+		panel.add(btnRecuperarSenha);
 		
 
 		JLabel BoasVindas = new JLabel("Bem-vindo(a) ao MedAgende!");

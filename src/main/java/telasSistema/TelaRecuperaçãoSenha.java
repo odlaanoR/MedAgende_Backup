@@ -18,9 +18,11 @@ public class TelaRecuperaçãoSenha extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
-	private JButton btnNewButton;
-	private JButton btnNewButton_1;
+	private JButton btnEnviar;
+	private JButton btnReenviar;
 	private JLabel lblNewLabel_2;
+	private JButton btnPróximo;
+	private JButton btnProximo;
 
 	/**
 	 * Launch the application.
@@ -51,35 +53,50 @@ public class TelaRecuperaçãoSenha extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Recuperação de Senha");
-		lblNewLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 22));
-		lblNewLabel.setBounds(25, 11, 258, 62);
+		lblNewLabel.setFont(new Font("Trebuchet MS", Font.BOLD, 22));
+		lblNewLabel.setBounds(195, 10, 258, 62);
 		contentPane.add(lblNewLabel);
 		
 		textField = new JTextField();
-		textField.setBounds(45, 115, 193, 20);
+		textField.setBounds(45, 115, 238, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Insira aqui o Email para o qual devemos enviar o Token de Recuperação:");
+		lblNewLabel_1.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		lblNewLabel_1.setBounds(35, 89, 434, 14);
 		contentPane.add(lblNewLabel_1);
 		
-		btnNewButton = new JButton("ENVIAR");
-		btnNewButton.addActionListener(new ActionListener() {
+		btnEnviar = new JButton("Enviar");
+		btnEnviar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnEnviar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		btnNewButton.setBounds(45, 146, 87, 20);
-		contentPane.add(btnNewButton);
+		btnEnviar.setBounds(45, 146, 87, 20);
+		contentPane.add(btnEnviar);
 		
-		btnNewButton_1 = new JButton("REENVIAR");
-		btnNewButton_1.setBounds(142, 146, 119, 20);
-		contentPane.add(btnNewButton_1);
+		btnReenviar = new JButton("Reenviar");
+		btnReenviar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnReenviar.setBounds(142, 146, 119, 20);
+		contentPane.add(btnReenviar);
 		
 		lblNewLabel_2 = new JLabel("Caso ultrapasse os 60s e não tenha recebido o Token , solicite o Reenvio ou verifique se preencheu o campo corretamente.");
 		lblNewLabel_2.setBounds(10, 252, 702, 14);
 		contentPane.add(lblNewLabel_2);
-
+		
+		btnProximo = new JButton("Próximo");
+		btnProximo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnProximo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaInserirTolken tela = new TelaInserirTolken();
+				tela.setVisible(true);
+				dispose();
+			}
+		});
+		btnProximo.setBounds(501, 208, 156, 20);
+		contentPane.add(btnProximo);
+		
 	}
 	private static class __Tmp {
 		private static void __tmp() {
