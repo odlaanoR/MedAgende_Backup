@@ -66,11 +66,23 @@ public class TelaPrincipalMedico extends JFrame {
 		
 		
 		JButton btnSolicitarExame = new JButton("Solicitar exame");
+		btnSolicitarExame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaSolicitacaoExame telaSolicitacaoExame = new TelaSolicitacaoExame();
+				telaSolicitacaoExame.setVisible(true);
+			}
+		});
 		btnSolicitarExame.setAlignmentY(0.0f);
 		btnSolicitarExame.setBounds(277, 174, 154, 62);
 		contentPane.add(btnSolicitarExame);
 		
 		JButton btnEmitirAtestado = new JButton("Emitir atestado");
+		btnEmitirAtestado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaEmitirAtestado telaEmitirAtestado = new TelaEmitirAtestado();
+				telaEmitirAtestado.setVisible(true);
+			}
+		});
 		btnEmitirAtestado.setAlignmentY(0.0f);
 		btnEmitirAtestado.setBounds(452, 174, 154, 62);
 		contentPane.add(btnEmitirAtestado);
