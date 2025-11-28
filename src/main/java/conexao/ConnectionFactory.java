@@ -1,9 +1,13 @@
 package conexao;
 
- public class ConnectionFactory {
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class ConnectionFactory {
 
     // Dados do seu banco MySQL
-    private static final String URL = "jdbc:mysql://localhost:3306/BancodeDadosMedAgende;
+    private static final String URL = "jdbc:mysql://localhost:3306/BancodeDadosMedAgende";
     private static final String USER = "root";
     private static final String PASSWORD = "30096700";
 
