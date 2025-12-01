@@ -43,6 +43,8 @@ public class TelaHistoricoAgendamentos extends JFrame {
 		btnConfirmar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TelaPrincipalSecretaria tela = new TelaPrincipalSecretaria();
+				tela.setLocationRelativeTo(null);
+
 				tela.setVisible(true);
 				dispose();
 				
@@ -56,6 +58,7 @@ public class TelaHistoricoAgendamentos extends JFrame {
 		btnVoltar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TelaPrincipalSecretaria tela = new TelaPrincipalSecretaria();
+				tela.setLocationRelativeTo(null);
 				tela.setVisible(true);
 				 dispose();
 			}

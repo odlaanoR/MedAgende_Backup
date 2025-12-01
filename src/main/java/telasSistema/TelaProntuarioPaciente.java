@@ -44,6 +44,7 @@ public class TelaProntuarioPaciente extends JFrame {
 			public void run() {
 				try {
 					TelaProntuarioPaciente frame = new TelaProntuarioPaciente();
+					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

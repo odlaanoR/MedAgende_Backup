@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -64,9 +66,36 @@ public class TelaSecretariaAgendar extends JFrame {
 		JButton btnProximo = new JButton("Próximo");
 		btnProximo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String mensagemDeErro = "Por favor, preencha os seguintes campos obrigatórios:\n";
+				int camposEmBranco=0;
+				if (textField.getText().trim().isEmpty()) {
+			        camposEmBranco++;
+			        mensagemDeErro += "- Nome\n"; 
+			    }
+
+			  
+			    if (textField_1.getText().trim().isEmpty()) { 
+			        camposEmBranco++;
+			        mensagemDeErro += "- CPF\n";
+			    }
+
+			    
+			    if (camposEmBranco > 0) {
+			        
+			        System.out.println(camposEmBranco + " campo(s) em branco. Abortando cadastro.");
+			        
+			        // 
+			        JOptionPane.showMessageDialog(
+			            null,
+			            mensagemDeErro,
+			            "Erro de Validação",
+			            JOptionPane.WARNING_MESSAGE );
+			        
+			        return; 
+			    
+			}
 				new TelaInfosAgendamento().setVisible(true);
 				dispose();
-				
 			}
 		});
 		btnProximo.setFont(new Font("Segoe UI", Font.BOLD, 12));

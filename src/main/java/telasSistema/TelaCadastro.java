@@ -24,6 +24,8 @@ import java.util.Arrays;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JTree;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import java.awt.Checkbox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -61,6 +63,7 @@ public class TelaCadastro extends JFrame {
 			public void run() {
 				try {
 					TelaCadastro frame = new TelaCadastro();
+					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -214,8 +217,49 @@ public class TelaCadastro extends JFrame {
         JButton btnLogin = new JButton("Realizar Login");
         btnLogin.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		String mensagem="";
+        		int camposEmBranco=0;
+        		if (textNome.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="Nome\n";
+				}
+				if (textCPF.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="CPf\n";
+				}
+				if (textEmail.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="Email\n";
+				}
+				
+				if (textField_3.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="Matricula\n";
+				}
+				if (passwordFieldSENHA.getPassword().length==0) {
+					camposEmBranco++;
+					mensagem+="Cep\n";}
+				 if (	passwordCONFIRMARSENHA.getPassword().length==0) {
+					 camposEmBranco++;
+				 }
+				
+				if (camposEmBranco > 0) {
+				        
+				     System.out.println(camposEmBranco + " campo(s) em branco. Abortando login.");
+				        
+				        // 
+				        JOptionPane.showMessageDialog(
+				            null,
+				            mensagem,
+				            "Erro de Validação",
+				            JOptionPane.WARNING_MESSAGE 
+				        );
+				        
+				        return; 
+				    }
         		TelaLogin tela = new TelaLogin();
-				tela.setVisible(true);
+				tela.setLocationRelativeTo(null);
+        		tela.setVisible(true);
 				 dispose();
         	}
         });
@@ -244,7 +288,8 @@ public class TelaCadastro extends JFrame {
         btnVoltar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		TelaLogin tela = new TelaLogin();
-				tela.setVisible(true);
+				tela.setLocationRelativeTo(null);
+        		tela.setVisible(true);
 				 dispose();
         	}
         });

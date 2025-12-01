@@ -32,6 +32,7 @@ public class TelaRecuperaçãoSenha extends JFrame {
 			public void run() {
 				try {
 					TelaRecuperaçãoSenha frame = new TelaRecuperaçãoSenha();
+					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

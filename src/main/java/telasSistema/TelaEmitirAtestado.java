@@ -30,6 +30,8 @@ public class TelaEmitirAtestado extends JFrame {
 			public void run() {
 				try {
 					TelaEmitirAtestado frame = new TelaEmitirAtestado();
+					frame.setLocationRelativeTo(null);
+
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -65,6 +67,8 @@ public class TelaEmitirAtestado extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TelaPrincipalMedico telaPrincipalMedico = new TelaPrincipalMedico();
+				telaPrincipalMedico.setLocationRelativeTo(null);
+
 				telaPrincipalMedico.setVisible(true);
 			}
 		});

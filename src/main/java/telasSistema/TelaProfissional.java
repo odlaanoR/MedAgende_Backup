@@ -36,6 +36,7 @@ public class TelaProfissional extends JFrame {
 			public void run() {
 				try {
 					TelaProfissional frame = new TelaProfissional();
+					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

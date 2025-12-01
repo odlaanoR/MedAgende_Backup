@@ -14,6 +14,8 @@ import java.awt.Font;
 import javax.swing.JPasswordField;
 import java.awt.Color;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+
 import java.awt.Button;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -49,6 +51,7 @@ public class TelaSecretariaCadastrar extends JFrame {
 			public void run() {
 				try {
 					TelaSecretariaCadastrar frame = new TelaSecretariaCadastrar();
+					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -205,10 +208,65 @@ public class TelaSecretariaCadastrar extends JFrame {
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String mensagem="Por favor, preencha os seguintes campos obrigatórios:\n";
+				int camposEmBranco=0;
+				if (textFieldNome.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="nome\n";}
+				if (textField.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="CPF\n";
+				}
+				if (textField_1.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="email\n";
+				}
+				if (textField_2.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="Data de nascimento\n";
+				}
+				
+				if (textField_3.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="Telefone\n";
+				}
+				if (textField_4.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="Cep\n";
+				}
+				if (textField_5.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="cidade\n";
+				}
+				if (textField_6.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="Bairro\n";
+				}
+				if (textField_7.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="Rua\n";
+				}
+				if (textField_8.getText().trim().isEmpty()) {
+					camposEmBranco++;
+					mensagem+="n°\n";
+				}
+				if (camposEmBranco>0) {
+					JOptionPane.showMessageDialog(null, mensagem,"Erro de Validação",
+				            JOptionPane.WARNING_MESSAGE 	);
+					
+				return;
+				}
+				
+				
 				TelaLogin tela = new TelaLogin();
+				
 				tela.setVisible(true);
 				 dispose();
 			}
+			
+		
+		
+		
 		});
 		btnCadastrar.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		btnCadastrar.setBounds(516, 370, 104, 20);

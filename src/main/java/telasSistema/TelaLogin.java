@@ -14,6 +14,8 @@ import java.awt.Font;
 import javax.swing.JPasswordField;
 import java.awt.Color;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+
 import java.awt.Button;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -38,6 +40,7 @@ public class TelaLogin extends JFrame {
 			public void run() {
 				try {
 					TelaLogin frame = new TelaLogin();
+					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -112,10 +115,47 @@ public class TelaLogin extends JFrame {
 		//BOTAO LOGIN: 
 		JButton btnLogin = new JButton("LOGIN");
 		btnLogin.addActionListener(new ActionListener() {
-
+			
+		
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				//condição para não deixar ele passar se estiver em branco 
+				String mensagemDeErro = "Por favor, preencha os seguintes campos obrigatórios:\n";
+				int camposEmBranco=0;
+				if (textFieldEmail.getText().trim().isEmpty()) {
+			        camposEmBranco++;
+			        mensagemDeErro += "- E-mail\n"; 
+			    }
+			    
+			
+			    if (textFieldSenha.getText().trim().isEmpty()) {
+			        camposEmBranco++;
+			        mensagemDeErro += "- Matrícula\n"; 
+			    }
+			    
+			  
+			    if (passwordField.getPassword().length==0) { 
+			        camposEmBranco++;
+			        mensagemDeErro += "- Senha\n";
+			    }
+
+			    
+			    if (camposEmBranco > 0) {
+			        
+			        System.out.println(camposEmBranco + " campo(s) em branco. Abortando login.");
+			        
+			        // 
+			        JOptionPane.showMessageDialog(
+			            null,
+			            mensagemDeErro,
+			            "Erro de Validação",
+			            JOptionPane.WARNING_MESSAGE 
+			        );
+			        
+			        return; 
+			    }
+				
 				if (rdbtnSecretaria.isSelected()) {
 					TelaPrincipalSecretaria tela = new TelaPrincipalSecretaria();
 					tela.setVisible(true);
@@ -208,11 +248,7 @@ public class TelaLogin extends JFrame {
 		Gerenciamento.setBounds(20, 46, 349, 39);
 		contentPane.add(Gerenciamento);
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(TelaLogin.class.getResource("/EstetoscopioTelaLogin.png")));
-		lblNewLabel.setBounds(10, 95, 317, 312);
-		contentPane.add(lblNewLabel);
-
+		
 		
 		
 	}
