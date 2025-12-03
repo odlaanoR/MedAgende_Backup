@@ -96,9 +96,12 @@ public class TelaSecretariaCancelar extends JFrame {
 			    
 			}
 				
-				new TelaHistoricoAgendamentos().setVisible(true);
-				
-				dispose();
+			    TelaHistoricoAgendamentos tela= new TelaHistoricoAgendamentos();
+			    tela.setLocationRelativeTo(null);
+				tela.setVisible(true);
+				 dispose();
+				// new TelaHistoricoAgendamentos().setVisible(true);
+				//dispose();
 				
 			}
 		});
