@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `consultas` (
-  `id_Consultas` int(11) NOT NULL,
+  `id_Consultas` int(11) NOT NULL UNIQUE AUTO_INCREMENT,
   `Fk_Id_Paciente` int(11) NOT NULL,
   `Fk_Matricula_Medico` int(11) NOT NULL,
   `Data_Consulta` date NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE `consultas` (
 --
 
 CREATE TABLE `especialidades` (
-  `Id_Especialidade` int(11) NOT NULL,
+  `Id_Especialidade` int(11) NOT NULL UNIQUE AUTO_INCREMENT,
   `Nome_Especialidade` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -53,7 +53,7 @@ CREATE TABLE `especialidades` (
 --
 
 CREATE TABLE `medico` (
-  `Matricula` int(11) NOT NULL,
+  `Matricula` int(11) NOT NULL UNIQUE AUTO_INCREMENT,
   `Id_Usuario` int(11) NOT NULL,
   `Especialidade` int(11) NOT NULL,
   `Crm` char(9) NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE `medico` (
 --
 
 CREATE TABLE `paciente` (
-  `Id_Paciente` int(11) NOT NULL,
+  `Id_Paciente` int(11) NOT NULL UNIQUE AUTO_INCREMENT,
   `Email` varchar(90) NOT NULL,
   `Nome` varchar(90) NOT NULL,
   `Data_Nasc` date DEFAULT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE `paciente` (
 --
 
 CREATE TABLE `usuarios` (
-  `Id_Usuario` int(11) NOT NULL,
+  `Id_Usuario` int(11) NOT NULL UNIQUE AUTO_INCREMENT,
   `Email` varchar(90) NOT NULL,
   `Senha` varchar(15) NOT NULL,
   `Nome` varchar(90) NOT NULL,
@@ -188,4 +188,5 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
 
