@@ -31,6 +31,15 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox; // Importação para Arrays.fill (boa prática de segurança)
+import javax.swing.Timer; // Importação para Timer
+import java.awt.Cursor; // Importação para Cursor
+
+// IMPORTAÇÕES PARA API DOS CORREIOS
+import com.google.gson.Gson;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import java.io.IOException;
 
 public class TelaCadastro extends JFrame {
 
@@ -41,12 +50,93 @@ public class TelaCadastro extends JFrame {
         STRONG // Forte
     }
 
+    // CLASSE INTERNA PARA A RESPOSTA DA API DOS CORREIOS
+    private static class ViaCEPResponse {
+        private String cep;
+        private String logradouro;
+        private String complemento;
+        private String bairro;
+        private String localidade;
+        private String uf;
+        private String ibge;
+        private String gia;
+        private String ddd;
+        private String siafi;
+        
+        // Getters e Setters
+        public String getCep() { return cep; }
+        public void setCep(String cep) { this.cep = cep; }
+        
+        public String getLogradouro() { return logradouro; }
+        public void setLogradouro(String logradouro) { this.logradouro = logradouro; }
+        
+        public String getBairro() { return bairro; }
+        public void setBairro(String bairro) { this.bairro = bairro; }
+        
+        public String getLocalidade() { return localidade; }
+        public void setLocalidade(String localidade) { this.localidade = localidade; }
+        
+        public String getUf() { return uf; }
+        public void setUf(String uf) { this.uf = uf; }
+        
+        public String getComplemento() { return complemento; }
+        public void setComplemento(String complemento) { this.complemento = complemento; }
+        
+        public String getIbge() { return ibge; }
+        public void setIbge(String ibge) { this.ibge = ibge; }
+        
+        public String getGia() { return gia; }
+        public void setGia(String gia) { this.gia = gia; }
+        
+        public String getDdd() { return ddd; }
+        public void setDdd(String ddd) { this.ddd = ddd; }
+        
+        public String getSiafi() { return siafi; }
+        public void setSiafi(String siafi) { this.siafi = siafi; }
+    }
+
+    // CLASSE INTERNA PARA O SERVIÇO DA API
+    private static class ViaCEPService {
+        private static final String VIA_CEP_URL = "https://viacep.com.br/ws/%s/json/";
+        
+        public ViaCEPResponse buscarCEP(String cep) throws IOException {
+            // Remove caracteres não numéricos
+            cep = cep.replaceAll("[^0-9]", "");
+            
+            if (cep.length() != 8) {
+                throw new IllegalArgumentException("CEP deve conter 8 dígitos");
+            }
+            
+            OkHttpClient client = new OkHttpClient();
+            String url = String.format(VIA_CEP_URL, cep);
+            
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            
+            try (Response response = client.newCall(request).execute()) {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Erro na requisição: " + response.code());
+                }
+                
+                String jsonResponse = response.body().string();
+                
+                // Verifica se o CEP não foi encontrado
+                if (jsonResponse.contains("\"erro\": true")) {
+                    return null;
+                }
+                
+                Gson gson = new Gson();
+                return gson.fromJson(jsonResponse, ViaCEPResponse.class);
+            }
+        }
+    }
+
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textNome;
 	private JTextField textCPF;
 	private JTextField textEmail;
-	private JTextField textField_3;
 	private JPasswordField passwordFieldSENHA;
 	private JPasswordField passwordCONFIRMARSENHA;
 	private JDateChooser dcDataNascimento;
@@ -54,6 +144,14 @@ public class TelaCadastro extends JFrame {
     // NOVOS COMPONENTES PARA FEEDBACK
     private JLabel lblStrengthFeedbackNIVELSENHA; // Rótulo para texto (Fraca, Forte)
     private JProgressBar progressBarBARRAdoNIVELSENHA; // Barra de progresso para visualização
+    private JTextField textField; // CEP
+    private JTextField textField_1; // Rua
+    private JTextField textField_2; // Número
+    
+    // VARIÁVEIS ADICIONADAS PARA ENDEREÇO
+    private JTextField textMunicipio; // Campo para Município (antiga Cidade)
+    private JTextField textEstadoUF; // Campo para Estado(UF)
+    private JTextField textBairro; // Campo para Bairro
 
 	/**
 	 * Launch the application.
@@ -109,11 +207,6 @@ public class TelaCadastro extends JFrame {
 		contentPane.add(textEmail);
 		textEmail.setColumns(10);
 		
-		textField_3 = new JTextField();
-		textField_3.setBounds(385, 357, 86, 20);
-		contentPane.add(textField_3);
-		textField_3.setColumns(10);
-		
 		JLabel LabelEmail = new JLabel("Digite aqui seu Email:");
 		LabelEmail.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		LabelEmail.setBounds(21, 172, 189, 14);
@@ -139,14 +232,9 @@ public class TelaCadastro extends JFrame {
 		lblNewLabel_5.setBounds(31, 322, 379, 14);
 		contentPane.add(lblNewLabel_5);
 		
-		JLabel LabelMatrícula = new JLabel("Digite aqui sua Matrícula");
-		LabelMatrícula.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		LabelMatrícula.setBounds(364, 322, 175, 14);
-		contentPane.add(LabelMatrícula);
-		
 		JLabel LabelDataNascimento = new JLabel("Insira sua Data de Nascimento:");
 		LabelDataNascimento.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		LabelDataNascimento.setBounds(438, 118, 154, 14);
+		LabelDataNascimento.setBounds(438, 118, 167, 14);
 		contentPane.add(LabelDataNascimento);
         
         // --- JCALENDAR ---
@@ -266,23 +354,12 @@ public class TelaCadastro extends JFrame {
         btnLogin.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         btnLogin.setBounds(405, 50, 135, 20);
         contentPane.add(btnLogin);
-               
-        JLabel LabelEstados = new JLabel("Estado(UF):");
-        LabelEstados.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        LabelEstados.setBounds(699, 114, 72, 22);
-        contentPane.add(LabelEstados);
         
-        JLabel LabelMunicípios = new JLabel("Município:");
-        LabelMunicípios.setBounds(699, 162, 59, 35);
-        contentPane.add(LabelMunicípios);
-        
-        JComboBox comboBoxEstados = new JComboBox();
-        comboBoxEstados.setBounds(699, 140, 72, 22);
-        contentPane.add(comboBoxEstados);
-        
-        JComboBox comboBoxMunicípios = new JComboBox();
-        comboBoxMunicípios.setBounds(691, 197, 95, 22);
-        contentPane.add(comboBoxMunicípios);
+        // REMOVI OS CAMPOS ANTIGOS SEM FUNCIONALIDADE:
+        // JLabel LabelEstados = new JLabel("Estado(UF):"); // REMOVIDO
+        // JLabel LabelMunicípios = new JLabel("Município:"); // REMOVIDO
+        // JComboBox comboBoxEstados = new JComboBox(); // REMOVIDO
+        // JComboBox comboBoxMunicípios = new JComboBox(); // REMOVIDO
         
         JButton btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(new ActionListener() {
@@ -296,14 +373,85 @@ public class TelaCadastro extends JFrame {
         btnVoltar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         btnVoltar.setBounds(686, 407, 125, 32);
         contentPane.add(btnVoltar);
+        
+        JLabel lblNewLabel = new JLabel("CEP:");
+        lblNewLabel.setBounds(652, 117, 46, 14);
+        contentPane.add(lblNewLabel);
+        
+        textField = new JTextField(); // CEP
+        textField.setBounds(644, 140, 86, 20);
+        contentPane.add(textField);
+        textField.setColumns(10);
+        
+        JLabel lblNewLabel_1 = new JLabel("Rua:");
+        lblNewLabel_1.setBounds(740, 230, 46, 14);
+        contentPane.add(lblNewLabel_1);
+        
+        textField_1 = new JTextField(); // Rua
+        textField_1.setBounds(740, 255, 86, 20);
+        contentPane.add(textField_1);
+        textField_1.setColumns(10);
+        
+        JLabel lblNewLabel_2 = new JLabel("Número:");
+        lblNewLabel_2.setBounds(740, 286, 72, 14);
+        contentPane.add(lblNewLabel_2);
+        
+        textField_2 = new JTextField(); // Número
+        textField_2.setBounds(740, 311, 59, 20);
+        contentPane.add(textField_2);
+        textField_2.setColumns(10);
 
 		JLabel lblNewLabel_9 = new JLabel("Senha:");
 		lblNewLabel_9.setBounds(285, 224, 46, 14);
 		// Removi o lblNewLabel_9 para dar espaço ao novo JLabel e JProgressBar
 		// contentPane.add(lblNewLabel_9); 
         
-        // chamando o método que implementa O DocumentListener
+        // CAMPOS ADICIONADOS PARA COMPLETAR ENDEREÇO
+        // RENOMEADO: Bairro
+        JLabel lblBairro = new JLabel("Bairro:");
+        lblBairro.setBounds(644, 230, 46, 14);
+        contentPane.add(lblBairro);
+        
+        textBairro = new JTextField(); // Bairro
+        textBairro.setBounds(644, 255, 86, 20);
+        contentPane.add(textBairro);
+        textBairro.setColumns(10);
+        
+        // RENOMEADO: Município (antiga Cidade)
+        JLabel lblMunicipio = new JLabel("Município:");
+        lblMunicipio.setBounds(740, 173, 72, 14);
+        contentPane.add(lblMunicipio);
+        
+        textMunicipio = new JTextField(); // Município
+        textMunicipio.setBounds(740, 198, 86, 20);
+        contentPane.add(textMunicipio);
+        textMunicipio.setColumns(10);
+        
+        // RENOMEADO: Estado(UF)
+        JLabel lblEstadoUF = new JLabel("Estado(UF):");
+        lblEstadoUF.setBounds(644, 173, 72, 14);
+        contentPane.add(lblEstadoUF);
+        
+        textEstadoUF = new JTextField(); // Estado(UF)
+        textEstadoUF.setBounds(644, 198, 46, 20);
+        contentPane.add(textEstadoUF);
+        textEstadoUF.setColumns(10);
+        
+        // BOTÃO PARA BUSCAR CEP (OPCIONAL)
+        JButton btnBuscarCEP = new JButton("Buscar");
+        btnBuscarCEP.setBounds(740, 140, 83, 20);
+        btnBuscarCEP.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                buscarEnderecoPorCEP();
+            }
+        });
+        contentPane.add(btnBuscarCEP);
+
+		// chamando o método que implementa O DocumentListener
         implementPasswordStrengthCheck();
+        
+        // ADICIONA LISTENER PARA BUSCA AUTOMÁTICA DE CEP
+        implementCEPAutoComplete();
 
 	}
 
@@ -432,6 +580,96 @@ public class TelaCadastro extends JFrame {
                 }
             }
         });
+    }
+    
+    /**
+     * MÉTODO ADICIONADO: Implementa a busca automática de CEP
+     */
+    private void implementCEPAutoComplete() {
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                buscarQuandoCompleto();
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                // Não faz nada
+            }
+            
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                buscarQuandoCompleto();
+            }
+            
+            private void buscarQuandoCompleto() {
+                String cep = textField.getText().replaceAll("[^0-9]", "");
+                if (cep.length() == 8) {
+                    // Aguarda 500ms antes de buscar (para não buscar a cada tecla)
+                    Timer timer = new Timer(500, e2 -> buscarEnderecoPorCEP());
+                    timer.setRepeats(false);
+                    timer.start();
+                }
+            }
+        });
+    }
+    
+    /**
+     * MÉTODO ADICIONADO: Busca endereço por CEP
+     */
+    private void buscarEnderecoPorCEP() {
+        String cep = textField.getText().trim();
+        
+        if (cep.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Digite um CEP válido");
+            return;
+        }
+        
+        // Mostra cursor de carregamento
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        
+        // Usa SwingWorker para não travar a interface
+        javax.swing.SwingWorker<ViaCEPResponse, Void> worker = new javax.swing.SwingWorker<>() {
+            @Override
+            protected ViaCEPResponse doInBackground() throws Exception {
+                ViaCEPService service = new ViaCEPService();
+                return service.buscarCEP(cep);
+            }
+            
+            @Override
+            protected void done() {
+                setCursor(Cursor.getDefaultCursor());
+                
+                try {
+                    ViaCEPResponse endereco = get();
+                    
+                    if (endereco == null) {
+                        JOptionPane.showMessageDialog(TelaCadastro.this, 
+                            "CEP não encontrado", 
+                            "Erro", 
+                            JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    
+                    // Preenche os campos automaticamente
+                    textField_1.setText(endereco.getLogradouro());
+                    textBairro.setText(endereco.getBairro());
+                    textMunicipio.setText(endereco.getLocalidade()); // Preenche Município
+                    textEstadoUF.setText(endereco.getUf()); // Preenche Estado(UF)
+                    
+                    // Foca no campo Número automaticamente
+                    textField_2.requestFocus();
+                    
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(TelaCadastro.this,
+                        "Erro ao buscar CEP: " + e.getMessage(),
+                        "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        };
+        
+        worker.execute();
     }
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
