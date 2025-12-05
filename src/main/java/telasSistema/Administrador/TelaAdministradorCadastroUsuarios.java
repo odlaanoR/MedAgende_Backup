@@ -118,7 +118,7 @@ public class TelaAdministradorCadastroUsuarios extends JFrame {
     private Gson gson;
     private JTextField textPlano;
     private JTextField textTelefone;
-    private JTextField textSenha;
+    private JPasswordField textSenha;
 
 	/**
 	 * Launch the application.
@@ -349,11 +349,9 @@ public class TelaAdministradorCadastroUsuarios extends JFrame {
         contentPane.add(textTelefone);
         textTelefone.setColumns(10);
         
-        textSenha = new JTextField();
-        textSenha.setToolTipText("Senha");
+        textSenha = new JPasswordField();
         textSenha.setBounds(242, 198, 172, 18);
         contentPane.add(textSenha);
-        textSenha.setColumns(10);
 
 		// chamando o método que implementa O DocumentListener
         implementPasswordStrengthCheck();
@@ -373,7 +371,7 @@ public class TelaAdministradorCadastroUsuarios extends JFrame {
     	u.setNome(textNome.getText());
     	u.setEmail(textEmail.getText());
     	u.setCPF(textCPF.getText());
-    	u.setSenha(textSenha.getText());
+    	 u.setSenha(new String(textSenha.getPassword()));
     	u.setDataNasc(textDataNascimento.getDate());
     	u.setBairro(textBairro.getText());
     	u.setCep(textCEP.getText());
@@ -403,7 +401,7 @@ public class TelaAdministradorCadastroUsuarios extends JFrame {
             camposEmBranco++;
             mensagem += "Email\n";
         }
-        if (textSenha.getText().length() == 0) {
+        if (textSenha.getPassword().length == 0) {
             camposEmBranco++;
             mensagem += "Senha\n";
         }
@@ -625,3 +623,5 @@ public class TelaAdministradorCadastroUsuarios extends JFrame {
 		});
 	}
 }
+
+
