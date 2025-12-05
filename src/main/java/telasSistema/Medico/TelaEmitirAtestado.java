@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Back.Atestado;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -79,6 +81,11 @@ public class TelaEmitirAtestado extends JFrame {
 		contentPane.add(btnVoltar);
 		
 		JButton btnImprimir = new JButton("Imprimir");
+		btnImprimir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Atestado.EmitirAtestado();
+			}
+		});
 		btnImprimir.setForeground(Color.WHITE);
 		btnImprimir.setBorder(null);
 		btnImprimir.setBackground(Color.DARK_GRAY);
