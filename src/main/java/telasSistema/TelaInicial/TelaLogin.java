@@ -154,7 +154,7 @@ public class TelaLogin extends JFrame {
 
 		JLabel EsqueceuSenha = new JLabel("Esqueceu a senha?");
 		EsqueceuSenha.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		EsqueceuSenha.setBounds(20, 359, 210, 32);
+		EsqueceuSenha.setBounds(96, 375, 114, 32);
 		panel.add(EsqueceuSenha);
 
 		JButton btnRecuperarSenha = new JButton("Recuperar Senha");
@@ -169,7 +169,7 @@ public class TelaLogin extends JFrame {
 		});
 		btnRecuperarSenha.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnRecuperarSenha.setBackground(Color.WHITE);
-		btnRecuperarSenha.setBounds(207, 359, 132, 32);
+		btnRecuperarSenha.setBounds(208, 375, 132, 32);
 		panel.add(btnRecuperarSenha);
 
 		JLabel BoasVindas = new JLabel("Bem-vindo(a) ao MedAgende!");

@@ -24,6 +24,7 @@ public class TelaRecuperaçãoSenha extends JFrame {
 	private JLabel lblNewLabel_2;
 	private JButton btnPróximo;
 	private JButton btnProximo;
+	private JButton btnvoltar;
 
 	/**
 	 * Launch the application.
@@ -99,6 +100,18 @@ public class TelaRecuperaçãoSenha extends JFrame {
 		});
 		btnProximo.setBounds(501, 208, 156, 20);
 		contentPane.add(btnProximo);
+		
+		btnvoltar = new JButton("Voltar");
+		btnvoltar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			TelaLogin tela=new TelaLogin();
+			tela.setLocationRelativeTo(null);
+			tela.setVisible(true);
+			dispose();
+			}
+		});
+		btnvoltar.setBounds(36, 212, 132, 14);
+		contentPane.add(btnvoltar);
 		
 	}
 	private static class __Tmp {

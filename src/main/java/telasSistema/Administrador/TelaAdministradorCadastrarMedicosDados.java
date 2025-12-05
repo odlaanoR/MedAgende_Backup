@@ -508,21 +508,21 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
                 // Atualiza a interface
                 switch (strength) {
                     case WEAK:
-                        lblStrengthFeedbackNIVELSENHA.setText("FRACA");
+                        lblStrengthFeedbackNIVELSENHA.setText("Nível da Senha:");
                         lblStrengthFeedbackNIVELSENHA.setForeground(Color.RED);
                         progressBarBARRAdoNIVELSENHA.setValue(1);
                         progressBarBARRAdoNIVELSENHA.setForeground(Color.RED);
                         progressBarBARRAdoNIVELSENHA.setString("Fraca");
                         break;
                     case MEDIUM:
-                        lblStrengthFeedbackNIVELSENHA.setText("MÉDIA");
+                        lblStrengthFeedbackNIVELSENHA.setText("Nível da Senha:");
                         lblStrengthFeedbackNIVELSENHA.setForeground(Color.ORANGE.darker());
                         progressBarBARRAdoNIVELSENHA.setValue(3);
                         progressBarBARRAdoNIVELSENHA.setForeground(Color.ORANGE.darker());
                         progressBarBARRAdoNIVELSENHA.setString("Média");
                         break;
                     case STRONG:
-                        lblStrengthFeedbackNIVELSENHA.setText("FORTE");
+                        lblStrengthFeedbackNIVELSENHA.setText("Nível da Senha:");
                         lblStrengthFeedbackNIVELSENHA.setForeground(Color.GREEN.darker());
                         progressBarBARRAdoNIVELSENHA.setValue(5);
                         progressBarBARRAdoNIVELSENHA.setForeground(Color.GREEN.darker());

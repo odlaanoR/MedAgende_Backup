@@ -151,6 +151,7 @@ public class TelaAdministradorCadastroUsuarios extends JFrame {
 		contentPane.setBackground(new Color(143, 222, 239));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		setResizable(false);
 		
 		JPopupMenu popupMenu = new JPopupMenu();
 		addPopup(contentPane, popupMenu);
@@ -204,7 +205,7 @@ public class TelaAdministradorCadastroUsuarios extends JFrame {
         
         // --- JCALENDAR ---
         textDataNascimento = new JDateChooser();
-        textDataNascimento.setToolTipText("Ex: 25/06/2003...");
+        textDataNascimento.setToolTipText("Ex: 15/76/2002...");
         textDataNascimento.setDateFormatString("dd/MM/yyyy");
         textDataNascimento.setBounds(441, 142, 120, 20); 
         contentPane.add(textDataNascimento);
@@ -238,7 +239,7 @@ public class TelaAdministradorCadastroUsuarios extends JFrame {
                 realizarCadastro();
             }
         });
-        btnCadastro.setBounds(42, 406, 135, 35);
+        btnCadastro.setBounds(677, 409, 135, 35);
         contentPane.add(btnCadastro);
         
         JButton btnVoltar = new JButton("Voltar");
@@ -249,8 +250,8 @@ public class TelaAdministradorCadastroUsuarios extends JFrame {
 				 dispose();
         	}
         });
-        btnVoltar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        btnVoltar.setBounds(686, 407, 125, 32);
+        btnVoltar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnVoltar.setBounds(40, 410, 125, 32);
         contentPane.add(btnVoltar);
         
         JLabel lblNewLabel = new JLabel("CEP:");
@@ -501,6 +502,61 @@ public class TelaAdministradorCadastroUsuarios extends JFrame {
      * Implementa a verificação de força da senha
      */
     private void implementPasswordStrengthCheck() {
+        textSenha.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                checkAndUpdateUI();
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                checkAndUpdateUI();
+            }
+            
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                // Não usado para JPasswordField
+            }
+
+            private void checkAndUpdateUI() {
+                String password = new String(textSenha.getPassword());
+                
+                if (password.isEmpty()) {
+                    lblStrengthFeedbackNIVELSENHA.setText("Nível da Senha:");
+                    lblStrengthFeedbackNIVELSENHA.setForeground(Color.BLACK);
+                    progressBarBARRAdoNIVELSENHA.setValue(0);
+                    progressBarBARRAdoNIVELSENHA.setString("");
+                    return;
+                }
+                
+                PasswordStrength strength = checkPasswordStrength(password);
+                
+                // Atualiza a interface
+                switch (strength) {
+                    case WEAK:
+                        lblStrengthFeedbackNIVELSENHA.setText("Nível da Senha:");
+                        lblStrengthFeedbackNIVELSENHA.setForeground(Color.RED);
+                        progressBarBARRAdoNIVELSENHA.setValue(1);
+                        progressBarBARRAdoNIVELSENHA.setForeground(Color.RED);
+                        progressBarBARRAdoNIVELSENHA.setString("Fraca");
+                        break;
+                    case MEDIUM:
+                        lblStrengthFeedbackNIVELSENHA.setText("Nível da Senha:");
+                        lblStrengthFeedbackNIVELSENHA.setForeground(Color.ORANGE.darker());
+                        progressBarBARRAdoNIVELSENHA.setValue(3);
+                        progressBarBARRAdoNIVELSENHA.setForeground(Color.ORANGE.darker());
+                        progressBarBARRAdoNIVELSENHA.setString("Média");
+                        break;
+                    case STRONG:
+                        lblStrengthFeedbackNIVELSENHA.setText("Nível da Senha:");
+                        lblStrengthFeedbackNIVELSENHA.setForeground(Color.GREEN.darker());
+                        progressBarBARRAdoNIVELSENHA.setValue(5);
+                        progressBarBARRAdoNIVELSENHA.setForeground(Color.GREEN.darker());
+                        progressBarBARRAdoNIVELSENHA.setString("Forte");
+                        break;
+                }
+            }
+        });
     }
     
     /**
