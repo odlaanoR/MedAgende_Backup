@@ -83,6 +83,7 @@ public class TelaEmitirAtestado extends JFrame {
 		JButton btnImprimir = new JButton("Imprimir");
 		btnImprimir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				Atestado.EmitirAtestado();
 			}
 		});

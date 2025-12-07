@@ -2,21 +2,21 @@ package telasSistema.Medico;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JRadioButton;
-import javax.swing.JCheckBox;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import Back.Prontuario;
 
 public class TelaProntuarioPaciente extends JFrame {
 
@@ -86,6 +86,7 @@ public class TelaProntuarioPaciente extends JFrame {
 		txtIdade.setBounds(40, 124, 86, 20);
 		contentPane.add(txtIdade);
 		txtIdade.setColumns(10);
+		
 		
 		txtNomeCompleto = new JTextField();
 		txtNomeCompleto.setColumns(10);
@@ -251,7 +252,7 @@ public class TelaProntuarioPaciente extends JFrame {
 		btnVoltar.setForeground(Color.WHITE);
 		btnVoltar.setBorder(null);
 		btnVoltar.setBackground(Color.DARK_GRAY);
-		btnVoltar.setBounds(243, 406, 89, 23);
+		btnVoltar.setBounds(289, 406, 89, 23);
 		contentPane.add(btnVoltar);
 		
 		JButton btnProximo = new JButton("Próximo");
@@ -260,6 +261,50 @@ public class TelaProntuarioPaciente extends JFrame {
 		btnProximo.setBackground(Color.DARK_GRAY);
 		btnProximo.setBounds(482, 406, 89, 23);
 		contentPane.add(btnProximo);
+		
+		JButton btnBaixar = new JButton("Baixar Prontuário");
+		btnBaixar.setForeground(Color.WHITE);
+		btnBaixar.setBorder(null);
+		btnBaixar.setBackground(Color.DARK_GRAY);
+		btnBaixar.setBounds(693, 406, 121, 23);
+		contentPane.add(btnBaixar);
+		
+		btnBaixar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//Processando as informações guardadas nos campos
+				String Idade = txtIdade.getText();
+				
+				String Nome = txtNomeCompleto.getText();
+				
+				String Endereco = txtEndereco.getText();
+				
+				String Telefone = txtTelefone.getText();
+				
+				String Peso = txtPeso.getText();
+				
+				String Altura = txtAltura.getText();
+				
+				String Alergias = txtAlergias.getText();
+				
+				String Doencas = txtDoencas.getText();
+				
+				String Profissao = txtProfissao.getText();
+				
+				String Temperatura = txtTemperatura.getText();
+				
+				String Pressao = txtPressao.getText();
+				
+				String FreqCardiaca = txtFrequenciaCardiaca.getText();
+				
+				String Sintomas = txtSintomas.getText();
+				
+				String Sexo = (String) comboBoxSexo.getSelectedItem();
+				
+				
+				// [DEBUG] System.out.println("método foi chamado");
+				Prontuario.EmitirProntuario(Idade, Nome, Endereco, Telefone, Peso, Altura, Alergias, Doencas, Profissao, Temperatura, Pressao, FreqCardiaca, Sintomas, Sexo);
+			}
+		});
 
 	}
 }
