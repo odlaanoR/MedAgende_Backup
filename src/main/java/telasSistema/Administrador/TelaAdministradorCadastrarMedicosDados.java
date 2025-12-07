@@ -13,6 +13,8 @@ import javax.swing.JPopupMenu;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+
 import javax.swing.JProgressBar;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -95,6 +97,7 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
 	private JTextField textNome;
 	private JTextField textCPF;
 	private JTextField textEmail;
+	private JTextField textTelefone;
 	private JPasswordField passwordFieldSENHA;
 	private JPasswordField passwordCONFIRMARSENHA;
 	private JDateChooser dcDataNascimento;
@@ -108,11 +111,12 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
     private JTextField textMunicipio;
     private JTextField textEstadoUF;
     private JTextField textBairro;
+
     
     // Componentes para API
     private OkHttpClient httpClient;
     private Gson gson;
-    private JPasswordField PlanoSaudeField;
+    private JPasswordField PlanoSaudeField; //Realmente precisa disso aqui?
 
 	/**
 	 * Launch the application.
@@ -171,30 +175,30 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
 		contentPane.add(textEmail);
 		textEmail.setColumns(10);
 		
-		JLabel LabelEmail = new JLabel("Digite o Email:");
-		LabelEmail.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
-		LabelEmail.setBounds(31, 172, 189, 14);
-		contentPane.add(LabelEmail);
+		JLabel labelEmail = new JLabel("Digite o Email:");
+		labelEmail.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
+		labelEmail.setBounds(31, 172, 189, 14);
+		contentPane.add(labelEmail);
 		
-		JLabel LabelSENHA = new JLabel("Digite aqui a senha :");
-		LabelSENHA.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
-		LabelSENHA.setBounds(252, 172, 206, 14);
-		contentPane.add(LabelSENHA);
+		JLabel labelSENHA = new JLabel("Digite aqui a senha :");
+		labelSENHA.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
+		labelSENHA.setBounds(252, 172, 206, 14);
+		contentPane.add(labelSENHA);
 		
-		JLabel LabelCPF = new JLabel("CPF:");
-		LabelCPF.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
-		LabelCPF.setBounds(260, 118, 154, 14);
-		contentPane.add(LabelCPF);
+		JLabel labelCPF = new JLabel("CPF:");
+		labelCPF.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
+		labelCPF.setBounds(260, 118, 154, 14);
+		contentPane.add(labelCPF);
 		
-		JLabel LabelNome = new JLabel("Nome Completo:");
-		LabelNome.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
-		LabelNome.setBounds(21, 118, 206, 14);
-		contentPane.add(LabelNome);
+		JLabel labelNome = new JLabel("Nome Completo:");
+		labelNome.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
+		labelNome.setBounds(21, 118, 206, 14);
+		contentPane.add(labelNome);
 		
-		JLabel LabelDataNascimento = new JLabel("Insira a Data de Nascimento:");
-		LabelDataNascimento.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
-		LabelDataNascimento.setBounds(438, 118, 167, 14);
-		contentPane.add(LabelDataNascimento);
+		JLabel labelDataNascimento = new JLabel("Insira a Data de Nascimento:");
+		labelDataNascimento.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
+		labelDataNascimento.setBounds(438, 118, 167, 14);
+		contentPane.add(labelDataNascimento);
         
         // --- JCALENDAR ---
         dcDataNascimento = new JDateChooser();
@@ -212,10 +216,10 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
 		passwordCONFIRMARSENHA.setBounds(457, 198, 135, 20);
 		contentPane.add(passwordCONFIRMARSENHA);
 		
-		JLabel LabelCONFIRMARSENHA = new JLabel("Confirme a senha:");
-		LabelCONFIRMARSENHA.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
-		LabelCONFIRMARSENHA.setBounds(468, 172, 124, 14);
-		contentPane.add(LabelCONFIRMARSENHA);
+		JLabel labelConfirmarSenha = new JLabel("Confirme a senha:");
+		labelConfirmarSenha.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
+		labelConfirmarSenha.setBounds(468, 172, 124, 14);
+		contentPane.add(labelConfirmarSenha);
 		
 		// configuração dos novos componentes 
 		lblStrengthFeedbackNIVELSENHA = new JLabel("Nível da Senha:");
@@ -327,16 +331,15 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
         lblPreenchaOsDados.setBounds(338, 56, 223, 14);
         contentPane.add(lblPreenchaOsDados);
         
-        PlanoSaudeField = new JPasswordField();
-        PlanoSaudeField.setToolTipText("Plano de saúde");
-        PlanoSaudeField.setBounds(21, 284, 206, 20);
-        contentPane.add(PlanoSaudeField);
-        
         JLabel lblDigiteOTelefone = new JLabel("Digite o Telefone:");
         lblDigiteOTelefone.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
         lblDigiteOTelefone.setBounds(40, 253, 189, 14);
         contentPane.add(lblDigiteOTelefone);
         
+        textTelefone = new JTextField();
+        textTelefone.setBounds(21, 284, 206, 20);
+        contentPane.add(textTelefone);
+    
         JButton btnNewButton = new JButton("Próximo");
         btnNewButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -479,14 +482,22 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
         passwordFieldSENHA.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                checkAndUpdateUI();
+            	try {
+            		checkAndUpdateUI();
+            	} catch (Exception er) {
+            		er.printStackTrace();
+            	}
             }
             
             @Override
             public void removeUpdate(DocumentEvent e) {
-                checkAndUpdateUI();
+            	try {
+            		checkAndUpdateUI();
+            	} catch (Exception er) {
+            		er.printStackTrace();
+            	}
             }
-            
+    
             @Override
             public void changedUpdate(DocumentEvent e) {
                 // Não usado para JPasswordField
@@ -554,12 +565,16 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
             }
             
             private void buscarQuandoCompleto() {
-                String cep = textField.getText().replaceAll("[^0-9]", "");
-                if (cep.length() == 8) {
-                    Timer timer = new Timer(500, e2 -> buscarEnderecoPorCEP());
-                    timer.setRepeats(false);
-                    timer.start();
-                }
+            	try {
+            	    String cep = textField.getText().replaceAll("[^0-9]", "");
+            	    if (cep.length() == 8) {
+                        Timer timer = new Timer(500, e2 -> buscarEnderecoPorCEP());
+                        timer.setRepeats(false);
+                        timer.start();
+            	    }
+            	} catch (Exception ex) {
+            	    ex.printStackTrace();
+            	}
             }
         });
     }
@@ -581,19 +596,24 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
         SwingWorker<ViaCEPResponse, Void> worker = new SwingWorker<ViaCEPResponse, Void>() {
             @Override
             protected ViaCEPResponse doInBackground() throws Exception {
-                try {
+            	try {
                     String url = "https://viacep.com.br/ws/" + cep + "/json/";
                     Request request = new Request.Builder()
                             .url(url)
                             .build();
-                    
-                    Response response = httpClient.newCall(request).execute();
-                    String json = response.body().string();
-                    
-                    ViaCEPResponse viaCEPResponse = gson.fromJson(json, ViaCEPResponse.class);
-                    return viaCEPResponse;
-                    
-                } catch (Exception e) {
+
+                    try (Response response = httpClient.newCall(request).execute()) {
+                        if (!response.isSuccessful() || response.body() == null) {
+                            throw new IOException("Resposta inválida da API");
+                        }
+
+                        String json = response.body().string();
+                        ViaCEPResponse viaCEPResponse = gson.fromJson(json, ViaCEPResponse.class);
+                        return viaCEPResponse;
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
                     return null;
                 }
             }
