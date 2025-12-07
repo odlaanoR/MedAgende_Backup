@@ -1,9 +1,11 @@
 package model;
 
 import java.sql.Date;
+import Back.Crypto;
 
 public class Usuario {
-	 private int idUsuario;
+	
+	 	private int idUsuario;
 	    private String email;
 	    private String senha;
 	    private String nome;
@@ -60,6 +62,9 @@ public class Usuario {
 		
 		public void setSenha (String senha) {
 			this.senha=senha;
+			Crypto crypto = new Crypto();
+			crypto.gerarHashBCrypt(senha);
+			senha = crypto.getHash();
 		}
 	    
 	   
