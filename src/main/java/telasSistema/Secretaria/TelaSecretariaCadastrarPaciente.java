@@ -42,7 +42,7 @@ import okhttp3.Response;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
-public class TelaSecretariaCadastrar extends JFrame {
+public class TelaSecretariaCadastrarPaciente extends JFrame {
 
  
     private static class ViaCEPResponse {
@@ -107,12 +107,13 @@ public class TelaSecretariaCadastrar extends JFrame {
     private JTextField FieldMunicipio;
     private JTextField FieldEstado;
     private JTextField FieldBairro;
+    
+    PreparedStatement pstDelete = null;
+
     PreparedStatement pstPaciente = null;
     PreparedStatement pstAlergia = null;
-    PreparedStatement pstComorbidade = null;
-    
-    Connection conexao = null;
-    
+    PreparedStatement pstComorbidade = null;  
+    Connection conexao = null;  
     ResultSet rs=null;
     
     // Componentes para API
@@ -132,11 +133,15 @@ public class TelaSecretariaCadastrar extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaSecretariaCadastrar frame = new TelaSecretariaCadastrar();
+					TelaSecretariaCadastrarPaciente frame = new TelaSecretariaCadastrarPaciente();
 					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null,
+	                        "Erro ao iniciar a aplicação: " + e.getMessage(),
+	                        "Erro", JOptionPane.ERROR_MESSAGE);
+	                    e.printStackTrace();
+
 				}
 			}
 		});
@@ -146,7 +151,7 @@ public class TelaSecretariaCadastrar extends JFrame {
 	 * Create the frame.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public TelaSecretariaCadastrar() {
+	public TelaSecretariaCadastrarPaciente() {
 		// INICIALIZA AS BIBLIOTECAS DA API
 		httpClient = new OkHttpClient();
 		gson = new Gson();
@@ -218,14 +223,28 @@ public class TelaSecretariaCadastrar extends JFrame {
         btnCadastro.setForeground(new Color(0, 0, 0));
         btnCadastro.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                realizarValidação();
-                try {
+               if (realizarValidação()) {
+                
+				try {
 					cadastrarDadosPaciente();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-            }
+				} catch (SQLException ex) {
+	                JOptionPane.showMessageDialog(null,
+	                        "Erro SQL: " + ex.getMessage(),
+	                        "Erro no Banco de Dados",
+	                        JOptionPane.ERROR_MESSAGE);
+	                    ex.printStackTrace();
+	                }catch (Exception ex) {
+	                    JOptionPane.showMessageDialog(null,
+	                            "Erro inesperado: " + ex.getMessage(),
+	                            "Erro",
+	                            JOptionPane.ERROR_MESSAGE);
+	                        ex.printStackTrace();
+	                    }
+
+				
+				
+               }
+               }
         });
         btnCadastro.setBounds(683, 401, 135, 35);
         contentPane.add(btnCadastro);
@@ -234,7 +253,8 @@ public class TelaSecretariaCadastrar extends JFrame {
         btnVoltar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		TelaSecretariaAgendar tela = new TelaSecretariaAgendar();
-				tela.setVisible(true);
+				tela.setLocationRelativeTo(null);
+        		tela.setVisible(true);
 				 dispose();
         	}
         });
@@ -386,113 +406,221 @@ public class TelaSecretariaCadastrar extends JFrame {
         
         // ADICIONA LISTENER PARA BUSCA AUTOMÁTICA DE CEP
         implementCEPAutoComplete();
-	}//o metodo abaixo ele utiliza a tabela de paciente como referencia
+	}
 	public void cadastrarDadosPaciente() throws SQLException {
-		String sqlusuario="insert into paciente ( Email, Nome, Data_Nasc, Bairro, Rua, Num_Casa, Municipio, Plano_De_Saude, CEP, Senha, CPF, Telefone, Estado, Profissao, Sexo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		try {
-			pstPaciente = conexao.prepareStatement(sqlusuario, Statement.RETURN_GENERATED_KEYS);
-			pstPaciente.setString(1,FieldEmail.getText() );
-			pstPaciente.setString(2, FieldNome.getText());
-			// Converter data para java.sql.Date
+	    Connection conn = null;
+	    PreparedStatement pstPaciente = null;
+	    PreparedStatement pstAlergia = null;
+	    PreparedStatement pstComorbidade = null;
+	    ResultSet rs = null;
+	    
+	    try {
+	        // desativa autocommit
+	        conexao.setAutoCommit(false);
+	        
+	        
+	        String sqlPaciente = "INSERT INTO paciente (Email, Nome, Data_Nasc, Bairro, Rua, Num_Casa, Municipio, Plano_De_Saude, CEP, Senha, CPF, Telefone, Estado, Profissao, Sexo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	        pstPaciente = conexao.prepareStatement(sqlPaciente, Statement.RETURN_GENERATED_KEYS);
+	      //o metodo abaixo ele utiliza a tabela de paciente como referencia
+	        // Preenche os parâmetros (igual ao seu código)
+	        pstPaciente.setString(1, FieldEmail.getText());
+	        pstPaciente.setString(2, FieldNome.getText());
+	        
+	        // Data de nascimento
 	        java.util.Date dataUtil = dcDataNascimento.getDate();
 	        if (dataUtil != null) {
 	            java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime());
 	            pstPaciente.setDate(3, dataSql);
 	        } else {
-	            pstPaciente.setNull(3, java.sql.Types.DATE);  // Se não houver data
+	            pstPaciente.setNull(3, java.sql.Types.DATE);
 	        }
+	        
 	        pstPaciente.setString(4, FieldBairro.getText());
 	        pstPaciente.setString(5, FieldRua.getText());
 	        pstPaciente.setString(6, FieldNumero.getText());
 	        pstPaciente.setString(7, FieldMunicipio.getText());
 	        pstPaciente.setString(8, FieldPlanoSaude.getText());
-	        pstPaciente.setString(9,FieldCep.getText());
-	        pstPaciente.setString(10,FieldSenha.getText());
+	        pstPaciente.setString(9, FieldCep.getText());
+	        pstPaciente.setString(10, FieldSenha.getText());
 	        pstPaciente.setString(11, FieldCpf.getText());
 	        pstPaciente.setString(12, FieldTelefone.getText());
 	        pstPaciente.setString(13, FieldEstado.getText());
 	        pstPaciente.setString(14, FieldProfissao.getText());
+	        
 	        String sexo = (String) boxSexo.getSelectedItem();
-	        if (sexo != null && !sexo.isEmpty()) {
-	            pstPaciente.setString(15, sexo);
-	        } else {
-	            pstPaciente.setNull(15, java.sql.Types.VARCHAR);
-	        }
-	        int linhasAfetadas=pstPaciente.executeUpdate();
+	        pstPaciente.setString(15, sexo != null ? sexo : "");
+	        
+	        int linhasAfetadas = pstPaciente.executeUpdate();
+	        
 	        if (linhasAfetadas == 0) {
-	            throw new SQLException("Falha ao cadastrar paciente, nenhuma linha afetada.");
+	            throw new SQLException("Falha ao cadastrar paciente");
 	        }
-	       
+	        
+	        //   pega o idPaciente que é autoincrement
 	        rs = pstPaciente.getGeneratedKeys();
 	        int idPaciente = 0;
 	        if (rs.next()) {
 	            idPaciente = rs.getInt(1);
-	        } else {
-	            throw new SQLException("Falha ao obter ID do paciente.");
 	        }
 	        
+	        String alergia = FieldAlergia.getText().trim();
+	            String sqlAlergia = "INSERT INTO alergias(Id_Paciente, Alergia) VALUES (?,?)";
+	            pstAlergia = conexao.prepareStatement(sqlAlergia);
+	            pstAlergia.setInt(1, idPaciente);
+	            pstAlergia.setString(2, alergia);
+	            pstAlergia.executeUpdate();
 	        
-	        String sqlalergia="insert into alergias(Id_Paciente,Alergia)values(?,?)";
-            pstAlergia = conexao.prepareStatement(sqlalergia);
-
-	        pstAlergia.setInt(1, idPaciente);
-	        pstAlergia.setString(2, FieldAlergia.getText());
-	        int linhasAfetadas1=pstAlergia.executeUpdate();
-	        if (linhasAfetadas == 0) {
-	            throw new SQLException("Falha ao cadastrar paciente, nenhuma linha afetada.");
-	        }	        
-	        String sqlcomorbidades="insert into comorbidades(Id_Paciente,Comorbidade)values(?,?)";
-            pstComorbidade = conexao.prepareStatement(sqlcomorbidades);
-
-	        pstComorbidade.setInt(1,idPaciente);
-	        pstComorbidade.setString(2, FieldComorbidade.getText());
-	        int linhasAfetadas2=pstComorbidade.executeUpdate();
-	        if (linhasAfetadas == 0) {
-	            throw new SQLException("Falha ao cadastrar paciente, nenhuma linha afetada.");
+	        
+	        String comorbidade = FieldComorbidade.getText().trim();
+	       
+	            String sqlComorbidade = "INSERT INTO comorbidades(Id_Paciente, Comorbidade) VALUES (?,?)";
+	            pstComorbidade = conexao.prepareStatement(sqlComorbidade);
+	            pstComorbidade.setInt(1, idPaciente);
+	            pstComorbidade.setString(2, comorbidade);
+	            pstComorbidade.executeUpdate();
+	        
+	        
+	        conexao.commit();
+	        
+	        JOptionPane.showMessageDialog(null,
+	            "Paciente cadastrado com sucesso! ID: " + idPaciente,
+	            "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+	        
+	        limparCampos();
+	        
+	    } catch (Exception e) {
+	        if (conexao != null) {
+	            try {
+	                conexao.rollback();
+	            } catch (SQLException ex) {
+	                ex.printStackTrace();
+	            }
 	        }
-		
-		} catch (Exception e) {
-		JOptionPane.showMessageDialog(null,e);
-		}
-		
+	        
+	        JOptionPane.showMessageDialog(null,
+	            "Erro ao cadastrar paciente: " + e.getMessage(),
+	            "Erro no Cadastro", JOptionPane.ERROR_MESSAGE);
+	        throw e;
+	        
+	    } finally {
+	        if (rs != null) try { rs.close(); } catch (SQLException e) {}
+	        if (pstPaciente != null) try { pstPaciente.close(); } catch (SQLException e) {}
+	        if (pstAlergia != null) try { pstAlergia.close(); } catch (SQLException e) {}
+	        if (pstComorbidade != null) try { pstComorbidade.close(); } catch (SQLException e) {}
+	        
+	        if (conexao != null) {
+	            try {
+	                conexao.setAutoCommit(true);
+	            } catch (SQLException e) {}
+	        }
+	    }
 	}
 
-	
+	private void limparCampos() {
+	    FieldNome.setText("");
+	    FieldCpf.setText("");
+	    FieldEmail.setText("");
+	    dcDataNascimento.setDate(null);
+	    FieldProfissao.setText("");
+	    FieldAlergia.setText("");
+	    FieldComorbidade.setText("");
+	    FieldPlanoSaude.setText("");
+	    FieldTelefone.setText("");
+	    FieldCep.setText("");
+	    FieldRua.setText("");
+	    FieldNumero.setText("");
+	    FieldMunicipio.setText("");
+	    FieldEstado.setText("");
+	    FieldBairro.setText("");
+	    FieldSenha.setText("");
+	    boxSexo.setSelectedIndex(0);
+	}
     
     /**
      * Método para realizar o cadastro
      */
-    private void realizarValidação() {
-        String mensagem = "";
-        int camposEmBranco = 0;
+  
         
-        if (FieldNome.getText().trim().isEmpty()) {
-            camposEmBranco++;
-            mensagem += "Nome\n";
-        }
-        if (FieldCpf.getText().trim().isEmpty()) {
-            camposEmBranco++;
-            mensagem += "CPF\n";
-        }
-        if (FieldEmail.getText().trim().isEmpty()) {
-            camposEmBranco++;
-            mensagem += "Email\n";
-        }
-      
-        if (dcDataNascimento.getDate() == null) {
-            camposEmBranco++;
-            mensagem += "Data de Nascimento\n";
-        }
-        
+        private boolean realizarValidação() {
+            String mensagem = "";
+            int camposEmBranco = 0;
+            
+            if (FieldNome.getText().trim().isEmpty()) {
+                camposEmBranco++;
+                mensagem += "Nome\n";
+            }
+            if (FieldCpf.getText().trim().isEmpty()) {
+                camposEmBranco++;
+                mensagem += "CPF\n";
+            }
+            if (FieldEmail.getText().trim().isEmpty()) {
+                camposEmBranco++;
+                mensagem += "Email\n";
+            }
+          
+            if (dcDataNascimento.getDate() == null) {
+                camposEmBranco++;
+                mensagem += "Data de Nascimento\n";
+            }
+            if(FieldProfissao.getText().trim().isEmpty()) {
+            	camposEmBranco++;
+                mensagem += "Profissão\n";
+            }
+            if(FieldAlergia.getText().trim().isEmpty()) {
+            	camposEmBranco++;
+                mensagem += "Alergia\n";
+            }
+            if(FieldComorbidade.getText().trim().isEmpty()) {
+            	camposEmBranco++;
+                mensagem += "Comorbidade\n";
+            }
+            if(FieldPlanoSaude.getText().trim().isEmpty()) {
+            	camposEmBranco++;
+                mensagem += "Plano de Saude\n";
+            }
+            if(FieldTelefone.getText().trim().isEmpty()) {
+            	camposEmBranco++;
+                mensagem += "Telefone\n";
+            }        
         if (camposEmBranco > 0) {
             JOptionPane.showMessageDialog(
                 null,
                 "Preencha os campos:\n" + mensagem,
                 "Erro de Validação",
                 JOptionPane.WARNING_MESSAGE
-            );
-            return;
+              
+            	);
+          return false;
         }
+        
+        String cpf = FieldCpf.getText().replaceAll("[^0-9]", "");
+        if (cpf.length() != 11) {
+            JOptionPane.showMessageDialog(null,
+                "CPF inválido! Deve conter 11 dígitos.",
+                "CPF Inválido",
+                JOptionPane.WARNING_MESSAGE);
+            FieldCpf.requestFocus();
+            return false;
+        }
+        String email = FieldEmail.getText().trim();
+        if (!email.contains("@") || !email.contains(".")) {
+            JOptionPane.showMessageDialog(null,
+                "Email inválido! Digite um email válido.",
+                "Email Inválido",
+                JOptionPane.WARNING_MESSAGE);
+            FieldEmail.requestFocus();
+            return false;
+        }
+        String telefone = FieldTelefone.getText().replaceAll("[^0-9]", "");
+        if (telefone.length() < 10) {
+            JOptionPane.showMessageDialog(null,
+                "Telefone inválido! Deve conter no mínimo 10 dígitos.",
+                "Telefone Inválido",
+                JOptionPane.WARNING_MESSAGE);
+            FieldTelefone.requestFocus();
+            return false;
+        }
+		return true;
  
         }
     
@@ -569,7 +697,7 @@ public class TelaSecretariaCadastrar extends JFrame {
                     ViaCEPResponse endereco = get();
                     
                     if (endereco == null || endereco.temErro()) {
-                        JOptionPane.showMessageDialog(TelaSecretariaCadastrar.this, 
+                        JOptionPane.showMessageDialog(TelaSecretariaCadastrarPaciente.this, 
                             "CEP não encontrado!\nVerifique o CEP digitado.", 
                             "CEP não encontrado", 
                             JOptionPane.ERROR_MESSAGE);
@@ -587,7 +715,7 @@ public class TelaSecretariaCadastrar extends JFrame {
                     });
                     
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(TelaSecretariaCadastrar.this,
+                    JOptionPane.showMessageDialog(TelaSecretariaCadastrarPaciente.this,
                         "Erro na consulta ao CEP: " + e.getMessage(),
                         "Erro na Consulta",
                         JOptionPane.ERROR_MESSAGE);
