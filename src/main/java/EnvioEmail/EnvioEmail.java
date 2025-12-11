@@ -10,7 +10,7 @@ import javax.mail.PasswordAuthentication;
 //email do sistema: suporteapp2026@gmail.com senha: "lbmb fpcn ctmi jhwh" 
 //email do destinatário: emailprojetos01@gmail.com usar a seguinte senha: vzyw lush aydc jawv 
 public class EnvioEmail {
-    public static void main(String[] args) {
+    public  void main(String[] args) {
         // Configurações
         String host = "smtp.gmail.com"; 
         String port = "587";
