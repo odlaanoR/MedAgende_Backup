@@ -173,22 +173,22 @@ public class TelaRecuperaçãoSenha extends JFrame {
         JPanel panelInfo = new JPanel();
         panelInfo.setBackground(new Color(240, 240, 240));
         panelInfo.setBorder(javax.swing.BorderFactory.createTitledBorder("Informações do Sistema"));
-        panelInfo.setBounds(479, 101, 187, 116);
+        panelInfo.setBounds(487, 101, 173, 118);
         panelInfo.setLayout(null);
         
         JLabel lblInfo1 = new JLabel("<html>Email do sistema:<br><b>suporteapp2026@gmail.com</b></html>");
         lblInfo1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-        lblInfo1.setBounds(10, 20, 260, 30);
+        lblInfo1.setBounds(10, 20, 614, 30);
         panelInfo.add(lblInfo1);
         
         JLabel lblInfo2 = new JLabel("<html>Token gerado:<br><b>Aguardando...</b></html>");
         lblInfo2.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-        lblInfo2.setBounds(10, 49, 260, 30);
+        lblInfo2.setBounds(10, 50, 614, 30);
         panelInfo.add(lblInfo2);
         
         JLabel lblInfo3 = new JLabel("<html>Status SMTP:<br><b>Pronto para enviar</b></html>");
         lblInfo3.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-        lblInfo3.setBounds(10, 80, 260, 30);
+        lblInfo3.setBounds(10, 80, 614, 30);
         panelInfo.add(lblInfo3);
         
         contentPane.add(panelInfo);
@@ -334,14 +334,17 @@ public class TelaRecuperaçãoSenha extends JFrame {
         }
     }
     
-    // Gera token numérico de 6 dígitos
-     
+    /**
+     * Gera token numérico de 6 dígitos
+     */
     private String gerarToken() {
         Random random = new Random();
         return String.format("%06d", random.nextInt(999999));
     }
     
-   
+    /**
+     * Método REAL de envio de email - ATUALIZADO
+     */
     private void enviarEmailReal(String emailDestino, String token) throws MessagingException, UnsupportedEncodingException {
         // Configurar propriedades SMTP para Gmail - ATUALIZADO
         Properties props = new Properties();
@@ -438,7 +441,7 @@ public class TelaRecuperaçãoSenha extends JFrame {
             
             setTitle("Verificação de Token");
             setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            setSize(500, 350);
+            setSize(500, 400); // Aumentei a altura
             setLocationRelativeTo(null);
             setResizable(false);
             
@@ -446,7 +449,7 @@ public class TelaRecuperaçãoSenha extends JFrame {
             contentPanel.setBackground(new Color(204, 255, 255));
             contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
             setContentPane(contentPanel);
-            contentPanel.setLayout(null);
+            contentPanel.setLayout(null); // Usando layout absoluto
             
             JLabel lblTitulo = new JLabel("Verificação de Token");
             lblTitulo.setFont(new Font("Trebuchet MS", Font.BOLD, 20));
@@ -464,11 +467,12 @@ public class TelaRecuperaçãoSenha extends JFrame {
             lblEmail.setBounds(50, 90, 400, 20);
             contentPanel.add(lblEmail);
             
+            // CAMPO DE TEXTO PARA O TOKEN - CORRIGIDO
             txtToken = new JTextField();
             txtToken.setFont(new Font("Arial", Font.BOLD, 18));
             txtToken.setHorizontalAlignment(JTextField.CENTER);
             txtToken.setBounds(150, 130, 200, 40);
-            contentPane.add(txtToken);
+            contentPanel.add(txtToken); // CORREÇÃO: Agora está no contentPanel correto
             txtToken.setColumns(10);
             
             JLabel lblDica = new JLabel("Dica: O token tem 6 dígitos (ex: 123456)");
@@ -481,7 +485,7 @@ public class TelaRecuperaçãoSenha extends JFrame {
             btnVerificar.setFont(new Font("Segoe UI", Font.BOLD, 12));
             btnVerificar.setBackground(new Color(0, 153, 0));
             btnVerificar.setForeground(Color.WHITE);
-            btnVerificar.setBounds(150, 200, 200, 40);
+            btnVerificar.setBounds(150, 210, 200, 40);
             btnVerificar.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     verificarToken();
@@ -490,7 +494,7 @@ public class TelaRecuperaçãoSenha extends JFrame {
             contentPanel.add(btnVerificar);
             
             JButton btnVoltar = new JButton("← Voltar");
-            btnVoltar.setBounds(50, 260, 100, 30);
+            btnVoltar.setBounds(50, 270, 100, 30);
             btnVoltar.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     dispose();
@@ -504,21 +508,10 @@ public class TelaRecuperaçãoSenha extends JFrame {
             JButton btnRedefinir = new JButton("Redefinir Senha →");
             btnRedefinir.setBackground(new Color(51, 102, 255));
             btnRedefinir.setForeground(Color.WHITE);
-            btnRedefinir.setBounds(300, 260, 150, 30);
+            btnRedefinir.setBounds(300, 270, 150, 30);
             btnRedefinir.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    if (txtToken.getText().trim().equals(tokenValido)) {
-                        JOptionPane.showMessageDialog(TelaInserirToken.this, 
-                            "✅ Token válido!\n\nSua senha será redefinida...", 
-                            "Sucesso", 
-                            JOptionPane.INFORMATION_MESSAGE);
-                        dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(TelaInserirToken.this, 
-                            "❌ Token inválido! Verifique e tente novamente.", 
-                            "Erro", 
-                            JOptionPane.ERROR_MESSAGE);
-                    }
+                    verificarToken(); // Verifica antes de redefinir
                 }
             });
             contentPanel.add(btnRedefinir);
@@ -534,12 +527,19 @@ public class TelaRecuperaçãoSenha extends JFrame {
             });
             contentPanel.add(btnMostrarToken);
             
-            // Label do token atual
+            // Label do token atual (apenas para testes)
             JLabel lblTokenAtual = new JLabel("Token atual: " + tokenValido);
             lblTokenAtual.setFont(new Font("Segoe UI", Font.PLAIN, 10));
             lblTokenAtual.setForeground(Color.DARK_GRAY);
-            lblTokenAtual.setBounds(50, 290, 400, 20);
+            lblTokenAtual.setBounds(50, 310, 400, 20);
             contentPanel.add(lblTokenAtual);
+            
+            // Campo de instruções adicionais
+            JLabel lblAtencao = new JLabel("<html><center>Após verificar o token, clique em 'Redefinir Senha'<br>para criar uma nova senha.</center></html>");
+            lblAtencao.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+            lblAtencao.setForeground(new Color(128, 0, 0));
+            lblAtencao.setBounds(50, 330, 400, 40);
+            contentPanel.add(lblAtencao);
         }
         
         private void verificarToken() {
@@ -550,19 +550,37 @@ public class TelaRecuperaçãoSenha extends JFrame {
                     "Por favor, digite o token!", 
                     "Campo Vazio", 
                     JOptionPane.WARNING_MESSAGE);
+                txtToken.requestFocus();
                 return;
             }
             
             if (tokenInserido.equals(tokenValido)) {
-                JOptionPane.showMessageDialog(TelaInserirToken.this, 
-                    "✅ Token válido!\n\nClique em 'Redefinir Senha' para continuar.", 
-                    "Sucesso", 
-                    JOptionPane.INFORMATION_MESSAGE);
+                int opcao = JOptionPane.showConfirmDialog(TelaInserirToken.this,
+                    "✅ Token válido!\n\nDeseja prosseguir para a redefinição de senha?",
+                    "Sucesso na Verificação",
+                    JOptionPane.YES_NO_OPTION);
+                
+                if (opcao == JOptionPane.YES_OPTION) {
+                    // Aqui você pode abrir a tela de redefinição de senha
+                    JOptionPane.showMessageDialog(TelaInserirToken.this,
+                        "Redefinição de senha em desenvolvimento...\n\n" +
+                        "Em uma implementação real, esta tela abriria\n" +
+                        "um formulário para criar uma nova senha.",
+                        "Redefinição de Senha",
+                        JOptionPane.INFORMATION_MESSAGE);
+                    
+                    // Para testar, apenas fecha a janela
+                    dispose();
+                }
             } else {
                 JOptionPane.showMessageDialog(TelaInserirToken.this, 
-                    "❌ Token inválido!\n\nVerifique e tente novamente.", 
-                    "Erro", 
+                    "❌ Token inválido!\n\nVerifique e tente novamente.\n" +
+                    "Token esperado: " + tokenValido + // Remova esta linha em produção
+                    "\nToken inserido: " + tokenInserido, 
+                    "Erro na Verificação", 
                     JOptionPane.ERROR_MESSAGE);
+                txtToken.setText("");
+                txtToken.requestFocus();
             }
         }
     }
