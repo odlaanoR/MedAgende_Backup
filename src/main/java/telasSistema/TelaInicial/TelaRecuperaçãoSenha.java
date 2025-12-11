@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 import java.util.Random;
 import javax.mail.*;
@@ -29,12 +30,9 @@ public class TelaRecuperaçãoSenha extends JFrame {
     private JButton btnvoltar;
     private JLabel lblStatus;
     
-    // CREDENCIAIS FORNECIDAS - CORRIGIDAS
+    // CREDENCIAIS ATUALIZADAS - Use senha de aplicativo do Gmail
     private static final String EMAIL_SISTEMA = "suporteapp2026@gmail.com";
-    private static final String SENHA_SISTEMA = "lbmb fpcn ctmi jhwh"; // Senha do email do sistema
-    
-    // Credenciais para o email de destino (se necessário para testes)
-    private static final String SENHA_DESTINATARIO = "vzyw lush aydc jawv"; // Senha do emailprojetos01@gmail.com
+    private static final String SENHA_SISTEMA = "sizf ibor tgmn aanf"; // Senha do email do sistema
     
     private String tokenGerado = "";
     private String emailDestinatario = "";
@@ -62,7 +60,7 @@ public class TelaRecuperaçãoSenha extends JFrame {
     public TelaRecuperaçãoSenha() {
         setTitle("Sistema de Recuperação de Senha");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 728, 350);
+        setBounds(100, 100, 728, 400); // Aumentei a altura
         contentPane = new JPanel();
         contentPane.setBackground(new Color(204, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -100,7 +98,6 @@ public class TelaRecuperaçãoSenha extends JFrame {
         btnEnviar.setBounds(45, 150, 120, 30);
         contentPane.add(btnEnviar);
         
-        // BOTÃO REENVIAR
         btnReenviar = new JButton("Reenviar Token");
         btnReenviar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         btnReenviar.setBackground(new Color(51, 102, 255));
@@ -114,7 +111,7 @@ public class TelaRecuperaçãoSenha extends JFrame {
         contentPane.add(btnReenviar);
         
         lblNewLabel_2 = new JLabel("Caso ultrapasse os 60s e não tenha recebido o Token, solicite o Reenvio ou verifique se preencheu o campo corretamente.");
-        lblNewLabel_2.setBounds(10, 280, 702, 14);
+        lblNewLabel_2.setBounds(10, 320, 702, 14);
         contentPane.add(lblNewLabel_2);
         
         // BOTÃO PRÓXIMO
@@ -138,7 +135,7 @@ public class TelaRecuperaçãoSenha extends JFrame {
             }
         });
         btnProximo.setBounds(501, 240, 156, 35);
-        btnProximo.setEnabled(false); // Inicialmente desabilitado
+        btnProximo.setEnabled(false);
         contentPane.add(btnProximo);
         
         // BOTÃO VOLTAR
@@ -172,18 +169,31 @@ public class TelaRecuperaçãoSenha extends JFrame {
         btnTesteRapido.setBounds(315, 150, 100, 30);
         contentPane.add(btnTesteRapido);
         
-        // Info do sistema
-        JLabel lblInfoSistema = new JLabel("<html><b>Sistema:</b> suporteapp2026@gmail.com</html>");
-        lblInfoSistema.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-        lblInfoSistema.setBounds(500, 120, 200, 30);
-        contentPane.add(lblInfoSistema);
+        // Painel de informações
+        JPanel panelInfo = new JPanel();
+        panelInfo.setBackground(new Color(240, 240, 240));
+        panelInfo.setBorder(javax.swing.BorderFactory.createTitledBorder("Informações do Sistema"));
+        panelInfo.setBounds(479, 101, 187, 116);
+        panelInfo.setLayout(null);
+        
+        JLabel lblInfo1 = new JLabel("<html>Email do sistema:<br><b>suporteapp2026@gmail.com</b></html>");
+        lblInfo1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        lblInfo1.setBounds(10, 20, 260, 30);
+        panelInfo.add(lblInfo1);
+        
+        JLabel lblInfo2 = new JLabel("<html>Token gerado:<br><b>Aguardando...</b></html>");
+        lblInfo2.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        lblInfo2.setBounds(10, 49, 260, 30);
+        panelInfo.add(lblInfo2);
+        
+        JLabel lblInfo3 = new JLabel("<html>Status SMTP:<br><b>Pronto para enviar</b></html>");
+        lblInfo3.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        lblInfo3.setBounds(10, 80, 260, 30);
+        panelInfo.add(lblInfo3);
+        
+        contentPane.add(panelInfo);
     }
     
-    // ========== MÉTODOS DE ENVIO DE EMAIL REAL ==========
-    
-    /**
-     * Método para enviar o token por email
-     */
     private void enviarTokenEmail() {
         emailDestinatario = textField.getText().trim();
         
@@ -200,7 +210,7 @@ public class TelaRecuperaçãoSenha extends JFrame {
         tokenGerado = gerarToken();
         
         // Atualizar status na interface
-        lblStatus.setText("Status: Enviando token...");
+        lblStatus.setText("Status: Gerando token...");
         lblStatus.setForeground(Color.BLUE);
         
         // Desabilitar botões durante o envio
@@ -219,10 +229,23 @@ public class TelaRecuperaçãoSenha extends JFrame {
                 
             } catch (AuthenticationFailedException e) {
                 mensagemErro = "Falha na autenticação. Verifique as credenciais do email.";
-                e.printStackTrace();
+                System.err.println("Erro de autenticação: " + e.getMessage());
+                
+                // Sugestão para o usuário
+                JOptionPane.showMessageDialog(TelaRecuperaçãoSenha.this,
+                    "Problema de autenticação!\n\n" +
+                    "Possíveis soluções:\n" +
+                    "1. Verifique se a senha do email está correta\n" +
+                    "2. Use uma senha de aplicativo do Gmail\n" +
+                    "3. Verifique se 'Acesso a app menos seguro' está ativado\n" +
+                    "4. Use o modo de teste abaixo",
+                    "Erro de Autenticação",
+                    JOptionPane.ERROR_MESSAGE);
+                    
             } catch (MessagingException e) {
                 mensagemErro = "Erro ao enviar email: " + e.getMessage();
-                e.printStackTrace();
+                System.err.println("Erro no envio: " + e.getMessage());
+                
             } catch (Exception e) {
                 mensagemErro = "Erro inesperado: " + e.getMessage();
                 e.printStackTrace();
@@ -253,17 +276,22 @@ public class TelaRecuperaçãoSenha extends JFrame {
                     btnProximo.setEnabled(true);
                     
                 } else {
-                    lblStatus.setText("Status: Falha no envio");
+                    lblStatus.setText("Status: Falha no envio - " + erroMsg.substring(0, Math.min(30, erroMsg.length())));
                     lblStatus.setForeground(Color.RED);
                     
-                    // Opção de usar modo de teste como fallback
-                    int opcao = JOptionPane.showConfirmDialog(TelaRecuperaçãoSenha.this,
+                    // Oferecer opções
+                    Object[] options = {"Usar Modo Teste", "Tentar Outro Email", "Cancelar"};
+                    int opcao = JOptionPane.showOptionDialog(TelaRecuperaçãoSenha.this,
                         "❌ Falha no envio do email!\n\n" + erroMsg + 
-                        "\n\nDeseja usar o modo de teste (token será exibido)?",
+                        "\n\nEscolha uma opção:",
                         "Erro no Envio",
-                        JOptionPane.YES_NO_OPTION);
+                        JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.ERROR_MESSAGE,
+                        null,
+                        options,
+                        options[0]);
                     
-                    if (opcao == JOptionPane.YES_OPTION) {
+                    if (opcao == 0) { // Modo teste
                         lblStatus.setText("Status: Modo de teste ativo");
                         lblStatus.setForeground(Color.ORANGE);
                         JOptionPane.showMessageDialog(TelaRecuperaçãoSenha.this,
@@ -272,6 +300,9 @@ public class TelaRecuperaçãoSenha extends JFrame {
                             "Modo Teste",
                             JOptionPane.WARNING_MESSAGE);
                         btnProximo.setEnabled(true);
+                    } else if (opcao == 1) { // Tentar outro email
+                        textField.setText("");
+                        textField.requestFocus();
                     }
                 }
             });
@@ -303,38 +334,44 @@ public class TelaRecuperaçãoSenha extends JFrame {
         }
     }
     
-    /**
-     * Gera token numérico de 6 dígitos
-     */
+    // Gera token numérico de 6 dígitos
+     
     private String gerarToken() {
         Random random = new Random();
         return String.format("%06d", random.nextInt(999999));
     }
     
-    /**
-     * Método REAL de envio de email
-     */
-    private void enviarEmailReal(String emailDestino, String token) throws MessagingException {
-        // Configurar propriedades SMTP para Gmail
+   
+    private void enviarEmailReal(String emailDestino, String token) throws MessagingException, UnsupportedEncodingException {
+        // Configurar propriedades SMTP para Gmail - ATUALIZADO
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
         props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-        props.put("mail.smtp.connectiontimeout", "10000");
-        props.put("mail.smtp.timeout", "10000");
-        props.put("mail.smtp.writetimeout", "10000");
         
-        // Debug (opcional)
+        // Configurações de timeout
+        props.put("mail.smtp.connectiontimeout", "5000");
+        props.put("mail.smtp.timeout", "5000");
+        props.put("mail.smtp.writetimeout", "5000");
+        
+        // Para debug
         props.put("mail.debug", "true");
+        
+        // Remover espaços da senha se houver
+        String senhaCorrigida = SENHA_SISTEMA.replace(" ", "");
+        
+        System.out.println("Tentando conectar com:");
+        System.out.println("Email: " + EMAIL_SISTEMA);
+        System.out.println("Senha (primeiros 3 chars): " + (senhaCorrigida.length() > 3 ? 
+            senhaCorrigida.substring(0, 3) + "..." : senhaCorrigida));
         
         // Criar sessão com autenticação
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                // IMPORTANTE: Remover espaços da senha se houver
-                String senhaCorrigida = SENHA_SISTEMA.replace(" ", "");
                 return new PasswordAuthentication(EMAIL_SISTEMA, senhaCorrigida);
             }
         });
@@ -343,9 +380,9 @@ public class TelaRecuperaçãoSenha extends JFrame {
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(EMAIL_SISTEMA, "Sistema de Recuperação de Senha"));
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailDestino));
-        message.setSubject("🔐 Token de Recuperação de Senha - Sistema");
+        message.setSubject("🔐 Token de Recuperação de Senha");
         
-        // Corpo do email em HTML formatado
+        // Corpo do email em HTML
         String htmlContent = "<html>"
                 + "<body style='font-family: Arial, sans-serif;'>"
                 + "<div style='background-color: #f4f4f4; padding: 20px; border-radius: 10px;'>"
@@ -354,7 +391,7 @@ public class TelaRecuperaçãoSenha extends JFrame {
                 + "<p>Você solicitou a recuperação de senha. Use o token abaixo para continuar:</p>"
                 + "<div style='background-color: #fff; border: 2px dashed #4CAF50; padding: 20px; "
                 + "text-align: center; font-size: 24px; font-weight: bold; color: #333; "
-                + "margin: 20px 0; border-radius: 5px;'>"
+                + "margin: 20px 0; border-radius: 5px; letter-spacing: 5px;'>"
                 + token
                 + "</div>"
                 + "<p><strong>Instruções:</strong></p>"
@@ -367,42 +404,27 @@ public class TelaRecuperaçãoSenha extends JFrame {
                 + "<hr style='border: 1px solid #ddd;'>"
                 + "<p style='color: #666; font-size: 12px;'>"
                 + "Este é um email automático, por favor não responda.<br>"
-                + "Sistema de Recuperação de Senha<br>"
-                + EMAIL_SISTEMA
+                + "Sistema de Recuperação de Senha"
                 + "</p>"
                 + "</div>"
                 + "</body>"
                 + "</html>";
         
-        // Texto alternativo para clientes que não suportam HTML
+        // Texto alternativo
         String textoSimples = "Token de recuperação: " + token + 
                             "\n\nUse este token na tela de verificação." +
                             "\nVálido por 10 minutos." +
                             "\n\nSe não solicitou, ignore este email.";
         
-        // Configurar conteúdo multipart
-        MimeMultipart multipart = new MimeMultipart("alternative");
-        
-        // Parte em texto simples
-        MimeBodyPart textPart = new MimeBodyPart();
-        textPart.setText(textoSimples, "utf-8");
-        
-        // Parte em HTML
-        MimeBodyPart htmlPart = new MimeBodyPart();
-        htmlPart.setContent(htmlContent, "text/html; charset=utf-8");
-        
-        // Adicionar partes ao multipart
-        multipart.addBodyPart(textPart);
-        multipart.addBodyPart(htmlPart);
-        
-        // Definir conteúdo da mensagem
-        message.setContent(multipart);
+        // Configurar conteúdo
+        message.setContent(htmlContent, "text/html; charset=utf-8");
+        message.setText(textoSimples);
         
         // Enviar email
+        System.out.println("Enviando email para: " + emailDestino);
         Transport.send(message);
+        System.out.println("Email enviado com sucesso!");
     }
-    
-  
     
     private class TelaInserirToken extends JFrame {
         private static final long serialVersionUID = 1L;
@@ -446,10 +468,10 @@ public class TelaRecuperaçãoSenha extends JFrame {
             txtToken.setFont(new Font("Arial", Font.BOLD, 18));
             txtToken.setHorizontalAlignment(JTextField.CENTER);
             txtToken.setBounds(150, 130, 200, 40);
-            contentPanel.add(txtToken);
+            contentPane.add(txtToken);
             txtToken.setColumns(10);
             
-            JLabel lblDica = new JLabel("Dica: O token tem 6 dígitos");
+            JLabel lblDica = new JLabel("Dica: O token tem 6 dígitos (ex: 123456)");
             lblDica.setFont(new Font("Segoe UI", Font.ITALIC, 11));
             lblDica.setForeground(Color.GRAY);
             lblDica.setBounds(150, 175, 200, 20);
@@ -511,6 +533,13 @@ public class TelaRecuperaçãoSenha extends JFrame {
                 }
             });
             contentPanel.add(btnMostrarToken);
+            
+            // Label do token atual
+            JLabel lblTokenAtual = new JLabel("Token atual: " + tokenValido);
+            lblTokenAtual.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+            lblTokenAtual.setForeground(Color.DARK_GRAY);
+            lblTokenAtual.setBounds(50, 290, 400, 20);
+            contentPanel.add(lblTokenAtual);
         }
         
         private void verificarToken() {
