@@ -46,6 +46,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import Back.ViaCep;
 
 public class TelaAdministradorCadastrarMedicosDados extends JFrame {
 
@@ -54,54 +55,6 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
         WEAK, // Fraca
         MEDIUM, // Média
         STRONG // Forte
-    }
-
-    private static class ViaCEPResponse {
-        private String cep;
-        private String logradouro;
-        private String complemento;
-        private String bairro;
-        private String localidade;
-        private String uf;
-        private String ibge;
-        private String gia;
-        private String ddd;
-        private String siafi;
-        private boolean erro;
-        
-        // Getters e Setters
-        public String getCep() { return cep; }
-        public void setCep(String cep) { this.cep = cep; }
-        
-        public String getLogradouro() { return logradouro; }
-        public void setLogradouro(String logradouro) { this.logradouro = logradouro; }
-        
-        public String getBairro() { return bairro; }
-        public void setBairro(String bairro) { this.bairro = bairro; }
-        
-        public String getLocalidade() { return localidade; }
-        public void setLocalidade(String localidade) { this.localidade = localidade; }
-        
-        public String getUf() { return uf; }
-        public void setUf(String uf) { this.uf = uf; }
-        
-        public String getComplemento() { return complemento; }
-        public void setComplemento(String complemento) { this.complemento = complemento; }
-        
-        public String getIbge() { return ibge; }
-        public void setIbge(String ibge) { this.ibge = ibge; }
-        
-        public String getGia() { return gia; }
-        public void setGia(String gia) { this.gia = gia; }
-        
-        public String getDdd() { return ddd; }
-        public void setDdd(String ddd) { this.ddd = ddd; }
-        
-        public String getSiafi() { return siafi; }
-        public void setSiafi(String siafi) { this.siafi = siafi; }
-        
-        public boolean temErro() { return erro; }
-        public void setErro(boolean erro) { this.erro = erro; }
     }
 
     private static final long serialVersionUID = 1L;
@@ -282,30 +235,30 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
         btnVoltar.setBounds(31, 407, 125, 32);
         contentPane.add(btnVoltar);
         
-        JLabel lblNewLabel = new JLabel("CEP:");
-        lblNewLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblNewLabel.setBounds(652, 117, 46, 14);
-        contentPane.add(lblNewLabel);
+        JLabel cep = new JLabel("CEP:");
+        cep.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
+        cep.setBounds(652, 117, 46, 14);
+        contentPane.add(cep);
         
         FieldCep = new JTextField(); 
         FieldCep.setBounds(644, 140, 86, 20);
         contentPane.add(FieldCep);
         FieldCep.setColumns(10);
         
-        JLabel lblNewLabel_1 = new JLabel("Rua:");
-        lblNewLabel_1.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblNewLabel_1.setBounds(740, 230, 46, 14);
-        contentPane.add(lblNewLabel_1);
+        JLabel rua = new JLabel("Rua:");
+        rua.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
+        rua.setBounds(740, 230, 46, 14);
+        contentPane.add(rua);
         
         FieldRua = new JTextField(); 
         FieldRua.setBounds(740, 255, 86, 20);
         contentPane.add(FieldRua);
         FieldRua.setColumns(10);
         
-        JLabel lblNewLabel_2 = new JLabel("Número:");
-        lblNewLabel_2.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblNewLabel_2.setBounds(740, 286, 72, 14);
-        contentPane.add(lblNewLabel_2);
+        JLabel numero = new JLabel("Número:");
+        numero.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
+        numero.setBounds(740, 286, 72, 14);
+        contentPane.add(numero);
         
         FieldNum = new JTextField(); 
         FieldNum.setBounds(740, 311, 59, 20);
@@ -808,37 +761,20 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
         // Mostra cursor de carregamento
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         
-        SwingWorker<ViaCEPResponse, Void> worker = new SwingWorker<ViaCEPResponse, Void>() {
-            @Override
-            protected ViaCEPResponse doInBackground() throws Exception {
-                try {
-                    String url = "https://viacep.com.br/ws/" + cep + "/json/";
-                    Request request = new Request.Builder()
-                            .url(url)
-                            .build();
+        SwingWorker<ViaCep.ViaCEPResponse, Void> worker = 
+        	    new SwingWorker<ViaCep.ViaCEPResponse, Void>() {
 
-                    try (Response response = httpClient.newCall(request).execute()) {
-                        if (!response.isSuccessful() || response.body() == null) {
-                            throw new IOException("Resposta inválida da API");
-                        }
-
-                        String json = response.body().string();
-                        ViaCEPResponse viaCEPResponse = gson.fromJson(json, ViaCEPResponse.class);
-                        return viaCEPResponse;
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
+        	    @Override
+        	    protected ViaCep.ViaCEPResponse doInBackground() {
+        	        return ViaCep.buscarCEP(cep);
+        	    }
             
             @Override
             protected void done() {
                 setCursor(Cursor.getDefaultCursor());
                 
                 try {
-                    ViaCEPResponse endereco = get();
+                	ViaCep.ViaCEPResponse endereco = get();
                     
                     if (endereco == null || endereco.temErro()) {
                         JOptionPane.showMessageDialog(TelaAdministradorCadastrarMedicosDados.this, 
