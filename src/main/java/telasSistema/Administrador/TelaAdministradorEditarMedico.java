@@ -79,7 +79,7 @@ public class TelaAdministradorEditarMedico extends JFrame {
         LabelTitulo.setFont(new Font("Trebuchet MS", Font.PLAIN, 24));
         contentPane.add(LabelTitulo);
         
-        JLabel lblPreenchaOsDados = new JLabel("Preencha os dados do(a) paciente. Comece pelo CPF.");
+        JLabel lblPreenchaOsDados = new JLabel("Preencha os dados do(a) médico(a). Comece pelo CPF.");
         lblPreenchaOsDados.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
         lblPreenchaOsDados.setBounds(299, 53, 331, 14);
         contentPane.add(lblPreenchaOsDados);
