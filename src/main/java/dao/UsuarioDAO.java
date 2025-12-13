@@ -98,4 +98,13 @@ public class UsuarioDAO {
 
 	    stmt.executeUpdate();
 	}
+	
+	public void deletarUsuario(Connection con, int id) throws Exception {
+
+	    String sql = "DELETE FROM usuarios WHERE Id_Usuario = ?";
+	    PreparedStatement stmt = con.prepareStatement(sql);
+	    stmt.setInt(1, id);
+
+	    stmt.executeUpdate();
+	}
 }
