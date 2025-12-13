@@ -93,7 +93,7 @@ public class TelaAdministradorEditarSecretaria extends JFrame {
         FieldCpf.setBounds(385, 98, 100, 25);
         contentPane.add(FieldCpf);
 
-        JButton btnBuscarCPF = new JButton("Pesquisar");
+        JButton btnBuscarCPF = new JButton("Verificar");
         btnBuscarCPF.setFont(new Font("Trebuchet MS", Font.BOLD, 11));
         btnBuscarCPF.setBounds(510, 98, 90, 25);
         btnBuscarCPF.addActionListener(new ActionListener() {

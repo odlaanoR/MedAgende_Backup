@@ -19,9 +19,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 import com.toedter.calendar.JDateChooser;
 
-import telasSistema.Secretaria.TelaSecretariaAgendar;
-
-public class TelaAdministradorEditarMedico extends JFrame {
+public class TelaAdministradorExcluirMedico extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
@@ -52,7 +50,7 @@ public class TelaAdministradorEditarMedico extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    TelaAdministradorEditarMedico frame = new TelaAdministradorEditarMedico();
+                    TelaAdministradorExcluirMedico frame = new TelaAdministradorExcluirMedico();
                     frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
                 } catch (Exception e) {
@@ -65,7 +63,7 @@ public class TelaAdministradorEditarMedico extends JFrame {
     /**
      * Create the frame.
      */
-    public TelaAdministradorEditarMedico() {
+    public TelaAdministradorExcluirMedico() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 888, 550);
         contentPane = new JPanel();
@@ -74,15 +72,15 @@ public class TelaAdministradorEditarMedico extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JLabel LabelTitulo = new JLabel("Editar Dados do Médico");
-        LabelTitulo.setBounds(315, 0, 300, 67);
+        JLabel LabelTitulo = new JLabel("Excluir Médico(a)");
+        LabelTitulo.setBounds(311, 0, 300, 51);
         LabelTitulo.setFont(new Font("Trebuchet MS", Font.PLAIN, 24));
         contentPane.add(LabelTitulo);
         
-        JLabel lblPreenchaOsDados = new JLabel("Preencha os dados do(a) médico(a). Comece pelo CPF.");
-        lblPreenchaOsDados.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
-        lblPreenchaOsDados.setBounds(299, 53, 331, 14);
-        contentPane.add(lblPreenchaOsDados);
+        JLabel lblSubTitulo = new JLabel("Digite o CPF para buscar o(a) médico(a) para excluir: ");
+        lblSubTitulo.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
+        lblSubTitulo.setBounds(280, 53, 331, 14);
+        contentPane.add(lblSubTitulo);
 
         JLabel labelCPF = new JLabel("CPF (Digite para buscar):");
         labelCPF.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
@@ -309,24 +307,24 @@ public class TelaAdministradorEditarMedico extends JFrame {
 
         // --- BOTÕES DE AÇÃO ---
         
-        JButton btnAtualizar = new JButton("Atualizar");
-        btnAtualizar.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
-        btnAtualizar.setForeground(Color.BLACK);
-        btnAtualizar.addActionListener(new ActionListener() {
+        JButton btnExcluir = new JButton("Excluir");
+        btnExcluir.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
+        btnExcluir.setForeground(Color.BLACK);
+        btnExcluir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             }
         });
-        btnAtualizar.setBounds(678, 459, 145, 35);
-        contentPane.add(btnAtualizar);
+        btnExcluir.setBounds(678, 459, 145, 35);
+        contentPane.add(btnExcluir);
 
         JButton btnVoltar = new JButton("Voltar");
         btnVoltar.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
         btnVoltar.setBounds(31, 460, 125, 32);
         btnVoltar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            		TelaAdminEditarUsuarios telaAdminEditarUsuarios = new TelaAdminEditarUsuarios();
-            		telaAdminEditarUsuarios.setLocationRelativeTo(null);
-            		telaAdminEditarUsuarios.setVisible(true);
+            		TelaAdminExcluirUsuarios telaAdminExcluirUsuarios = new TelaAdminExcluirUsuarios();
+            		telaAdminExcluirUsuarios.setLocationRelativeTo(null);
+            		telaAdminExcluirUsuarios.setVisible(true);
     				 dispose();
             }
         });

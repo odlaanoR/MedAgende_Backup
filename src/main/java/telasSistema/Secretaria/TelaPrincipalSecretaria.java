@@ -42,7 +42,7 @@ public class TelaPrincipalSecretaria extends JFrame {
 		listOpcoes.setBackground(new Color(255, 255, 255));
 		listOpcoes.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		listOpcoes.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Agendar Consulta", "Cancelar Consulta", "Reagendar Consulta", "Cadastrar Novo Paciente", "Editar dados do Paciente"};
+			String[] values = new String[] {"Agendar Consulta", "Cancelar Consulta", "Reagendar Consulta", "Cadastrar Novo Paciente", "Editar dados do Paciente", "Excluir Paciente"};
 			public int getSize() {
 				return values.length;
 			}
@@ -50,7 +50,7 @@ public class TelaPrincipalSecretaria extends JFrame {
 				return values[index];
 			}
 		});
-		listOpcoes.setBounds(186, 136, 349, 126);
+		listOpcoes.setBounds(186, 136, 349, 150);
 		panel.add(listOpcoes);
 		
 		JButton BotaoProximo = new JButton("Proximo");
@@ -98,6 +98,14 @@ public class TelaPrincipalSecretaria extends JFrame {
 					telaSecretariaEditar.setLocationRelativeTo(null);
 					telaSecretariaEditar.setVisible(true);
 					 dispose();
+					
+					break;
+					
+				case "Excluir Paciente":
+					TelaSecretariaExcluirPaciente telaSecretariaExcluir = new TelaSecretariaExcluirPaciente();
+					telaSecretariaExcluir.setLocationRelativeTo(null);
+					telaSecretariaExcluir.setVisible(true);
+					dispose();
 					
 					break;
 				}

@@ -72,6 +72,13 @@ public class TelaAdministradorGestaoUsuarios extends JFrame {
 		panel.add(btnEditarUsuarios);
 		
 		JButton btnExcluirUsuarios = new JButton("Excluir Usuarios");
+		btnExcluirUsuarios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaAdminExcluirUsuarios telaAdminExcluirUsuarios = new TelaAdminExcluirUsuarios();
+				telaAdminExcluirUsuarios.setVisible(true);
+				dispose();
+			}
+		});
 		btnExcluirUsuarios.setBounds(212, 295, 266, 63);
 		panel.add(btnExcluirUsuarios);
 		
