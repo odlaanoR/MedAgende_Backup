@@ -7,7 +7,7 @@ public class MedicoDAO {
 
     public void atualizarMedico(Connection con, int id, String crm, String rqe, int especialidade) throws Exception {
 
-        String sql = "UPDATE medico SET Crm = ?, Rqe = ?, Especialidade = ? WHERE Id_Usuario = ? ";
+        String sql = "UPDATE medico SET Rqe = ?, Especialidade = ? WHERE Id_Usuario = ? ";
 
         PreparedStatement stmt = con.prepareStatement(sql);
         stmt.setString(1, crm);
@@ -16,5 +16,14 @@ public class MedicoDAO {
         stmt.setInt(4, id);
         
         stmt.executeUpdate();
+    }
+    
+    public void deletarMedico(Connection con, int id) throws Exception {
+    	
+    	String sql = "DELETE FROM medico WHERE Id_Usuario = ?";
+    	PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setInt(1, id);
+        stmt.executeUpdate();
+    
     }
 }
