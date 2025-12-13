@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
@@ -17,6 +18,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 import com.toedter.calendar.JDateChooser;
 
+import Back.Secretaria;
+import Back.Usuarios;
+import model.Usuario;
 public class TelaAdministradorEditarSecretaria extends JFrame {
 
     private static final long serialVersionUID = 1L;
@@ -38,10 +42,9 @@ public class TelaAdministradorEditarSecretaria extends JFrame {
     private JTextField FieldMunicipio;
     private JTextField FieldEstado;
     private JTextField FieldBairro;
-    
     private JTextField FieldPlanoSaude;
-    
     private JDateChooser dcDataNascimento;
+    private Usuario usuarioAtual;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -98,6 +101,31 @@ public class TelaAdministradorEditarSecretaria extends JFrame {
         btnBuscarCPF.setBounds(510, 98, 90, 25);
         btnBuscarCPF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                try {
+                    String cpf = FieldCpf.getText().replace(".", "").replace("-", "");
+                    Usuarios usuarios = new Usuarios();
+                    usuarioAtual = usuarios.buscarUsuarioPorCpf(cpf);
+
+                    if (usuarioAtual == null) {
+                        JOptionPane.showMessageDialog(null, "Usuário não encontrado");
+                        return;
+                    }
+
+                    FieldNome.setText(usuarioAtual.getNome());
+                    FieldEmail.setText(usuarioAtual.getEmail());
+                    FieldTelefone.setText(usuarioAtual.getTelefone());
+                    FieldRua.setText(usuarioAtual.getRua());
+                    FieldBairro.setText(usuarioAtual.getBairro());
+                    FieldMunicipio.setText(usuarioAtual.getCidade());
+                    FieldCep.setText(usuarioAtual.getCep());
+                    dcDataNascimento.setDate(usuarioAtual.getDataNasc());
+
+                    JOptionPane.showMessageDialog(null, "Usuário carregado com sucesso");
+
+                } catch (Exception er) {
+                    JOptionPane.showMessageDialog(null, "Erro ao buscar usuário");
+                    er.printStackTrace();
+                }
             }
         });
         contentPane.add(btnBuscarCPF);
@@ -250,8 +278,34 @@ public class TelaAdministradorEditarSecretaria extends JFrame {
         btnAtualizar.setForeground(new Color(0, 0, 0));
         btnAtualizar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+                if (usuarioAtual == null) {
+                    JOptionPane.showMessageDialog(null, "Busque uma secretária primeiro");
+                    return;
+                }
+
+                try {
+                    usuarioAtual.setNome(FieldNome.getText());
+                    usuarioAtual.setEmail(FieldEmail.getText());
+                    usuarioAtual.setTelefone(FieldTelefone.getText());
+                    usuarioAtual.setRua(FieldRua.getText());
+                    usuarioAtual.setBairro(FieldBairro.getText());
+                    usuarioAtual.setCidade(FieldMunicipio.getText());
+                    usuarioAtual.setCep(FieldCep.getText());
+                    usuarioAtual.setDataNasc(new java.sql.Date(dcDataNascimento.getDate().getTime()));
+
+                    Secretaria secretaria = new Secretaria();
+                    secretaria.editarSecretaria(usuarioAtual);
+
+                    JOptionPane.showMessageDialog(null, "Dados atualizados com sucesso");
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao atualizar secretária");
+                    ex.printStackTrace();
+                }
             }
         });
+
         btnAtualizar.setBounds(677, 406, 135, 35);
         contentPane.add(btnAtualizar);
 
@@ -268,6 +322,5 @@ public class TelaAdministradorEditarSecretaria extends JFrame {
         });
         contentPane.add(btnVoltar);
         
-
     }
 }
