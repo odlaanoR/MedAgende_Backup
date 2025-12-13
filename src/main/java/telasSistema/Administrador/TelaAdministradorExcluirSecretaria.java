@@ -15,33 +15,33 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
+import javax.swing.JOptionPane;
 import com.toedter.calendar.JDateChooser;
+import Back.Secretaria;
+import Back.Usuarios;
+import model.Usuario;
 
 public class TelaAdministradorExcluirSecretaria extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-
     private JTextField FieldNome;
     private JFormattedTextField FieldCpf;
     private JTextField FieldEmail;
     private JTextField FieldTelefone;
-    
     private JPasswordField FieldSENHA;
     private JPasswordField FieldConfirmarSenha;
     private JLabel lblStrengthFeedbackNIVELSENHA;
     private JProgressBar progressBarBARRAdoNIVELSENHA;
-    
     private JTextField FieldCep;
     private JTextField FieldRua;
     private JTextField FieldNum;
     private JTextField FieldMunicipio;
     private JTextField FieldEstado;
     private JTextField FieldBairro;
-    
     private JTextField FieldPlanoSaude;
-    
     private JDateChooser dcDataNascimento;
+    private Usuario usuarioAtual;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -98,8 +98,35 @@ public class TelaAdministradorExcluirSecretaria extends JFrame {
         btnBuscarCPF.setBounds(510, 98, 90, 25);
         btnBuscarCPF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                try {
+                    String cpf = FieldCpf.getText().replace(".", "").replace("-", "");
+
+                    Usuarios usuarios = new Usuarios();
+                    usuarioAtual = usuarios.buscarUsuarioPorCpf(cpf);
+
+                    if (usuarioAtual == null) {
+                        JOptionPane.showMessageDialog(null, "Secretária não encontrada");
+                        return;
+                    }
+
+                    FieldNome.setText(usuarioAtual.getNome());
+                    FieldEmail.setText(usuarioAtual.getEmail());
+                    FieldTelefone.setText(usuarioAtual.getTelefone());
+                    FieldRua.setText(usuarioAtual.getRua());
+                    FieldBairro.setText(usuarioAtual.getBairro());
+                    FieldMunicipio.setText(usuarioAtual.getCidade());
+                    FieldCep.setText(usuarioAtual.getCep());
+                    dcDataNascimento.setDate(usuarioAtual.getDataNasc());
+
+                    JOptionPane.showMessageDialog(null, "Secretária carregada");
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao buscar secretária");
+                    ex.printStackTrace();
+                }
             }
         });
+
         contentPane.add(btnBuscarCPF);
 
         JLabel labelNome = new JLabel("Nome Completo:");
@@ -249,9 +276,29 @@ public class TelaAdministradorExcluirSecretaria extends JFrame {
         btnExcluir.setFont(new Font("Segoe UI", Font.BOLD, 12));
         btnExcluir.setForeground(new Color(0, 0, 0));
         btnExcluir.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
+
+              	if (usuarioAtual == null) {
+                    JOptionPane.showMessageDialog(null, "Busque uma secretária primeiro");
+                    return;
+                }
+
+                int opcao = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir esta secretária?", "Confirmação", JOptionPane.YES_NO_OPTION);
+
+                if (opcao == JOptionPane.YES_OPTION) {
+                    try {
+                        Secretaria secretaria = new Secretaria();
+                        secretaria.deletarSecretaria(usuarioAtual.getIdUsuario());
+                        JOptionPane.showMessageDialog(null, "Secretária excluída com sucesso");
+                        dispose();
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao excluir secretária");
+                        ex.printStackTrace();
+                    }
+                }
             }
         });
+
         btnExcluir.setBounds(677, 406, 135, 35);
         contentPane.add(btnExcluir);
 
