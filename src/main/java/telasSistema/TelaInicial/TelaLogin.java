@@ -226,7 +226,6 @@ public class TelaLogin extends JFrame {
 					
 				}else if (serviço.equals("Médico")) {
 					Medico.criamedico(id_conectado);
-					System.out.println("[DEBUG] Logado como médico, doutor: " + Medico.GetMedico().getMatricula());
 					JOptionPane.showMessageDialog(null, "Bem vindo(a) Doutor(a) "+nome);
 					TelaPrincipalMedico tela = new TelaPrincipalMedico();
 					tela.setLocationRelativeTo(null);

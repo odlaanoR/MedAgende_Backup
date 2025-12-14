@@ -41,6 +41,7 @@ import com.google.gson.Gson;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import telasSistema.Administrador.TelaAdminExcluirUsuarios;
 import telasSistema.Secretaria.TelaSecretariaAgendar;
 
 import javax.swing.JComboBox;
@@ -254,7 +255,7 @@ public class TelaSecretariaExcluirPaciente extends JFrame {
         JButton btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		TelaSecretariaAgendar tela = new TelaSecretariaAgendar();
+        		TelaAdminExcluirUsuarios tela = new TelaAdminExcluirUsuarios();
 				tela.setLocationRelativeTo(null);
         		tela.setVisible(true);
 				 dispose();

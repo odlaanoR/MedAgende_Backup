@@ -100,7 +100,8 @@ public class TelaAdministradorExcluirMedico extends JFrame {
             e.printStackTrace();
         }
 
-        FieldCpf = new JFormattedTextField(maskCpf);
+        FieldCpf = new JFormattedTextField();
+        FieldCpf.setText("");
         FieldCpf.setBounds(381, 98, 100, 25);
         contentPane.add(FieldCpf);
 

@@ -75,6 +75,7 @@ public class TelaAdminEditarUsuarios extends JFrame {
 		btnEditarPaciente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TelaSecretariaEditarPaciente telaSecretariaEditarPaciente = new TelaSecretariaEditarPaciente();
+				telaSecretariaEditarPaciente.setLocationRelativeTo(null);
 				telaSecretariaEditarPaciente.setVisible(true);
 				dispose();
 			}
@@ -89,6 +90,7 @@ public class TelaAdminEditarUsuarios extends JFrame {
 		btnEditarMedico.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TelaAdministradorEditarMedico telaAdministradorEditarMedico = new TelaAdministradorEditarMedico();
+				telaAdministradorEditarMedico.setLocationRelativeTo(null);
 				telaAdministradorEditarMedico.setVisible(true);
 				dispose();
 			}
@@ -102,6 +104,7 @@ public class TelaAdminEditarUsuarios extends JFrame {
 		btnEditarSecretaria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TelaAdministradorEditarSecretaria telaAdministradorEditarSecretaria = new TelaAdministradorEditarSecretaria();
+				telaAdministradorEditarSecretaria.setLocationRelativeTo(null);
 				telaAdministradorEditarSecretaria.setVisible(true);
 				dispose();
 			}

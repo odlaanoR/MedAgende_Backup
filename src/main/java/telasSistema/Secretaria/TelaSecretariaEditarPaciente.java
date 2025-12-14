@@ -41,6 +41,8 @@ import com.google.gson.Gson;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import telasSistema.Administrador.TelaAdminEditarUsuarios;
+
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
@@ -269,7 +271,7 @@ public class TelaSecretariaEditarPaciente extends JFrame {
         JButton btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		TelaSecretariaAgendar tela = new TelaSecretariaAgendar();
+        		TelaAdminEditarUsuarios tela = new TelaAdminEditarUsuarios();
 				tela.setLocationRelativeTo(null);
         		tela.setVisible(true);
 				 dispose();

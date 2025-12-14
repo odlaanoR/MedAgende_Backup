@@ -75,6 +75,7 @@ public class TelaAdministradorGestaoUsuarios extends JFrame {
 		btnExcluirUsuarios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TelaAdminExcluirUsuarios telaAdminExcluirUsuarios = new TelaAdminExcluirUsuarios();
+				telaAdminExcluirUsuarios.setLocationRelativeTo(null);
 				telaAdminExcluirUsuarios.setVisible(true);
 				dispose();
 			}
