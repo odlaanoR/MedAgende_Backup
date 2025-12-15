@@ -119,6 +119,8 @@ public class TelaAdministradorEditarSecretaria extends JFrame {
                     FieldBairro.setText(usuarioAtual.getBairro());
                     FieldMunicipio.setText(usuarioAtual.getCidade());
                     FieldCep.setText(usuarioAtual.getCep());
+                    FieldPlanoSaude.setText(usuarioAtual.getPlanoDeSaude());
+                    FieldNum.setText(usuarioAtual.getNumCasa());
                     dcDataNascimento.setDate(usuarioAtual.getDataNasc());
 
                     JOptionPane.showMessageDialog(null, "Usuário carregado com sucesso");
@@ -293,7 +295,10 @@ public class TelaAdministradorEditarSecretaria extends JFrame {
                     usuarioAtual.setBairro(FieldBairro.getText());
                     usuarioAtual.setCidade(FieldMunicipio.getText());
                     usuarioAtual.setCep(FieldCep.getText());
-                    usuarioAtual.setDataNasc(new java.sql.Date(dcDataNascimento.getDate().getTime()));
+                    usuarioAtual.setNumCasa(FieldNum.getText());
+                    usuarioAtual.setDataNasc(dcDataNascimento.getDate());
+                    usuarioAtual.setDataNasc(dcDataNascimento.getDate());
+                    
 
                     Secretaria secretaria = new Secretaria();
                     secretaria.editarSecretaria(usuarioAtual);
