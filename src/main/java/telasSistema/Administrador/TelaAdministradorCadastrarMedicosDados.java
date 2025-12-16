@@ -391,7 +391,7 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
             conexao.setAutoCommit(false);
             
             // 3. colocando em usuario os valores
-            String sqlusuario = "INSERT INTO usuarios (Email, Senha, Nome, CPF, Data_Nasc, Bairro, Rua, Num_Casa, Cidade, Servíco, Plano_De_Saude, CEP, Telefone) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sqlusuario = "INSERT INTO usuarios (Email, Senha, Nome, CPF, Data_Nasc, Bairro, Rua, Num_Casa, Cidade, Servíco, Plano_De_Saude, CEP, Telefone,Uf) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             
             pstUsuario = conexao.prepareStatement(sqlusuario, Statement.RETURN_GENERATED_KEYS);
             pstUsuario.setString(1, FieldEmail.getText());
@@ -416,7 +416,7 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
             pstUsuario.setString(11, FieldPlanoSaude.getText());
             pstUsuario.setString(12, FieldCep.getText());
             pstUsuario.setString(13, FieldTelefone.getText());
-            
+            pstUsuario.setString(14, FieldEstado.getText());
             pstUsuario.executeUpdate();
             
             // 4. pega o id que é auto increment
