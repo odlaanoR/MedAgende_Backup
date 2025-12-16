@@ -11,7 +11,7 @@ public class MedicoDAO {
 
     public void atualizarMedico(Connection con, int id, String crm, String rqe, int especialidade) throws Exception {
 
-        String sql = "UPDATE medico SET Rqe = ?, Especialidade = ? WHERE Id_Usuario = ? ";
+        String sql = "UPDATE medico SET CRM = ?, Rqe = ?, Especialidade = ? WHERE Id_Usuario = ? ";
 
         PreparedStatement stmt = con.prepareStatement(sql);
         stmt.setString(1, crm);
@@ -30,6 +30,28 @@ public class MedicoDAO {
         stmt.executeUpdate();
     
     }
+    
+    public Medico buscarMedico(int idUsuario) throws Exception {
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT CRM, Rqe, Especialidade FROM medico WHERE Id_Usuario = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, idUsuario);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Medico m = new Medico();
+                m.setCrm(rs.getString("CRM"));
+                m.setRqe(rs.getString("Rqe"));
+                m.setEspecialidade(rs.getString("Especialidade"));
+                return m;
+            }
+            return null;
+    }
+
     public static Medico criamedicoconectado(String id) throws Exception {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement pst = null;
