@@ -40,7 +40,7 @@ public class TelaPrincipalAdministrador extends JFrame {
 		
 		JList<String> listOpcoes = new JList<String>();
 		listOpcoes.setBackground(new Color(240, 240, 240));
-		listOpcoes.setFont(new Font("Trebuchet MS", Font.PLAIN, 27));
+		listOpcoes.setFont(new Font("Trebuchet MS", Font.PLAIN, 24));
 		listOpcoes.setModel(new AbstractListModel() {
 			String[] values = new String[] {"Gestão de usuários", "Configuração de horários e funcionamento", "Cadastro de Secretária(o)", "Cadastro de médicos"};
 			public int getSize() {

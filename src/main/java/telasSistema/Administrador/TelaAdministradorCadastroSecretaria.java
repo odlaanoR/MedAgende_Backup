@@ -211,7 +211,7 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
 		
 		JLabel labelDataNascimento = new JLabel("Insira a Data de Nascimento:");
 		labelDataNascimento.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
-		labelDataNascimento.setBounds(438, 118, 167, 14);
+		labelDataNascimento.setBounds(424, 118, 167, 14);
 		contentPane.add(labelDataNascimento);
         
         // --- JCALENDAR ---
@@ -267,21 +267,21 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
         
         JLabel lblNewLabel = new JLabel("CEP:");
         lblNewLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblNewLabel.setBounds(652, 117, 46, 14);
+        lblNewLabel.setBounds(619, 119, 46, 14);
         contentPane.add(lblNewLabel);
         
         textCEP = new JTextField(); // CEP
-        textCEP.setBounds(644, 140, 86, 20);
+        textCEP.setBounds(618, 142, 86, 20);
         contentPane.add(textCEP);
         textCEP.setColumns(10);
         
         JLabel lblNewLabel_1 = new JLabel("Rua:");
         lblNewLabel_1.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblNewLabel_1.setBounds(740, 230, 46, 14);
+        lblNewLabel_1.setBounds(739, 230, 46, 14);
         contentPane.add(lblNewLabel_1);
         
         textRua = new JTextField(); // Rua
-        textRua.setBounds(740, 255, 86, 20);
+        textRua.setBounds(739, 256, 125, 20);
         contentPane.add(textRua);
         textRua.setColumns(10);
         
@@ -297,11 +297,11 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
         
         JLabel lblBairro = new JLabel("Bairro:");
         lblBairro.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblBairro.setBounds(644, 230, 46, 14);
+        lblBairro.setBounds(619, 230, 46, 14);
         contentPane.add(lblBairro);
         
         textBairro = new JTextField(); // Bairro
-        textBairro.setBounds(644, 255, 86, 20);
+        textBairro.setBounds(619, 255, 100, 20);
         contentPane.add(textBairro);
         textBairro.setColumns(10);
         
@@ -317,17 +317,17 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
         
         JLabel lblEstadoUF = new JLabel("Estado(UF):");
         lblEstadoUF.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblEstadoUF.setBounds(644, 173, 72, 14);
+        lblEstadoUF.setBounds(619, 173, 72, 14);
         contentPane.add(lblEstadoUF);
         
         textEstado = new JTextField(); // Estado(UF)
-        textEstado.setBounds(644, 198, 46, 20);
+        textEstado.setBounds(619, 198, 46, 20);
         contentPane.add(textEstado);
         textEstado.setColumns(10);
         
         // BOTÃO PARA BUSCAR CEP
         JButton btnBuscarCEP = new JButton("Buscar");
-        btnBuscarCEP.setBounds(740, 140, 83, 20);
+        btnBuscarCEP.setBounds(729, 141, 83, 20);
         btnBuscarCEP.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 buscarEnderecoPorCEP();

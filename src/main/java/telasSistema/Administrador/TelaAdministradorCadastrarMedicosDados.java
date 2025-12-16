@@ -175,7 +175,7 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
         
         JLabel labelDataNascimento = new JLabel("Insira a Data de Nascimento:");
         labelDataNascimento.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
-        labelDataNascimento.setBounds(438, 118, 167, 14);
+        labelDataNascimento.setBounds(424, 118, 167, 14);
         contentPane.add(labelDataNascimento);
         
         // --- JCALENDAR ---
@@ -239,61 +239,61 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
         
         JLabel cep = new JLabel("CEP:");
         cep.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        cep.setBounds(652, 117, 46, 14);
+        cep.setBounds(620, 119, 46, 14);
         contentPane.add(cep);
         
         FieldCep = new JTextField(); 
-        FieldCep.setBounds(644, 140, 86, 20);
+        FieldCep.setBounds(609, 142, 86, 20);
         contentPane.add(FieldCep);
         FieldCep.setColumns(10);
         
         JLabel rua = new JLabel("Rua:");
         rua.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        rua.setBounds(740, 230, 46, 14);
+        rua.setBounds(717, 260, 46, 14);
         contentPane.add(rua);
         
         FieldRua = new JTextField(); 
-        FieldRua.setBounds(740, 255, 86, 20);
+        FieldRua.setBounds(716, 284, 148, 20);
         contentPane.add(FieldRua);
         FieldRua.setColumns(10);
         
         JLabel numero = new JLabel("Número:");
         numero.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        numero.setBounds(740, 286, 72, 14);
+        numero.setBounds(740, 315, 72, 14);
         contentPane.add(numero);
         
         FieldNum = new JTextField(); 
-        FieldNum.setBounds(740, 311, 59, 20);
+        FieldNum.setBounds(740, 339, 59, 20);
         contentPane.add(FieldNum);
         FieldNum.setColumns(10);
         
         JLabel lblBairro = new JLabel("Bairro:");
         lblBairro.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblBairro.setBounds(644, 230, 46, 14);
+        lblBairro.setBounds(609, 260, 46, 14);
         contentPane.add(lblBairro);
         
         FieldBairro = new JTextField(); 
-        FieldBairro.setBounds(644, 255, 86, 20);
+        FieldBairro.setBounds(609, 284, 86, 20);
         contentPane.add(FieldBairro);
         FieldBairro.setColumns(10);
         
         JLabel lblMunicipio = new JLabel("Município:");
         lblMunicipio.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblMunicipio.setBounds(740, 173, 72, 14);
+        lblMunicipio.setBounds(716, 173, 72, 14);
         contentPane.add(lblMunicipio);
         
         FieldMunicipio = new JTextField(); 
-        FieldMunicipio.setBounds(740, 198, 86, 20);
+        FieldMunicipio.setBounds(716, 198, 86, 20);
         contentPane.add(FieldMunicipio);
         FieldMunicipio.setColumns(10);
         
         JLabel lblEstadoUF = new JLabel("Estado(UF):");
         lblEstadoUF.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblEstadoUF.setBounds(644, 173, 72, 14);
+        lblEstadoUF.setBounds(609, 173, 72, 14);
         contentPane.add(lblEstadoUF);
         
         FieldEstado = new JTextField(); 
-        FieldEstado.setBounds(644, 198, 46, 20);
+        FieldEstado.setBounds(609, 198, 46, 20);
         contentPane.add(FieldEstado);
         FieldEstado.setColumns(10);
         
