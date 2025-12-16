@@ -2,14 +2,15 @@ package conexao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
 
     // Dados do seu banco MySQL
-    private static final String URL = "jdbc:mysql://localhost:3306/BancodeDadosMedAgende";
+    private static final String URL = "jdbc:mysql://localhost:3306/medagendebd";
     private static final String USER = "root";
-    private static final String PASSWORD = "30096700";
+    private static final String PASSWORD = "And30hei06@";
 
     // Método que retorna uma conexão pronta
     public static Connection getConnection() {
@@ -29,4 +30,9 @@ public class ConnectionFactory {
             throw new RuntimeException(e);
         }
     }
+
+	public static void closeConnection(Connection con, PreparedStatement stmt) {
+		// TODO Auto-generated method stub
+		
+	}
 }
