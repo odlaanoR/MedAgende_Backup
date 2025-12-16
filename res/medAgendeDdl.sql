@@ -20,6 +20,95 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `agenda`
+--
+
+CREATE TABLE `agenda` (
+  `matricula_medico` int(11) NOT NULL,
+  `dia` date NOT NULL,
+  `hora_entrada` time NOT NULL,
+  `hora_saida` time NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `agenda`
+--
+
+INSERT INTO `agenda` (`matricula_medico`, `dia`, `hora_entrada`, `hora_saida`) VALUES
+(4, '2025-02-13', '13:00:00', '23:00:00'),
+(4, '2025-02-14', '14:00:00', '00:00:00'),
+(4, '2025-02-15', '15:00:00', '01:00:00'),
+(4, '2025-02-16', '16:00:00', '02:00:00'),
+(4, '2025-02-17', '17:00:00', '03:00:00'),
+(4, '2025-02-18', '18:00:00', '04:00:00'),
+(4, '2025-02-19', '19:00:00', '05:00:00'),
+(4, '2025-02-20', '20:00:00', '06:00:00'),
+(4, '2025-02-21', '21:00:00', '07:00:00'),
+(4, '2025-02-22', '22:00:00', '08:00:00'),
+(4, '2025-02-23', '23:00:00', '09:00:00'),
+(4, '2025-02-24', '00:00:00', '10:00:00'),
+(4, '2025-02-25', '01:00:00', '11:00:00'),
+(4, '2025-02-26', '02:00:00', '12:00:00'),
+(4, '2025-02-27', '03:00:00', '13:00:00'),
+(4, '2025-02-28', '04:00:00', '14:00:00'),
+(4, '2025-03-01', '05:00:00', '15:00:00'),
+(4, '2025-03-02', '06:00:00', '16:00:00'),
+(4, '2025-03-03', '07:00:00', '17:00:00'),
+(4, '2025-03-04', '08:00:00', '18:00:00'),
+(4, '2025-03-05', '09:00:00', '19:00:00'),
+(4, '2025-03-06', '10:00:00', '20:00:00'),
+(4, '2025-03-07', '11:00:00', '21:00:00'),
+(4, '2025-03-08', '12:00:00', '22:00:00'),
+(4, '2025-03-09', '13:00:00', '23:00:00'),
+(4, '2025-03-10', '14:00:00', '00:00:00'),
+(4, '2025-03-11', '15:00:00', '01:00:00'),
+(4, '2025-03-12', '16:00:00', '02:00:00'),
+(4, '2025-03-13', '17:00:00', '03:00:00'),
+(4, '2025-03-14', '18:00:00', '04:00:00'),
+(4, '2025-03-15', '19:00:00', '05:00:00'),
+(4, '2025-03-16', '20:00:00', '06:00:00'),
+(4, '2025-03-17', '21:00:00', '07:00:00'),
+(4, '2025-03-18', '22:00:00', '08:00:00'),
+(4, '2025-03-19', '23:00:00', '09:00:00'),
+(4, '2025-03-20', '00:00:00', '10:00:00'),
+(4, '2025-03-21', '01:00:00', '11:00:00'),
+(4, '2025-03-22', '02:00:00', '12:00:00'),
+(4, '2025-03-23', '03:00:00', '13:00:00'),
+(4, '2025-03-24', '04:00:00', '14:00:00'),
+(4, '2025-03-25', '05:00:00', '15:00:00'),
+(4, '2025-03-26', '06:00:00', '16:00:00'),
+(4, '2025-03-27', '07:00:00', '17:00:00'),
+(4, '2025-03-28', '08:00:00', '18:00:00'),
+(4, '2025-03-29', '09:00:00', '19:00:00'),
+(4, '2025-03-30', '10:00:00', '20:00:00'),
+(4, '2025-03-31', '11:00:00', '21:00:00'),
+(4, '2025-04-01', '12:00:00', '22:00:00'),
+(4, '2025-04-02', '13:00:00', '23:00:00'),
+(4, '2025-04-03', '14:00:00', '00:00:00'),
+(4, '2025-04-04', '15:00:00', '01:00:00'),
+(4, '2025-04-05', '16:00:00', '02:00:00'),
+(4, '2025-04-06', '17:00:00', '03:00:00'),
+(4, '2025-04-07', '18:00:00', '04:00:00'),
+(4, '2025-04-08', '19:00:00', '05:00:00'),
+(4, '2025-04-09', '20:00:00', '06:00:00'),
+(4, '2025-04-10', '21:00:00', '07:00:00'),
+(4, '2025-04-11', '22:00:00', '08:00:00'),
+(4, '2025-04-12', '23:00:00', '09:00:00'),
+(4, '2025-04-13', '00:00:00', '10:00:00'),
+(4, '2025-04-14', '01:00:00', '11:00:00'),
+(4, '2025-04-15', '02:00:00', '12:00:00'),
+(4, '2025-04-16', '03:00:00', '13:00:00'),
+(4, '2025-04-17', '04:00:00', '14:00:00'),
+(4, '2025-04-18', '05:00:00', '15:00:00'),
+(4, '2025-04-19', '06:00:00', '16:00:00'),
+(4, '2025-04-20', '07:00:00', '17:00:00'),
+(4, '2025-04-21', '08:00:00', '18:00:00'),
+(4, '2025-04-22', '09:00:00', '19:00:00'),
+(4, '2025-04-23', '10:00:00', '20:00:00');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `alergias`
 --
 
@@ -46,15 +135,11 @@ CREATE TABLE `comorbidades` (
 --
 
 CREATE TABLE `consultas` (
-  `id_Consultas` int(11) NOT NULL,
-  `Fk_Id_Paciente` int(11) NOT NULL,
-  `Fk_Matricula_Medico` int(11) NOT NULL,
-  `Data_Consulta` date NOT NULL,
-  `Horario_Consulta` time NOT NULL,
-  `Regiao_Consulta` varchar(45) NOT NULL,
-  `Bairro_Consulta` varchar(45) NOT NULL,
-  `Cidade_Consulta` varchar(45) NOT NULL,
-  `Situacao` varchar(45) DEFAULT NULL
+  `Id_Consulta` int(11) NOT NULL,
+  `Matricula_Med` int(11) NOT NULL,
+  `Id_Paciente` int(11) NOT NULL,
+  `Data` date NOT NULL,
+  `Hora` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -73,20 +158,27 @@ CREATE TABLE `especialidades` (
 --
 
 INSERT INTO `especialidades` (`Id_Especialidade`, `Nome_Especialidade`) VALUES
-(1, 'Ortopedista'),
+(1, 'Ortopedista_e_Traumatologista'),
 (2, 'Cardiologista'),
 (3, 'Dermatologista'),
 (4, 'Urologista'),
 (5, 'Neurologista'),
-(6, 'Psiquiatra');
+(6, 'Psiquiatra'),
+(7, 'Alergista e Imunologista'),
+(8, 'Angiologista'),
+(9, 'Clínica Médica'),
+(10, 'Endocrinologista e Metabologista'),
+(11, 'Endoscopista'),
+(12, 'Geriatrista'),
+(13, 'Ginecologista e Obstreticista'),
+(14, 'Neurologista'),
+(15, 'Nutrologista'),
+(16, 'Oftalmologista'),
+(17, 'Pediatra');
 
 -- --------------------------------------------------------
--- Despejando dados para tabela 'especialidades'
---
-INSERT INTO `especialidades`(`Nome_Especialidade`) VALUES ('Alergista e Imunologista'), ('Angiologista'), ('Clínica Médica'), ('Endocrinologista e Metabologista'),
- ('Endoscopista'), ('Geriatrista'), ('Ginecologista e Obstreticista'), ('Neurologista'), ('Nutrologista'), ('Oftalmologista'), ('Pediatra')
 
--- ----------------------------------------------------------
+--
 -- Estrutura para tabela `medico`
 --
 
@@ -104,7 +196,8 @@ CREATE TABLE `medico` (
 --
 
 INSERT INTO `medico` (`Matricula`, `Id_Usuario`, `Especialidade`, `Crm`, `Situacao`, `Rqe`) VALUES
-(1, 1, 6, '555666777', 'Superposição Quântica', '3364447');
+(1, 1, 6, '555666777', 'Superposição Quântica', '3364447'),
+(4, 5, 17, '', 'ativo', '');
 
 -- --------------------------------------------------------
 
@@ -123,8 +216,8 @@ CREATE TABLE `paciente` (
   `Municipio` varchar(45) DEFAULT NULL,
   `Plano_De_Saude` varchar(45) DEFAULT NULL,
   `CEP` char(8) DEFAULT NULL,
-  `CPF` char(11) NOT NULL,
-  `Telefone` char(11) DEFAULT NULL,
+  `CPF` char(14) NOT NULL,
+  `Telefone` char(13) DEFAULT NULL,
   `Estado` varchar(45) DEFAULT NULL,
   `Profissao` varchar(45) NOT NULL,
   `Sexo` char(1) NOT NULL
@@ -177,28 +270,37 @@ CREATE TABLE `usuarios` (
   `Email` varchar(90) NOT NULL,
   `Senha` varchar(15) NOT NULL,
   `Nome` varchar(90) NOT NULL,
-  `CPF` char(11) NOT NULL,
+  `CPF` char(14) NOT NULL,
   `Data_Nasc` date DEFAULT NULL,
   `Bairro` varchar(45) DEFAULT NULL,
   `Rua` varchar(45) DEFAULT NULL,
   `Num_Casa` varchar(45) DEFAULT NULL,
   `Cidade` varchar(45) DEFAULT NULL,
+  `Uf` char(2) NOT NULL,
   `Servíco` varchar(45) DEFAULT NULL,
   `Plano_De_Saude` varchar(45) DEFAULT NULL,
   `CEP` char(8) DEFAULT NULL,
-  `Telefone` char(11) NOT NULL
+  `Telefone` char(13) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`Id_Usuario`, `Email`, `Senha`, `Nome`, `CPF`, `Data_Nasc`, `Bairro`, `Rua`, `Num_Casa`, `Cidade`, `Servíco`, `Plano_De_Saude`, `CEP`, `Telefone`) VALUES
-(1, 'adminicial@gmail.com', '123456', 'Lorem Ipsum Dolor', '55566677733', '0000-00-00', 'Lorem', 'Ipsum', '6', 'Dolor', 'Administrador', '', '44477777', '88636665556');
+INSERT INTO `usuarios` (`Id_Usuario`, `Email`, `Senha`, `Nome`, `CPF`, `Data_Nasc`, `Bairro`, `Rua`, `Num_Casa`, `Cidade`, `Uf`, `Servíco`, `Plano_De_Saude`, `CEP`, `Telefone`) VALUES
+(1, 'adminicial@gmail.com', '123456', 'Lorem Ipsum Dolor', '55566677733', '1950-12-08', 'Lorem', 'Ipsum', '6', 'Dolor', '', 'Administrador', '', '44477777', '88636665556'),
+(5, 'RodrigoMVP@gmail.com', 'Rodrigao', 'Rodrigo Moura Valério Pinto', '15524478812', '1990-06-03', 'Jardim Paulista', 'Rua Cento e Quatro', '987', 'Paulista', '', 'Médico', '', '53407230', '81955662023'),
+(6, 'eduhernandes@gmail.com', '3efilhotinhos', 'Eduardo Hernandes', '2882886558', '1995-06-08', 'Jardim Paulista', 'Rua Cento e Cinco', '855', 'Paulista', '', 'Secretária', 'Sesi Saude', '53407240', '81955663214');
 
 --
 -- Índices para tabelas despejadas
 --
+
+--
+-- Índices de tabela `agenda`
+--
+ALTER TABLE `agenda`
+  ADD PRIMARY KEY (`matricula_medico`,`dia`);
 
 --
 -- Índices de tabela `alergias`
@@ -216,10 +318,9 @@ ALTER TABLE `comorbidades`
 -- Índices de tabela `consultas`
 --
 ALTER TABLE `consultas`
-  ADD PRIMARY KEY (`id_Consultas`),
-  ADD UNIQUE KEY `id_Consultas` (`id_Consultas`),
-  ADD KEY `Fk_Matricula_Medico` (`Fk_Matricula_Medico`),
-  ADD KEY `Fk_Id_Paciente` (`Fk_Id_Paciente`);
+  ADD PRIMARY KEY (`Id_Consulta`),
+  ADD KEY `Matricula_Med` (`Matricula_Med`),
+  ADD KEY `Id_Paciente` (`Id_Paciente`);
 
 --
 -- Índices de tabela `especialidades`
@@ -274,19 +375,19 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `consultas`
 --
 ALTER TABLE `consultas`
-  MODIFY `id_Consultas` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id_Consulta` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `especialidades`
 --
 ALTER TABLE `especialidades`
-  MODIFY `Id_Especialidade` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `Id_Especialidade` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de tabela `medico`
 --
 ALTER TABLE `medico`
-  MODIFY `Matricula` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `Matricula` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `paciente`
@@ -310,11 +411,17 @@ ALTER TABLE `solicitacoes_exames`
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `Id_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `Id_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restrições para tabelas despejadas
 --
+
+--
+-- Restrições para tabelas `agenda`
+--
+ALTER TABLE `agenda`
+  ADD CONSTRAINT `agenda_ibfk_1` FOREIGN KEY (`matricula_medico`) REFERENCES `medico` (`Matricula`);
 
 --
 -- Restrições para tabelas `alergias`
@@ -332,8 +439,8 @@ ALTER TABLE `comorbidades`
 -- Restrições para tabelas `consultas`
 --
 ALTER TABLE `consultas`
-  ADD CONSTRAINT `consultas_ibfk_1` FOREIGN KEY (`Fk_Matricula_Medico`) REFERENCES `medico` (`Matricula`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `consultas_ibfk_2` FOREIGN KEY (`Fk_Id_Paciente`) REFERENCES `paciente` (`Id_Paciente`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `consultas_ibfk_1` FOREIGN KEY (`Matricula_Med`) REFERENCES `medico` (`Matricula`),
+  ADD CONSTRAINT `consultas_ibfk_2` FOREIGN KEY (`Id_Paciente`) REFERENCES `paciente` (`Id_Paciente`);
 
 --
 -- Restrições para tabelas `medico`
@@ -359,7 +466,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-
-
-
