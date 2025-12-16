@@ -18,12 +18,13 @@ public class Usuario {
 	    protected String planoDeSaude;
 	    protected String cep;
 	    protected String telefone;
+		protected String Uf;
 	    
 	    public Usuario() {
 	    }
 	    
 	    public Usuario(String email, String senha, String nome, String cpf, Date dataNasc, String bairro, 
-	                   String rua, String numCasa, String cidade, String servico, 
+	                   String rua, String numCasa, String cidade, String servico, String uf,
 	                   String planoDeSaude, String cep, String telefone) {
 	        this.email = email;
 	        this.senha=senha;
@@ -38,10 +39,8 @@ public class Usuario {
 	        this.planoDeSaude = planoDeSaude;
 	        this.cep = cep;
 	        this.telefone=telefone;
+	        this.Uf=uf;
 	    }
-	    public void setSenha(String senha) {
-			this.senha = senha;
-		}
 
 		public void setCpf(String cpf) {
 			this.cpf = cpf;
@@ -67,6 +66,8 @@ public class Usuario {
 			return senha;
 		}
 		
+		public void setSenha(String senha) {
+			 this.senha=senha;		}
 		
 	   
 	    public String getNome() {
@@ -153,7 +154,7 @@ public class Usuario {
 	    public void setCep(String cep) {
 	        this.cep = cep;
 	    }
-
+	    
 
 		public String getTelefone() {
 			// TODO Auto-generated method stub
@@ -164,9 +165,15 @@ public class Usuario {
 			this.telefone=telefone;
 		}
 
+		public String getUf() {
+			return Uf;
+		}
+
+		public void setUf(String uf) {
+			Uf = uf;
+		}
+		
 	
 
 
 }
-
-

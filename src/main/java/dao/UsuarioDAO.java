@@ -9,7 +9,6 @@ import javax.swing.JOptionPane;
 
 import conexao.ConnectionFactory;
 import model.Usuario;
-import Back.Crypto;
 
 
 public class UsuarioDAO {
@@ -19,17 +18,9 @@ public class UsuarioDAO {
 		PreparedStatement stmt = null;
 		
 		try {
-			// Garantir que a senha esteja em hash bcrypt antes de gravar
-			if (u.getSenha() != null) {
-				String s = u.getSenha();
-				boolean looksLikeBcrypt = s.startsWith("$2a$") || s.startsWith("$2b$") || s.startsWith("$2y$");
-				if (!looksLikeBcrypt) {
-					Crypto crypto = new Crypto();
-					String hashed = crypto.gerarHashBCrypt(s);
-					// armazena o hash diretamente no objeto para evitar re-hash posterior
-					u.setSenhaHash(hashed);
-				}
-			}
+		
+				
+			
 			
 			stmt = con.prepareStatement("INSERT INTO usuarios (Email, Senha, Nome, CPF, Data_Nasc, Bairro, Rua, Num_Casa, Cidade, Servíço, Plano_De_Saude, CEP, Telefone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)");
 		        stmt.setString(1, u.getEmail());
@@ -80,6 +71,7 @@ public class UsuarioDAO {
                 u.setCpf(rs.getString("CPF"));
                 u.setRua(rs.getString("Rua"));
                 u.setNumCasa(rs.getString("Num_Casa"));
+                u.setUf(rs.getString("Uf"));
                 u.setBairro(rs.getString("Bairro"));
                 u.setCidade(rs.getString("Cidade"));
                 u.setCep(rs.getString("CEP"));
@@ -91,7 +83,7 @@ public class UsuarioDAO {
             return null;
 
         } finally {
-            ConnectionFactory.closeConnection(con, pst, rs);
+            ConnectionFactory.closeConnection(con, pst);
         }
     }
     

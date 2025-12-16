@@ -127,15 +127,6 @@ public class TelaAdministradorEditarMedico extends JFrame {
                     String cpf = FieldCpf.getText().replace(".", "").replace("-", "");
                     Usuarios usuarios = new Usuarios();
                     usuarioAtual = usuarios.buscarUsuarioPorCpf(cpf);
-                    
-                    Médico medicos = new Médico();
-                    medicoAtual = medicos.buscarDadosMedico(usuarioAtual.getIdUsuario());
-
-                    if (medicoAtual != null) {
-                        FieldCrm.setText(medicoAtual.getCrm());
-                        FieldRqe.setText(medicoAtual.getRqe());
-                        BoxEspecialidades.setSelectedItem(medicoAtual.getEspecialidade());
-                    }
 
                     if (usuarioAtual == null) {
                         JOptionPane.showMessageDialog(null, "Usuário não encontrado");
@@ -152,6 +143,14 @@ public class TelaAdministradorEditarMedico extends JFrame {
                     FieldPlanoSaude.setText(usuarioAtual.getPlanoDeSaude());
                     FieldNum.setText(usuarioAtual.getNumCasa());
                     dcDataNascimento.setDate(usuarioAtual.getDataNasc());
+                    FieldEstado.setText(usuarioAtual.getUf());
+                    Médico medicos = new Médico();
+                    medicoAtual = medicos.buscarDadosMedico(usuarioAtual.getIdUsuario());
+                    if (medicoAtual != null) {
+                        FieldCrm.setText(medicoAtual.getCrm());
+                        FieldRqe.setText(medicoAtual.getRqe());
+                        BoxEspecialidades.setSelectedItem(medicoAtual.getEspecialidade());
+                    }
                     JOptionPane.showMessageDialog(null, "Usuário carregado com sucesso");
 
                 } catch (Exception er) {
@@ -381,7 +380,7 @@ public class TelaAdministradorEditarMedico extends JFrame {
                 usuarioAtual.setPlanoDeSaude(FieldPlanoSaude.getText());
                 usuarioAtual.setNumCasa(FieldNum.getText());
                 usuarioAtual.setDataNasc(dcDataNascimento.getDate());
-            
+                usuarioAtual.setUf(FieldEstado.getText());
                 
                 String crm = FieldCrm.getText();
                 String rqe = FieldRqe.getText();
@@ -408,8 +407,10 @@ public class TelaAdministradorEditarMedico extends JFrame {
         JButton btnVoltar = new JButton("Voltar");
         btnVoltar.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
         btnVoltar.setBounds(31, 460, 125, 32);
+
         btnVoltar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            
+        	public void actionPerformed(ActionEvent e) {
             		TelaAdminEditarUsuarios telaAdminEditarUsuarios = new TelaAdminEditarUsuarios();
             		telaAdminEditarUsuarios.setLocationRelativeTo(null);
             		telaAdminEditarUsuarios.setVisible(true);

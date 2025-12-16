@@ -88,7 +88,7 @@ public class MedicoDAO {
                 medico_conectado.setRqe(rs.getString("Rqe"));
                 
                 
-                System.out.println("[DEBUG MedicoDAO] médico cadastrado com sucesso");
+                System.out.println(" médico cadastrado com sucesso");
                 
                 return medico_conectado;
             }

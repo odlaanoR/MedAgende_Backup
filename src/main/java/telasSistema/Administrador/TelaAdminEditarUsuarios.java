@@ -58,17 +58,17 @@ public class TelaAdminEditarUsuarios extends JFrame {
 		
 		JLabel lblNewLabel_2 = new JLabel("");
 		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\heito\\OneDrive\\Imagens\\agata2.png"));
-		lblNewLabel_2.setBounds(503, 147, 160, 150);
+		lblNewLabel_2.setBounds(505, 147, 158, 142);
 		panel.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\heito\\OneDrive\\Imagens\\Cartaxo3.png"));
-		lblNewLabel_1.setBounds(279, 139, 166, 166);
+		lblNewLabel_1.setBounds(279, 139, 150, 150);
 		panel.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\heito\\OneDrive\\Imagens\\juninho.png"));
-		lblNewLabel.setBounds(50, 139, 160, 158);
+		lblNewLabel.setBounds(50, 139, 150, 150);
 		panel.add(lblNewLabel);
 		
 		JButton btnEditarPaciente = new JButton("Editar Paciente");
