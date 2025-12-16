@@ -80,9 +80,14 @@ public class TelaInfosAgendamento extends JFrame {
 		JComboBox<String> ComboboxEspecialidade = new JComboBox<String>();
 		ComboboxEspecialidade.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ComboBoxModel<String> modelomedicoespecialidade = MedicoDAO.Buscamedicoporespecialidade((ComboboxEspecialidade.getSelectedIndex())+1); 
-				ComboboxProfissional.setModel(modelomedicoespecialidade);
-				
+				try {
+					ComboBoxModel<String> modelomedicoespecialidade = MedicoDAO.Buscamedicoporespecialidade((ComboboxEspecialidade.getSelectedIndex())+1); 
+					ComboboxProfissional.setModel(modelomedicoespecialidade);
+				} catch (RuntimeException er){
+					JOptionPane.showMessageDialog(TelaInfosAgendamento.this, "Erro ao carregar profissionais.\n" +
+					"Tente novamente.", "", JOptionPane.ERROR_MESSAGE);
+					er.printStackTrace();
+				}
 			}
 		});
 		 ComboboxEspecialidade.setModel(modeloespecialidades);
@@ -92,17 +97,20 @@ public class TelaInfosAgendamento extends JFrame {
 	     ComboboxProfissional = new JComboBox<String>();
 	     ComboboxProfissional.addActionListener(new ActionListener() {
 	     	public void actionPerformed(ActionEvent e) {
-				int Id_Medico = MedicoDAO.Buscamedicopornome(ComboboxProfissional.getSelectedItem().toString());
-				ComboBoxModel<Date> modelodatamedico = AgendaDAO.getmedicoagenda(Id_Medico);
-				ComboboxDia.setModel(modelodatamedico);
+	     		try {
+					int Id_Medico = MedicoDAO.Buscamedicopornome(ComboboxProfissional.getSelectedItem().toString());
+					ComboBoxModel<Date> modelodatamedico = AgendaDAO.getmedicoagenda(Id_Medico);
+					ComboboxDia.setModel(modelodatamedico);
+	     		} catch (RuntimeException er) {
+	     			JOptionPane.showMessageDialog(TelaInfosAgendamento.this, "Erro ao carregar agenda do médico.\n", 
+	     			"Erro",JOptionPane.ERROR_MESSAGE);
+	     		}
 	     	}
 	     });
 
-
-	     ComboboxProfissional.setEditable(false);
-	    
-		 ComboboxProfissional.setBounds(398, 205, 206, 18);
-		 panel.add(ComboboxProfissional);
+	    ComboboxProfissional.setEditable(false);
+		ComboboxProfissional.setBounds(398, 205, 206, 18);
+		panel.add(ComboboxProfissional);
 		
 		JLabel lbldia = new JLabel("Escolha o dia");
 		lbldia.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -130,8 +138,6 @@ public class TelaInfosAgendamento extends JFrame {
 				Date Data_Consulta = (Date) ComboboxDia.getSelectedItem();
 				LocalTime Horario_Consulta = (LocalTime) Comboboxhorario.getSelectedItem();
 				
-				
-				
 				TelaConfirmar tela = new TelaConfirmar(Nome_Med, Nome_Pac, Especialidade , Data_Consulta, Horario_Consulta);
 				tela.setLocationRelativeTo(null);
 				tela.setVisible(true);
@@ -151,7 +157,7 @@ public class TelaInfosAgendamento extends JFrame {
 				TelaPrincipalSecretaria tela = new TelaPrincipalSecretaria();
 				tela.setLocationRelativeTo(null);
 				tela.setVisible(true);
-				 dispose();
+				dispose();
 			}
 		});
 		btnVoltar.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -259,7 +265,8 @@ public class TelaInfosAgendamento extends JFrame {
 		        
 		        
 		} catch (Exception e) {
-			// TODO: handle exception
+			JOptionPane.showMessageDialog(this,"Erro ao buscar paciente:\n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+		        e.printStackTrace();
 		}
 	}	
 }
