@@ -8,20 +8,44 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import javax.swing.JTextField;
+
+import conexao.ConnectionFactory;
+import dao.AgendaDAO;
+import dao.EspecialidadeDAO;
+import dao.MedicoDAO;
+
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Time;
+import java.time.LocalTime;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 
 public class TelaInfosAgendamento extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField textFieldRegiao;
-	private JTextField textFieldCidade;
-	private JTextField textFieldBairro;
-	private JTextField textFieldEspecialidade;
-	private JTextField textFieldProfissional;
-	private JTextField textFieldDiaHorario;
+	private JTextField txtEspecialidade;
+	private JComboBox<String> ComboboxProfissional;
+	private JComboBox<Date> ComboboxDia;
+	private JTextField txtcpfpaciente;
+	private JTextField txtnomepaciente;
+	private JComboBox<LocalTime> Comboboxhorario;
 
 	/**
 	 * Create the panel.
@@ -42,107 +66,73 @@ public class TelaInfosAgendamento extends JFrame {
 		lblAgendarConsulta.setBounds(278, 31, 234, 54);
 		panel.add(lblAgendarConsulta);
 		
-		JLabel lblEscolhaRegiao = new JLabel("Escolha a região");
-		lblEscolhaRegiao.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblEscolhaRegiao.setBounds(42, 105, 203, 16);
-		panel.add(lblEscolhaRegiao);
-		
-		textFieldRegiao = new JTextField();
-		textFieldRegiao.setBounds(27, 131, 265, 18);
-		panel.add(textFieldRegiao);
-		textFieldRegiao.setColumns(10);
-		
-		textFieldCidade = new JTextField();
-		textFieldCidade.setBounds(27, 205, 265, 18);
-		panel.add(textFieldCidade);
-		textFieldCidade.setColumns(10);
-		
-		JLabel lblEscolhaCidade = new JLabel("Escolha a Cidade");
-		lblEscolhaCidade.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblEscolhaCidade.setBounds(42, 179, 203, 16);
-		panel.add(lblEscolhaCidade);
-		
-		JLabel lblEscolhaBairro = new JLabel("Escolha o Bairro");
-		lblEscolhaBairro.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblEscolhaBairro.setBounds(42, 258, 203, 16);
-		panel.add(lblEscolhaBairro);
-		
 		JLabel lblEscolhaEspecialidade = new JLabel("Escolha a especialidade desejada");
 		lblEscolhaEspecialidade.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblEscolhaEspecialidade.setBounds(432, 105, 203, 16);
+		lblEscolhaEspecialidade.setBounds(398, 102, 203, 16);
 		panel.add(lblEscolhaEspecialidade);
 		
 		JLabel lblEscolhaProfissional = new JLabel("Escolha o Profissional");
 		lblEscolhaProfissional.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblEscolhaProfissional.setBounds(443, 179, 203, 16);
+		lblEscolhaProfissional.setBounds(398, 178, 203, 16);
 		panel.add(lblEscolhaProfissional);
 		
-		textFieldBairro = new JTextField();
-		textFieldBairro.setColumns(10);
-		textFieldBairro.setBounds(27, 284, 265, 18);
-		panel.add(textFieldBairro);
+		DefaultComboBoxModel<String> modeloespecialidades = EspecialidadeDAO.getespecialidades();
+		JComboBox<String> ComboboxEspecialidade = new JComboBox<String>();
+		ComboboxEspecialidade.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ComboBoxModel<String> modelomedicoespecialidade = MedicoDAO.Buscamedicoporespecialidade((ComboboxEspecialidade.getSelectedIndex())+1); 
+				ComboboxProfissional.setModel(modelomedicoespecialidade);
+				
+			}
+		});
+		 ComboboxEspecialidade.setModel(modeloespecialidades);
+	     ComboboxEspecialidade.setBounds(398, 129, 206, 22);
+	     panel.add(ComboboxEspecialidade);
 		
-		textFieldEspecialidade = new JTextField();
-		textFieldEspecialidade.setColumns(10);
-		textFieldEspecialidade.setBounds(398, 131, 265, 18);
-		panel.add(textFieldEspecialidade);
+	     ComboboxProfissional = new JComboBox<String>();
+	     ComboboxProfissional.addActionListener(new ActionListener() {
+	     	public void actionPerformed(ActionEvent e) {
+				int Id_Medico = MedicoDAO.Buscamedicopornome(ComboboxProfissional.getSelectedItem().toString());
+				ComboBoxModel<Date> modelodatamedico = AgendaDAO.getmedicoagenda(Id_Medico);
+				ComboboxDia.setModel(modelodatamedico);
+	     	}
+	     });
+
+
+	     ComboboxProfissional.setEditable(false);
+	    
+		 ComboboxProfissional.setBounds(398, 205, 206, 18);
+		 panel.add(ComboboxProfissional);
 		
-		textFieldProfissional = new JTextField();
-		textFieldProfissional.setColumns(10);
-		textFieldProfissional.setBounds(398, 205, 265, 18);
-		panel.add(textFieldProfissional);
+		JLabel lbldia = new JLabel("Escolha o dia");
+		lbldia.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		lbldia.setBounds(398, 257, 78, 16);
+		panel.add(lbldia);
 		
-		JLabel lblEscolhaDiahorrio = new JLabel("Escolha o dia/horário ");
-		lblEscolhaDiahorrio.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblEscolhaDiahorrio.setBounds(432, 261, 203, 16);
-		panel.add(lblEscolhaDiahorrio);
-		
-		textFieldDiaHorario = new JTextField();
-		textFieldDiaHorario.setColumns(10);
-		textFieldDiaHorario.setBounds(398, 284, 265, 18);
-		panel.add(textFieldDiaHorario);
+		ComboboxDia = new JComboBox<Date>();
+		ComboboxDia.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Date data = (Date) ComboboxDia.getSelectedItem();
+				ComboBoxModel<LocalTime> modelohorariodata = AgendaDAO.Buscahorariopordata(data);
+				Comboboxhorario.setModel(modelohorariodata);
+			}
+		});
+		ComboboxDia.setBounds(398, 284, 96, 18);
+		panel.add(ComboboxDia);
 		
 		JButton btnProximo = new JButton("Próximo");
 		btnProximo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				String mensagem="Por favor, preencha os seguintes campos obrigatórios:\n";
-				int camposEmBranco=0;
-				if (textFieldRegiao.getText().trim().isEmpty()) {
-					camposEmBranco++;
-					mensagem+="nome\n";}
-				if (textFieldCidade.getText().trim().isEmpty()) {
-					camposEmBranco++;
-					mensagem+="CPF\n";
-				}
-				if (textFieldBairro.getText().trim().isEmpty()) {
-					camposEmBranco++;
-					mensagem+="email\n";
-				}
-				if (textFieldEspecialidade.getText().trim().isEmpty()) {
-					camposEmBranco++;
-					mensagem+="Especialidade\n";
-				}
-				
-				if (textFieldProfissional.getText().trim().isEmpty()) {
-					camposEmBranco++;
-					mensagem+="Profissional\n";
-				}
-				if (textFieldDiaHorario.getText().trim().isEmpty()) {
-					camposEmBranco++;
-					mensagem+="Dia/horario\n";
-				}
-				
-				if (camposEmBranco>0) {
-					JOptionPane.showMessageDialog(null, mensagem,"Erro de Validação",
-				            JOptionPane.WARNING_MESSAGE 	);
-					
-				return;
-				}
-
+				String Nome_Med = ComboboxProfissional.getSelectedItem().toString();
+				String Nome_Pac = txtnomepaciente.getText();
+				String Especialidade = ComboboxEspecialidade.getSelectedItem().toString();
+				Date Data_Consulta = (Date) ComboboxDia.getSelectedItem();
+				LocalTime Horario_Consulta = (LocalTime) Comboboxhorario.getSelectedItem();
 				
 				
-				TelaConfirmar tela= new TelaConfirmar();
+				
+				TelaConfirmar tela = new TelaConfirmar(Nome_Med, Nome_Pac, Especialidade , Data_Consulta, Horario_Consulta);
 				tela.setLocationRelativeTo(null);
 				tela.setVisible(true);
 				 dispose();
@@ -152,7 +142,7 @@ public class TelaInfosAgendamento extends JFrame {
 			}
 		});
 		btnProximo.setFont(new Font("Segoe UI", Font.BOLD, 12));
-		btnProximo.setBounds(508, 349, 84, 20);
+		btnProximo.setBounds(398, 349, 84, 20);
 		panel.add(btnProximo);
 		
 		JButton btnVoltar = new JButton("Voltar");
@@ -165,11 +155,113 @@ public class TelaInfosAgendamento extends JFrame {
 			}
 		});
 		btnVoltar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-		btnVoltar.setBounds(98, 349, 84, 20);
+		btnVoltar.setBounds(248, 349, 84, 20);
 		panel.add(btnVoltar);
+		
+		JLabel lblcpfpaciente = new JLabel("Digite o CPF do paciente");
+		lblcpfpaciente.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		lblcpfpaciente.setBounds(71, 107, 203, 16);
+		panel.add(lblcpfpaciente);
+		
+		JLabel lblnomepaciente = new JLabel("Nome do Paciente:");
+		lblnomepaciente.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		lblnomepaciente.setBounds(71, 181, 203, 16);
+		panel.add(lblnomepaciente);
+		
+		txtcpfpaciente = new JTextField();
+		txtcpfpaciente.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				buscarNome();
+			}
+		});
+		txtcpfpaciente.setColumns(10);
+		txtcpfpaciente.setBounds(67, 131, 265, 18);
+		panel.add(txtcpfpaciente);
+		
+		txtnomepaciente = new JTextField();
+		txtnomepaciente.setEditable(false);
+		txtnomepaciente.setColumns(10);
+		txtnomepaciente.setBounds(67, 205, 265, 18);
+		panel.add(txtnomepaciente);
+		
+		JLabel lblhorario = new JLabel("Escolha o horário");
+		lblhorario.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		lblhorario.setBounds(539, 257, 96, 16);
+		panel.add(lblhorario);
+		
+		Comboboxhorario = new JComboBox<LocalTime>();
+		Comboboxhorario.setBounds(539, 284, 96, 18);
+		panel.add(Comboboxhorario);
+		
+		JLabel lblCadastroPaciente = new JLabel("Primeira vez do paciente na clínica?");
+		lblCadastroPaciente.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		lblCadastroPaciente.setBounds(71, 257, 203, 16);
+		panel.add(lblCadastroPaciente);
+		
+		JButton btnCadastrarPaciente = new JButton("Cadastrar Paciente");
+		btnCadastrarPaciente.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		btnCadastrarPaciente.setBounds(71, 283, 137, 20);
+		panel.add(btnCadastrarPaciente);
 		
 
 	}
+	
+	private void buscarNome() {
+		Connection conexao=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+
+		try {
+			conexao = ConnectionFactory.getConnection();
+			 if (conexao == null) {
+		            JOptionPane.showMessageDialog(this, 
+		                "Erro ao conectar ao banco de dados", 
+		                "Erro de Conexão", 
+		                JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
+		        
+		        // 3. Validar que o CPF foi digitado
+		        String cpf = txtcpfpaciente.getText().trim();
+		        if (cpf.isEmpty()) {
+		            JOptionPane.showMessageDialog(this, 
+		                "Digite um CPF para buscar", 
+		                "Aviso", 
+		                JOptionPane.WARNING_MESSAGE);
+		            txtcpfpaciente.requestFocus();
+		            return;
+		        
+		        }
+		        String sql = "SELECT nome FROM paciente WHERE cpf = ?";
+
+		        ps = conexao.prepareStatement(sql);
+		        ps.setString(1, cpf);
+		        rs = ps.executeQuery();
+		        if(rs.next()) {
+		        	String nomeEncontrado=rs.getString("Nome");
+		        	txtnomepaciente.setText(nomeEncontrado);
+		        JOptionPane.showMessageDialog(this, 
+		                "Paciente encontrado!", 
+		                "Sucesso", 
+		                JOptionPane.INFORMATION_MESSAGE);
+		        } else {
+		            // Se não encontrou, limpa o campo e informa
+		            txtnomepaciente.setText("");
+		            JOptionPane.showMessageDialog(this, 
+		                "Paciente não encontrado com o CPF: " + cpf, 
+		                "Paciente não encontrado", 
+		                JOptionPane.WARNING_MESSAGE);
+		            
+		            // Opcional: focar no campo de nome para cadastro
+		            txtnomepaciente.requestFocus();
+		        }
+		        
+		        
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}	
 }
 
 		

@@ -6,23 +6,26 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
+
+import Back.Consulta;
+import dao.ConsultaDAO;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.time.LocalTime;
 import java.awt.event.ActionEvent;
 
 
 public class TelaConfirmar extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField textFieldBairro;
-	private JTextField textFieldEspecialidade;
-	private JTextField textFieldProfissional;
-	private JTextField textFieldDiaHorario;
+
 
 	/**
 	 * Create the panel.
 	 */
-	public TelaConfirmar() {
+	public TelaConfirmar(String Nome_Med, String Nome_Pac, String Especialidade, Date Data_Consulta, LocalTime Horario_Consulta) {
 		setBounds(100, 100, 742, 454);
 		getContentPane().setBackground(new Color(170, 255, 255));
 		getContentPane().setLayout(null);
@@ -42,25 +45,18 @@ public class TelaConfirmar extends JFrame {
 		JButton btnConfirmar = new JButton("Confirmar");
 		btnConfirmar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TelaConfirmar tela=new TelaConfirmar();
-				tela.setLocationRelativeTo(null);
-				tela.setVisible(true);
-				dispose();
+				ConsultaDAO.cadastrarconsulta(Nome_Med, Nome_Pac, Data_Consulta, Horario_Consulta);
 				
 			}
 		});
 		btnConfirmar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-		btnConfirmar.setBounds(533, 349, 95, 20);
+		btnConfirmar.setBounds(312, 349, 95, 20);
 		panel.add(btnConfirmar);
 		
 		JButton btnVoltar = new JButton("Voltar");
 		btnVoltar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TelaPrincipalSecretaria tela = new TelaPrincipalSecretaria();
-				tela.setLocationRelativeTo(null);
-
-				tela.setVisible(true);
-				 dispose();
+				ConsultaDAO.cadastrarconsulta(Nome_Med, Nome_Pac, Data_Consulta, Horario_Consulta);
 			}
 		});
 		btnVoltar.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -72,10 +68,20 @@ public class TelaConfirmar extends JFrame {
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
-		JLabel lblConfirmação = new JLabel("Confirmar consulta na clínica xxxxx, especialidade xxxxx, com o(a) médico(a) xxxxx no dia xx/xx/xxxx às xx:xx horas?");
-		lblConfirmação.setBounds(20, 22, 628, 76);
+		JLabel lblConfirmação = new JLabel("<html>Confirmar consulta de Paciente " + Nome_Pac + ". especialidade " + Especialidade + ", com o(a) médico(a) " + Nome_Med + " no dia " + Data_Consulta + " às " + Horario_Consulta + " horas? </html>");
+		lblConfirmação.setBounds(20, 22, 618, 87);
 		panel_1.add(lblConfirmação);
 		lblConfirmação.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		
+		JButton btnImprimir = new JButton("Imprimir");
+		btnImprimir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Consulta.EmitirComprovanteConsulta(Nome_Med, Nome_Pac, Especialidade, Data_Consulta, Horario_Consulta);
+			}
+		});
+		btnImprimir.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		btnImprimir.setBounds(550, 349, 95, 20);
+		panel.add(btnImprimir);
 		
 
 	}

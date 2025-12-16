@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+
 import conexao.ConnectionFactory;
 import model.Medico;
 
@@ -99,5 +102,78 @@ public class MedicoDAO {
             //ConnectionFactory.closeConnection(con, pst, rs);
         }
 }
+    public static ComboBoxModel<String> Buscamedicoporespecialidade(int Id_Especialidade){
+    	Connection con = ConnectionFactory.getConnection();
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        //String debug = null;
+        DefaultComboBoxModel<String> Caixa = new DefaultComboBoxModel<String>();
+        
+        try {
+			String sql = "SELECT usuarios.Nome, medico.Id_Usuario, especialidades.Nome_Especialidade FROM usuarios INNER JOIN medico ON usuarios.Id_Usuario = medico.Id_Usuario INNER JOIN especialidades ON medico.Especialidade = especialidades.Id_Especialidade WHERE especialidades.Id_Especialidade = ? ORDER BY usuarios.Nome";
+			pst = con.prepareStatement(sql);
+			pst.setInt(1, Id_Especialidade);
+			rs = pst.executeQuery();
+			//debug = ("[DEBUG] MÉTODO GETESPECIALIDADES CHAMADO, RESULTADO: ");
+			
+			while(rs.next()) {
+				Caixa.addElement(rs.getString("Nome"));
+				//debug += (rs.getString("Nome_Especialidade") + ", ");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        //System.out.println(debug);
+        	return Caixa;
+	}  
+    
+    public static int Buscamedicopornome(String Nome_Medico) {
+    	try {
+    	Connection con = ConnectionFactory.getConnection();
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        System.out.println("[DEBUG Buscamedicopornome] Nome do médico recebido: " + Nome_Medico);
+        String sql = "SELECT usuarios.Id_Usuario FROM usuarios WHERE Nome = ?";
+		pst = con.prepareStatement(sql);
+		pst.setString(1, Nome_Medico);
+		rs = pst.executeQuery();
+		if (rs.next()) {
+            return rs.getInt("Id_Usuario");
+        }
+
+        return 0; // não encontrado
+
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    		return 0;
+    	}
+    }
+    
+    public static int Buscamatriculapornome(String Nome_Medico) {
+    	try {
+    	Connection con = ConnectionFactory.getConnection();
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        System.out.println("[DEBUG Buscamedicopornome] Nome do médico recebido: " + Nome_Medico);
+        String sql = "SELECT usuarios.Nome, medico.Matricula FROM medico\r\n"
+        		+ "INNER JOIN usuarios ON medico.Id_Usuario = usuarios.Id_Usuario\r\n"
+        		+ "WHERE Nome = ?";
+		pst = con.prepareStatement(sql);
+		pst.setString(1, Nome_Medico);
+		rs = pst.executeQuery();
+		if (rs.next()) {
+            return rs.getInt("Matricula");
+        }
+
+        return 0; // não encontrado
+
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    		return 0;
+    	}
+    }
+
 
 }

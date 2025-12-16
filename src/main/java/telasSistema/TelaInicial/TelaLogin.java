@@ -112,7 +112,7 @@ public class TelaLogin extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("[DEBUG telalogin] Botão de logar apertadp");
+				//System.out.println("[DEBUG telalogin] Botão de logar apertadp");
 				// condição para não deixar ele passar se estiver em branco
 				String mensagemDeErro = "Por favor, preencha os seguintes campos obrigatórios:\n";
 				int camposEmBranco = 0;
@@ -193,7 +193,7 @@ public class TelaLogin extends JFrame {
 	} // FECHA O CONSTRUTOR TelaLogin()
 
 	public void logar() {
-		System.out.println("[DEBUG telalogin] funcão Logar foi chamado");
+		//System.out.println("[DEBUG telalogin] funcão Logar foi chamado");
 		String sql = "SELECT * FROM usuarios WHERE Email=? AND Senha=?";
 		try {
 			//pst prepara a seleção que foi feita acima e pst.setString(1, textFieldEmail.getText()); substitui os valores 
@@ -211,7 +211,7 @@ public class TelaLogin extends JFrame {
 				String serviço = rs.getString("servíco");
 				String id_conectado = rs.getString("id_usuario");
 				if (serviço.equals("Secretária")){
-					System.out.println("usuário era uma secretária");
+					//System.out.println("usuário era uma secretária");
 					Usuarios.criausuarioconectado(id_conectado);
 					JOptionPane.showMessageDialog(null, "Bem vindo(a) "+nome);
 					TelaPrincipalSecretaria tela = new TelaPrincipalSecretaria();
@@ -219,7 +219,7 @@ public class TelaLogin extends JFrame {
 					tela.setVisible(true);
 					dispose();
 				}else if (serviço.equals("Administrador")) {
-					System.out.println("usuário era um admnistrador");
+					//System.out.println("usuário era um admnistrador");
 					Usuarios.criausuarioconectado(id_conectado);
 					JOptionPane.showMessageDialog(null, "Bem vindo(a) "+nome);
 					TelaPrincipalAdministrador tela = new TelaPrincipalAdministrador();

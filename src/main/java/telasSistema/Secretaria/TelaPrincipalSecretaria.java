@@ -64,9 +64,9 @@ public class TelaPrincipalSecretaria extends JFrame {
 				
 				switch (opcaoSelecionada) {
 				case "Agendar Consulta":
-					TelaSecretariaAgendar telaSecretariaAgendar= new TelaSecretariaAgendar();
-					telaSecretariaAgendar.setLocationRelativeTo(null);
-					telaSecretariaAgendar.setVisible(true);
+					TelaInfosAgendamento telainfosagendamento= new TelaInfosAgendamento();
+					telainfosagendamento.setLocationRelativeTo(null);
+					telainfosagendamento.setVisible(true);
 					 dispose();
 			
 					break;
