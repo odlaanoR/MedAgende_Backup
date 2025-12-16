@@ -5,7 +5,12 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -25,9 +30,9 @@ import com.toedter.calendar.JDateChooser;
 
 import Back.Médico;
 import Back.Usuarios;
+import conexao.ConnectionFactory;
 import dao.EspecialidadeDAO;
 import model.Usuario;
-import model.Medico;
 
 public class TelaAdministradorEditarMedico extends JFrame {
 
@@ -53,7 +58,9 @@ public class TelaAdministradorEditarMedico extends JFrame {
     private JComboBox<String> BoxEspecialidades;
     private JDateChooser dcDataNascimento;
     private Usuario usuarioAtual;
-    private Medico medicoAtual;
+	private int Id_Usuario;
+	private int Especialidade;
+	private int idusuario;
 
 
     /**
@@ -114,7 +121,7 @@ public class TelaAdministradorEditarMedico extends JFrame {
             e.printStackTrace();
         }
 
-        FieldCpf = new JFormattedTextField(maskCpf);
+        FieldCpf = new JFormattedTextField();
         FieldCpf.setBounds(381, 98, 100, 25);
         contentPane.add(FieldCpf);
 
@@ -124,38 +131,22 @@ public class TelaAdministradorEditarMedico extends JFrame {
         btnBuscarCPF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String cpf = FieldCpf.getText().replace(".", "").replace("-", "");
-                    Usuarios usuarios = new Usuarios();
-                    usuarioAtual = usuarios.buscarUsuarioPorCpf(cpf);
-
-                    if (usuarioAtual == null) {
-                        JOptionPane.showMessageDialog(null, "Usuário não encontrado");
-                        return;
+                    verificar();
+                    
+                    if (!FieldNome.getText().isEmpty() && !FieldCrm.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, 
+                            "Médico carregado com sucesso", 
+                            "Sucesso", 
+                            JOptionPane.INFORMATION_MESSAGE);
                     }
                     
-                    FieldNome.setText(usuarioAtual.getNome());
-                    FieldEmail.setText(usuarioAtual.getEmail());
-                    FieldTelefone.setText(usuarioAtual.getTelefone());
-                    FieldRua.setText(usuarioAtual.getRua());
-                    FieldBairro.setText(usuarioAtual.getBairro());
-                    FieldMunicipio.setText(usuarioAtual.getCidade());
-                    FieldCep.setText(usuarioAtual.getCep());
-                    FieldPlanoSaude.setText(usuarioAtual.getPlanoDeSaude());
-                    FieldNum.setText(usuarioAtual.getNumCasa());
-                    dcDataNascimento.setDate(usuarioAtual.getDataNasc());
-                    FieldEstado.setText(usuarioAtual.getUf());
-                    Médico medicos = new Médico();
-                    medicoAtual = medicos.buscarDadosMedico(usuarioAtual.getIdUsuario());
-                    if (medicoAtual != null) {
-                        FieldCrm.setText(medicoAtual.getCrm());
-                        FieldRqe.setText(medicoAtual.getRqe());
-                        BoxEspecialidades.setSelectedItem(medicoAtual.getEspecialidade());
-                    }
-                    JOptionPane.showMessageDialog(null, "Usuário carregado com sucesso");
 
                 } catch (Exception er) {
-                    JOptionPane.showMessageDialog(null, "Erro ao buscar usuário");
-                    er.printStackTrace();
+                	 JOptionPane.showMessageDialog(null, 
+                             "Erro inesperado ao buscar usuário: " + er.getMessage(), 
+                             "Erro", 
+                             JOptionPane.ERROR_MESSAGE);
+                         er.printStackTrace();
                 }
             }
         });
@@ -289,16 +280,16 @@ public class TelaAdministradorEditarMedico extends JFrame {
         // CEP
         JLabel lblCep = new JLabel("CEP:");
         lblCep.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblCep.setBounds(603, 143, 46, 14);
+        lblCep.setBounds(644, 140, 46, 14);
         contentPane.add(lblCep);
 
         FieldCep = new JTextField();
-        FieldCep.setBounds(603, 166, 86, 20);
+        FieldCep.setBounds(644, 166, 86, 20);
         contentPane.add(FieldCep);
         FieldCep.setColumns(10);
 
         JButton btnBuscarCEP = new JButton("Buscar");
-        btnBuscarCEP.setBounds(716, 164, 83, 22);
+        btnBuscarCEP.setBounds(740, 165, 83, 22);
         btnBuscarCEP.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // TODO: Adicionar lógica de busca de CEP
@@ -309,50 +300,50 @@ public class TelaAdministradorEditarMedico extends JFrame {
         // Município e Estado
         JLabel lblMun = new JLabel("Município:");
         lblMun.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblMun.setBounds(713, 197, 72, 14);
+        lblMun.setBounds(740, 199, 72, 14);
         contentPane.add(lblMun);
 
         FieldMunicipio = new JTextField();
-        FieldMunicipio.setBounds(713, 222, 86, 20);
+        FieldMunicipio.setBounds(740, 224, 86, 20);
         contentPane.add(FieldMunicipio);
 
         JLabel lblEst = new JLabel("UF:");
         lblEst.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblEst.setBounds(603, 197, 72, 14);
+        lblEst.setBounds(644, 199, 72, 14);
         contentPane.add(lblEst);
 
         FieldEstado = new JTextField();
-        FieldEstado.setBounds(603, 222, 46, 20);
+        FieldEstado.setBounds(644, 224, 46, 20);
         contentPane.add(FieldEstado);
         
         // Bairro e Rua
         JLabel lblBairro = new JLabel("Bairro:");
         lblBairro.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblBairro.setBounds(603, 254, 46, 14);
+        lblBairro.setBounds(644, 256, 46, 14);
         contentPane.add(lblBairro);
 
         FieldBairro = new JTextField();
-        FieldBairro.setBounds(603, 277, 100, 20);
+        FieldBairro.setBounds(644, 281, 86, 20);
         contentPane.add(FieldBairro);
 
         JLabel lblRua = new JLabel("Rua:");
         lblRua.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblRua.setBounds(716, 254, 46, 14);
+        lblRua.setBounds(740, 256, 46, 14);
         contentPane.add(lblRua);
 
         FieldRua = new JTextField();
-        FieldRua.setBounds(716, 277, 148, 20);
+        FieldRua.setBounds(740, 281, 86, 20);
         contentPane.add(FieldRua);
         FieldRua.setColumns(10);
 
         // Número
         JLabel lblNum = new JLabel("Número:");
         lblNum.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblNum.setBounds(716, 309, 72, 14);
+        lblNum.setBounds(740, 312, 72, 14);
         contentPane.add(lblNum);
 
         FieldNum = new JTextField();
-        FieldNum.setBounds(716, 331, 59, 20);
+        FieldNum.setBounds(740, 337, 59, 20);
         contentPane.add(FieldNum);
         FieldNum.setColumns(10);
 
@@ -362,43 +353,10 @@ public class TelaAdministradorEditarMedico extends JFrame {
         btnAtualizar.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
         btnAtualizar.setForeground(Color.BLACK);
         btnAtualizar.addActionListener(e -> {
-            if (usuarioAtual == null) {
-                JOptionPane.showMessageDialog(this, "Busque um médico pelo CPF primeiro!");
-                return;
-            }
-
+        	validarDados();
+        	atualizar();
             
-            try {
         
-                usuarioAtual.setNome(FieldNome.getText());
-                usuarioAtual.setEmail(FieldEmail.getText());
-                usuarioAtual.setTelefone(FieldTelefone.getText());
-                usuarioAtual.setRua(FieldRua.getText());
-                usuarioAtual.setBairro(FieldBairro.getText());
-                usuarioAtual.setCidade(FieldMunicipio.getText());
-                usuarioAtual.setCep(FieldCep.getText());
-                usuarioAtual.setPlanoDeSaude(FieldPlanoSaude.getText());
-                usuarioAtual.setNumCasa(FieldNum.getText());
-                usuarioAtual.setDataNasc(dcDataNascimento.getDate());
-                usuarioAtual.setUf(FieldEstado.getText());
-                
-                String crm = FieldCrm.getText();
-                String rqe = FieldRqe.getText();
-                int especialidade = BoxEspecialidades.getSelectedIndex();
-                //gambiarra +1
-                especialidade += 1;
-
-                Médico med = new Médico();
-                med.editarMedico(usuarioAtual, crm, rqe, especialidade);
-                JOptionPane.showMessageDialog(this, "Médico atualizado");
-
-            } 
-            catch (SQLException er) {
-                JOptionPane.showMessageDialog(this, "Erro ao conectar com o banco de dados");
-            } 
-            catch (Exception er) {
-                JOptionPane.showMessageDialog(this, "Erro inesperado");
-            }
         });
 
         btnAtualizar.setBounds(678, 459, 145, 35);
@@ -407,10 +365,8 @@ public class TelaAdministradorEditarMedico extends JFrame {
         JButton btnVoltar = new JButton("Voltar");
         btnVoltar.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
         btnVoltar.setBounds(31, 460, 125, 32);
-
         btnVoltar.addActionListener(new ActionListener() {
-            
-        	public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
             		TelaAdminEditarUsuarios telaAdminEditarUsuarios = new TelaAdminEditarUsuarios();
             		telaAdminEditarUsuarios.setLocationRelativeTo(null);
             		telaAdminEditarUsuarios.setVisible(true);
@@ -418,5 +374,333 @@ public class TelaAdministradorEditarMedico extends JFrame {
             }
         });
         contentPane.add(btnVoltar);
+    
+    
+}
+    public void atualizar() {
+        Connection conexao = null;
+        PreparedStatement psIdusuario = null;
+        ResultSet rsidusuario = null;
+        PreparedStatement psusuario = null;
+        PreparedStatement psmedico = null;
+        
+        try {
+            conexao = ConnectionFactory.getConnection();
+            conexao.setAutoCommit(false); // Iniciar transação
+            
+            int idusuario = 0;
+            
+            // 1. Buscar ID do usuário pelo CPF
+            String sqlIdusuario = "SELECT id_usuario FROM usuarios WHERE cpf=?";
+            psIdusuario = conexao.prepareStatement(sqlIdusuario);
+            psIdusuario.setString(1, FieldCpf.getText());
+            rsidusuario = psIdusuario.executeQuery();
+            
+            if (rsidusuario.next()) {
+                idusuario = rsidusuario.getInt("id_usuario");
+            } else {
+                throw new SQLException("Usuário não encontrado com o CPF informado");
+            }
+            
+            // 2. Atualizar tabela usuarios
+            String sqlusuario = "UPDATE usuarios SET Email=?, Senha=?, Nome=?, CPF=?, "
+                              + "Data_Nasc=?, Bairro=?, Rua=?, Num_Casa=?, Cidade=?, "
+                              + "Uf=?, Plano_De_Saude=?, CEP=?, Telefone=? "
+                              + "WHERE id_usuario=?";
+            
+            psusuario = conexao.prepareStatement(sqlusuario); // REMOVER Statement.RETURN_GENERATED_KEYS
+            
+            psusuario.setString(1, FieldEmail.getText());
+            String senha = new String(FieldSENHA.getPassword());
+            psusuario.setString(2, senha);
+            psusuario.setString(3, FieldNome.getText());
+            psusuario.setString(4, FieldCpf.getText());
+            
+            // Converter data
+            java.util.Date dataNascUtil = dcDataNascimento.getDate();
+            if (dataNascUtil != null) {
+                java.sql.Date dataNascSql = new java.sql.Date(dataNascUtil.getTime());
+                psusuario.setDate(5, dataNascSql);
+            } else {
+                psusuario.setNull(5, java.sql.Types.DATE);
+            }
+            
+            psusuario.setString(6, FieldBairro.getText());
+            psusuario.setString(7, FieldRua.getText());
+            psusuario.setString(8, FieldNum.getText());
+            psusuario.setString(9, FieldMunicipio.getText());
+            psusuario.setString(10, FieldEstado.getText());
+            psusuario.setString(11, FieldPlanoSaude.getText());
+            psusuario.setString(12, FieldCep.getText());
+            psusuario.setString(13, FieldTelefone.getText());
+            psusuario.setInt(14, idusuario);
+            
+            int linhasAfetadas = psusuario.executeUpdate();
+            
+            if (linhasAfetadas == 0) {
+                throw new SQLException("Falha ao atualizar paciente");
+            }
+            
+            if (!FieldCrm.getText().trim().isEmpty()) {
+                String sqlVerificaMedico = "SELECT COUNT(*) FROM medico WHERE id_usuario=?";
+                PreparedStatement psVerifica = conexao.prepareStatement(sqlVerificaMedico);
+                psVerifica.setInt(1, idusuario);
+                ResultSet rsVerifica = psVerifica.executeQuery();
+                
+                boolean medicoExiste = false;
+                if (rsVerifica.next()) {
+                    medicoExiste = rsVerifica.getInt(1) > 0;
+                }
+                psVerifica.close();
+                rsVerifica.close();
+                
+                if (medicoExiste) {
+                    String sqlmedico = "UPDATE medico SET Crm=?, Rqe=?, Especialidade=? "
+                                     + "WHERE id_usuario=?";
+                    
+                    psmedico = conexao.prepareStatement(sqlmedico);
+                    psmedico.setString(1, FieldCrm.getText());
+                    psmedico.setString(2, FieldRqe.getText());
+                    psmedico.setInt(3,BoxEspecialidades.getSelectedIndex()+1);
+                    
+                    
+                    psmedico.setInt(4, idusuario);
+                    int linhasMedico = psmedico.executeUpdate();
+                    
+                    if (linhasMedico == 0) {
+                        throw new SQLException("Falha ao atualizar dados do médico");
+                    }
+                } else { JOptionPane.showMessageDialog(null,
+                        "Medico não existe!" + idusuario,
+                        "failed", JOptionPane.WARNING_MESSAGE);
+                	
+                }
+            }
+            
+            conexao.commit();
+            
+            JOptionPane.showMessageDialog(null,
+                "Medico atualizado com sucesso! ID: " + idusuario,
+                "Sucess", JOptionPane.INFORMATION_MESSAGE);
+            
+        } catch (SQLException e) {
+            try {
+                if (conexao != null) {
+                    conexao.rollback();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            
+            JOptionPane.showMessageDialog(null,
+                "Erro ao atualizar paciente: " + e.getMessage(),
+                "Erro", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                "Erro inesperado: " + e.getMessage(),
+                "Erro", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            
+        } finally {
+            try {
+                if (rsidusuario != null) rsidusuario.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
+            try {
+                if (psmedico != null) psmedico.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
+            try {
+                if (psusuario != null) psusuario.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
+            try {
+                if (psIdusuario != null) psIdusuario.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
+            try {
+                if (conexao != null) {
+                    conexao.setAutoCommit(true); 
+                    conexao.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
+    
+    public void verificar() {
+        ResultSet rsusuario = null;
+        PreparedStatement psusuario = null;
+        Connection conexao = null;
+        PreparedStatement psmedico = null;
+        ResultSet rsmedico = null;
+        PreparedStatement psEspecialidade = null;
+        ResultSet rsEspecialidade = null;
+        
+        try {
+            conexao = ConnectionFactory.getConnection();
+            String sqlusuario = "select * from usuarios where CPF=?";
+            psusuario = conexao.prepareStatement(sqlusuario);
+            psusuario.setString(1, FieldCpf.getText().trim());
+            rsusuario = psusuario.executeQuery();
+            
+            if (rsusuario.next()) {
+                String servico = rsusuario.getString("Servíco"); 
+                
+                if (servico != null && servico.equals("Médico")) {
+
+                	FieldNome.setText(rsusuario.getString("Nome"));
+                    FieldEmail.setText(rsusuario.getString("Email"));
+                    dcDataNascimento.setDate(rsusuario.getDate("Data_Nasc"));
+                    FieldTelefone.setText(rsusuario.getString("Telefone"));
+                    FieldCep.setText(rsusuario.getString("CEP"));
+                    FieldPlanoSaude.setText(rsusuario.getString("Plano_De_Saude"));
+                    FieldMunicipio.setText(rsusuario.getString("Cidade"));
+                    FieldBairro.setText(rsusuario.getString("Bairro"));
+                    FieldRua.setText(rsusuario.getString("Rua"));
+                    FieldEstado.setText(rsusuario.getString("Uf"));
+                    FieldNum.setText(rsusuario.getString("Num_Casa"));
+                    FieldSENHA.setText(rsusuario.getString("Senha"));
+                    FieldConfirmarSenha.setText(rsusuario.getString("Senha"));
+                    
+                    this.Id_Usuario = rsusuario.getInt("Id_Usuario");
+                    
+                    String sqlmedico = "select Crm, Rqe, Especialidade from Medico where Id_Usuario=?";
+                    psmedico = conexao.prepareStatement(sqlmedico);
+                    psmedico.setInt(1, Id_Usuario);
+                    rsmedico = psmedico.executeQuery();
+                    
+                    if (rsmedico.next()) {
+                        FieldCrm.setText(rsmedico.getString("Crm"));
+                        FieldRqe.setText(rsmedico.getString("Rqe"));
+                        
+                        this.Especialidade = rsmedico.getInt("Especialidade");
+                        
+                        String sqlEspecialidade = "select Nome_Especialidade from especialidades where Id_Especialidade=?";
+                        psEspecialidade = conexao.prepareStatement(sqlEspecialidade);
+                        psEspecialidade.setInt(1, Especialidade);
+                        rsEspecialidade = psEspecialidade.executeQuery();
+                        
+                        if (rsEspecialidade.next()) {
+                            String especialidadeBanco = rsEspecialidade.getString("Nome_Especialidade");
+                            BoxEspecialidades.setSelectedItem(especialidadeBanco);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Médico não encontrado na tabela médico", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "O CPF inserido não pertence a um médico", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "CPF não encontrado no sistema", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro ao acessar o banco de dados: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (rsEspecialidade != null) rsEspecialidade.close();
+                if (psEspecialidade != null) psEspecialidade.close();
+                if (rsmedico != null) rsmedico.close();
+                if (psmedico != null) psmedico.close();
+                if (rsusuario != null) rsusuario.close();
+                if (psusuario != null) psusuario.close();
+                if (conexao != null) conexao.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    private boolean validarDados() {
+        StringBuilder erros = new StringBuilder();
+        
+        // Validação de campos obrigatórios
+        if (FieldNome.getText().trim().isEmpty()) {
+            erros.append("Nome completo\n");
+        }
+        
+        String cpf = FieldCpf.getText().replaceAll("\\D", "");
+        if (cpf.isEmpty() || cpf.length() != 11) {
+            erros.append("CPF válido (11 dígitos)\n");
+        }
+        
+        if (FieldEmail.getText().trim().isEmpty()) {
+            erros.append("Email\n");
+        } else {
+            String email = FieldEmail.getText().trim();
+            if (!email.contains("@") || !email.contains(".")) {
+                erros.append("Email válido\n");
+            }
+        }
+        
+        if (FieldSENHA.getPassword().length == 0) {
+            erros.append(" Senha\n");
+        }
+        
+        if (FieldConfirmarSenha.getPassword().length == 0) {
+            erros.append("Confirmação de senha\n");
+        } else {
+            String senha = new String(FieldSENHA.getPassword());
+            String confirmacao = new String(FieldConfirmarSenha.getPassword());
+            if (!senha.equals(confirmacao)) {
+                erros.append(" Senhas não coincidem\n");
+            }
+        }
+        
+        if (dcDataNascimento.getDate() == null) {
+            erros.append("Data de nascimento\n");
+        }
+        
+        if (FieldTelefone.getText().trim().isEmpty()) {
+            erros.append("Telefone\n");
+        } else {
+            String telefone = FieldTelefone.getText().replaceAll("[^0-9]", "");
+            if (telefone.length() < 10) {
+                erros.append(" Telefone válido (mínimo 10 dígitos)\n");
+            }
+        }
+        
+        if (FieldCep.getText().trim().isEmpty()) {
+            erros.append(" CEP\n");
+        }
+        
+        if (FieldCrm.getText().trim().isEmpty()) {
+            erros.append(" CRM\n");
+        }
+        if (FieldRqe.getText().trim().isEmpty()) {
+            erros.append(" Rqe\n");
+        }
+        if (FieldCep.getText().trim().isEmpty()) {
+            erros.append(" Cep\n");
+        }
+        		
+        if (erros.length() > 0) {
+            JOptionPane.showMessageDialog(this, 
+                "Preencha os seguintes campos corretamente:\n\n" + erros.toString(),
+                "Validação de Dados",
+                JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    
+    
 }
