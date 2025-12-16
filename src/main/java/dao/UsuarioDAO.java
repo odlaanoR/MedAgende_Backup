@@ -18,9 +18,7 @@ public class UsuarioDAO {
 		PreparedStatement stmt = null;
 		
 		try {
-		
-				
-			
+
 			
 			stmt = con.prepareStatement("INSERT INTO usuarios (Email, Senha, Nome, CPF, Data_Nasc, Bairro, Rua, Num_Casa, Cidade, Uf, Servíco, Plano_De_Saude, CEP, Telefone) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)");
 		        stmt.setString(1, u.getEmail());
@@ -37,6 +35,7 @@ public class UsuarioDAO {
 		        stmt.setString(12, u.getPlanoDeSaude());
 		        stmt.setString(13, u.getCep());
 		        stmt.setString(14, u.getTelefone());
+
 		        stmt.executeUpdate();
 			
 			JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
@@ -90,18 +89,22 @@ public class UsuarioDAO {
     
     public void atualizarUsuario(Connection con, Usuario u) throws Exception {
 
-        String sql = "UPDATE usuarios SET Nome = ?, Email = ?, Telefone = ?, Rua = ?, Bairro = ?, Cidade = ?, Uf = ?, CEP = ? WHERE CPF = ?";
+        String sql = "UPDATE usuarios SET Nome = ?, Email = ?, Data_Nasc=?, Telefone = ?, Rua = ?, Bairro = ?, Num_Casa =?, Cidade = ?, Uf = ?, CEP = ?, Plano_De_Saude = ?, Senha=? WHERE CPF = ?";
 
         PreparedStatement stmt = con.prepareStatement(sql);
         stmt.setString(1, u.getNome());
         stmt.setString(2, u.getEmail());
-        stmt.setString(3, u.getTelefone());
-        stmt.setString(4, u.getRua());
-        stmt.setString(5, u.getBairro());
-        stmt.setString(6, u.getCidade());
-        stmt.setString(7, u.getUf());
-        stmt.setString(8, u.getCep());
-        stmt.setString(9, u.getCpf());
+        stmt.setDate(3, u.getDataNasc());
+        stmt.setString(4, u.getTelefone());
+        stmt.setString(5, u.getRua());
+        stmt.setString(6, u.getBairro());
+        stmt.setString(7, u.getNumCasa());
+        stmt.setString(8, u.getCidade());
+        stmt.setString(9, u.getUf());
+        stmt.setString(10, u.getCep());
+        stmt.setString(11, u.getPlanoDeSaude());
+        stmt.setString(12, u.getSenha());
+        stmt.setString(13, u.getCpf());
 
         stmt.executeUpdate();
     }

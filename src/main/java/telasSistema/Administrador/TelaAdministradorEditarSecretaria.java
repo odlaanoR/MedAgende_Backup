@@ -122,6 +122,7 @@ public class TelaAdministradorEditarSecretaria extends JFrame {
                     FieldPlanoSaude.setText(usuarioAtual.getPlanoDeSaude());
                     FieldNum.setText(usuarioAtual.getNumCasa());
                     dcDataNascimento.setDate(usuarioAtual.getDataNasc());
+                    FieldEstado.setText(usuarioAtual.getUf());
 
                     JOptionPane.showMessageDialog(null, "Usuário carregado com sucesso");
 
@@ -297,7 +298,10 @@ public class TelaAdministradorEditarSecretaria extends JFrame {
                     usuarioAtual.setCep(FieldCep.getText());
                     usuarioAtual.setNumCasa(FieldNum.getText());
                     usuarioAtual.setDataNasc(dcDataNascimento.getDate());
-                    usuarioAtual.setDataNasc(dcDataNascimento.getDate());
+                    usuarioAtual.setUf(FieldEstado.getText());
+                    usuarioAtual.setSenha(new String (FieldSENHA.getPassword()));
+                    usuarioAtual.setPlanoDeSaude(FieldPlanoSaude.getText());
+                    
                     
 
                     Secretaria secretaria = new Secretaria();
