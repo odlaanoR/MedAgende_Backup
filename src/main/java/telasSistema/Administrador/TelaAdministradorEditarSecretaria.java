@@ -20,6 +20,7 @@ import com.toedter.calendar.JDateChooser;
 
 import Back.Secretaria;
 import Back.Usuarios;
+import model.Criptografia;
 import model.Usuario;
 public class TelaAdministradorEditarSecretaria extends JFrame {
 
@@ -102,7 +103,8 @@ public class TelaAdministradorEditarSecretaria extends JFrame {
         btnBuscarCPF.setBounds(510, 98, 90, 25);
         btnBuscarCPF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                try {
+                
+            	try {
                     String cpf = FieldCpf.getText().replace(".", "").replace("-", "");
                     Usuarios usuarios = new Usuarios();
                     usuarioAtual = usuarios.buscarUsuarioPorCpf(cpf);
@@ -299,7 +301,10 @@ public class TelaAdministradorEditarSecretaria extends JFrame {
                     usuarioAtual.setNumCasa(FieldNum.getText());
                     usuarioAtual.setDataNasc(dcDataNascimento.getDate());
                     usuarioAtual.setUf(FieldEstado.getText());
-                    usuarioAtual.setSenha(new String (FieldSENHA.getPassword()));
+                    String senhauser = new String(FieldSENHA.getPassword());
+                    Criptografia criptografia = new Criptografia(senhauser,"MD5");
+
+                	usuarioAtual.setSenha(criptografia.getInformacao());
                     usuarioAtual.setPlanoDeSaude(FieldPlanoSaude.getText());
                     
                     

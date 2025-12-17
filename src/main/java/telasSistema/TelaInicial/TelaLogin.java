@@ -24,6 +24,7 @@ import javax.swing.border.EmptyBorder;
 import Back.Usuarios;
 import conexao.ConnectionFactory;
 import dao.MedicoDAO;
+import model.Criptografia;
 import model.Medico;
 import telasSistema.Administrador.TelaPrincipalAdministrador;
 import telasSistema.Medico.TelaPrincipalMedico;
@@ -193,25 +194,29 @@ public class TelaLogin extends JFrame {
 	} // FECHA O CONSTRUTOR TelaLogin()
 
 	public void logar() {
-		//System.out.println("[DEBUG telalogin] funcão Logar foi chamado");
-		String sql = "SELECT * FROM usuarios WHERE Email=? AND Senha=?";
-		try {
-			//pst prepara a seleção que foi feita acima e pst.setString(1, textFieldEmail.getText()); substitui os valores 
-			pst = connection.prepareStatement(sql);
-			pst.setString(1, textFieldEmail.getText());
-			String senha = new String(passwordField.getPassword());
-			pst.setString(2, senha);
-		
-			// rs = pst.executeQuery(); =execução da query(consulta ao banco de dados o select nesse caso)
-			rs = pst.executeQuery();
-			
-			if (rs.next()) {
-				//obtem o conteudo do campo pefil
-				String nome = rs.getString("nome");
+	    String sql = "SELECT * FROM usuarios WHERE Email=? AND Senha=?";
+	    try {
+	        pst = connection.prepareStatement(sql);
+	        pst.setString(1, textFieldEmail.getText().trim());
+	        
+	        // 1. Captura a senha digitada
+	        String senhaDigitada = new String(passwordField.getPassword());
+	        
+	        // 2. Criptografa a senha digitada (mesmo processo do cadastro)
+	        Criptografia criptografia = new Criptografia(senhaDigitada, "md5");
+	        String senhaCriptografada = criptografia.getInformacao();
+	        
+	        // 3. Compara com o hash armazenado no banco
+	        pst.setString(2, senhaCriptografada);
+	        
+	        // 4. Executa a consulta
+	        rs = pst.executeQuery();
+	        
+	        if (rs.next()) {
+	        	String nome = rs.getString("nome");
 				String serviço = rs.getString("servíco");
 				String id_conectado = rs.getString("id_usuario");
 				if (serviço.equals("Secretária")){
-					//System.out.println("usuário era uma secretária");
 					Usuarios.criausuarioconectado(id_conectado);
 					JOptionPane.showMessageDialog(null, "Bem vindo(a) "+nome);
 					TelaPrincipalSecretaria tela = new TelaPrincipalSecretaria();
@@ -219,7 +224,6 @@ public class TelaLogin extends JFrame {
 					tela.setVisible(true);
 					dispose();
 				}else if (serviço.equals("Administrador")) {
-					//System.out.println("usuário era um admnistrador");
 					Usuarios.criausuarioconectado(id_conectado);
 					JOptionPane.showMessageDialog(null, "Bem vindo(a) "+nome);
 					TelaPrincipalAdministrador tela = new TelaPrincipalAdministrador();
@@ -236,18 +240,21 @@ public class TelaLogin extends JFrame {
 					tela.setLocationRelativeTo(null);
 					tela.setVisible(true);
 					dispose();
-				}
-				
-			} else {
-				JOptionPane.showMessageDialog(null, "Usuario e/ou senha invalido(s)");
-			}
-			rs.next(); //verifica se tem email e senha correspondente
-
-		} catch (Exception e) {
-			System.out.println("[DEBUG] ERRO: " + e);
-			JOptionPane.showMessageDialog(null, e);
-
-		}
+				}	        } else {
+	            JOptionPane.showMessageDialog(null, 
+	                "Usuário e/ou senha inválido(s)", 
+	                "Erro de Login", 
+	                JOptionPane.ERROR_MESSAGE);
+	        }
+	        
+	    } catch (Exception e) {
+	        System.out.println("ERRO no login: " + e.getMessage());
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(null, 
+	            "Erro ao realizar login: " + e.getMessage(), 
+	            "Erro", 
+	            JOptionPane.ERROR_MESSAGE);
+	    }
 	}
 
 }

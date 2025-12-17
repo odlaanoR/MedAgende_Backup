@@ -20,6 +20,7 @@ import javax.swing.event.DocumentListener;
 import com.toedter.calendar.JDateChooser;
 
 import dao.UsuarioDAO;
+import model.Criptografia;
 import model.Usuario;
 
 import javax.swing.JOptionPane;
@@ -383,7 +384,10 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
     	u.setNome(textNome.getText());
     	u.setEmail(textEmail.getText());
     	u.setCPF(textCPF.getText());
-    	u.setSenha(new String(textSenha.getPassword()));
+    	String senhauser = new String(textSenha.getPassword());
+        Criptografia criptografia = new Criptografia(senhauser,"MD5");
+
+    	u.setSenha(criptografia.getInformacao());
     	Date data = textDataNascimento.getDate();
     	if (data == null) {
     	    JOptionPane.showMessageDialog(null, "Data de nascimento inválida");

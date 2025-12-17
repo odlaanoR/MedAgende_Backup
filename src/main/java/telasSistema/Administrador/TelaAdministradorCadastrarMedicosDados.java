@@ -28,6 +28,7 @@ import com.toedter.calendar.JDateChooser;
 
 import conexao.ConnectionFactory;
 import dao.EspecialidadeDAO;
+import model.Criptografia;
 
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
@@ -377,9 +378,8 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
         ResultSet rsEspecialidade = null;
         ResultSet rsNovaEsp = null;
         ResultSet rsMedico = null;
-        
+       
         try {
-            // 1. Conectando ao bd
             conexao = ConnectionFactory.getConnection();
             if (conexao == null) {
                 JOptionPane.showMessageDialog(this, "Erro ao conectar ao banco de dados", 
@@ -390,16 +390,17 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
             
             conexao.setAutoCommit(false);
             
-            // 3. colocando em usuario os valores
             String sqlusuario = "INSERT INTO usuarios (Email, Senha, Nome, CPF, Data_Nasc, Bairro, Rua, Num_Casa, Cidade, Servíco, Plano_De_Saude, CEP, Telefone,Uf) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             
             pstUsuario = conexao.prepareStatement(sqlusuario, Statement.RETURN_GENERATED_KEYS);
             pstUsuario.setString(1, FieldEmail.getText());
             String senha = new String(FieldSENHA.getPassword());
-            pstUsuario.setString(2, senha);
+            Criptografia criptografia = new Criptografia(senha,"MD5");
+
+            pstUsuario.setString(2, criptografia.getInformacao());
             pstUsuario.setString(3, FieldNome.getText());
             pstUsuario.setString(4, FieldCpf.getText());
-            
+           
             java.util.Date dataUtil = dcDataNascimento.getDate();
             if (dataUtil != null) {
                 java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime());
@@ -419,18 +420,15 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
             pstUsuario.setString(14, FieldEstado.getText());
             pstUsuario.executeUpdate();
             
-            // 4. pega o id que é auto increment
             rsUsuario = pstUsuario.getGeneratedKeys();
             int idUsuario = 0;
             if (rsUsuario.next()) {
                 idUsuario = rsUsuario.getInt(1);
             }
             
-            // 5. buscar especialidade
             String especialidadeSelecionada = (String) BoxEspecialidades.getSelectedItem();
             int idEspecialidade = 0;
             
-            // Primeiro tenta buscar se ja existe
             String sqlBuscarEspecialidade = "SELECT Id_Especialidade FROM especialidades WHERE Nome_Especialidade = ?";
             pstBuscarEsp = conexao.prepareStatement(sqlBuscarEspecialidade);
             pstBuscarEsp.setString(1, especialidadeSelecionada);
@@ -440,7 +438,6 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
                 idEspecialidade = rsEspecialidade.getInt("Id_Especialidade");
             } 
             
-            // 6. INSERIR MÉDICO
             String sqlMedico = "INSERT INTO medico (Id_Usuario, Especialidade, Crm, Situacao, Rqe) VALUES (?,?,?,?,?)";
             pstMedico = conexao.prepareStatement(sqlMedico, Statement.RETURN_GENERATED_KEYS);
             pstMedico.setInt(1, idUsuario);
@@ -451,7 +448,6 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
             
             pstMedico.executeUpdate();
             
-            // 7. PEGAR MATRÍCULA GERADA
             rsMedico = pstMedico.getGeneratedKeys();
             if (rsMedico.next()) {
                 matricula = String.valueOf(rsMedico.getInt(1));
@@ -464,7 +460,6 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
                 "Cadastro Concluído", 
                 JOptionPane.INFORMATION_MESSAGE);
             
-            // 9. LIMPAR CAMPOS APÓS CADASTRO
             limparCampos();
             
         } catch (SQLException e) {
@@ -483,7 +478,6 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
             e.printStackTrace();
             
         } finally {
-            // FECHAR TODOS OS RECURSOS
             try {
                 if (rsMedico != null) rsMedico.close();
                 if (rsNovaEsp != null) rsNovaEsp.close();
@@ -512,7 +506,6 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
     private boolean validarDados() {
         StringBuilder erros = new StringBuilder();
         
-        // Validação de campos obrigatórios
         if (FieldNome.getText().trim().isEmpty()) {
             erros.append("Nome completo\n");
         }

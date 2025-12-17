@@ -32,6 +32,7 @@ import Back.Médico;
 import Back.Usuarios;
 import conexao.ConnectionFactory;
 import dao.EspecialidadeDAO;
+import model.Criptografia;
 import model.Usuario;
 
 public class TelaAdministradorEditarMedico extends JFrame {
@@ -130,26 +131,13 @@ public class TelaAdministradorEditarMedico extends JFrame {
         btnBuscarCPF.setBounds(502, 98, 90, 25);
         btnBuscarCPF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                try {
+                
                     verificar();
-                    
-                    if (!FieldNome.getText().isEmpty() && !FieldCrm.getText().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, 
-                            "Médico carregado com sucesso", 
-                            "Sucesso", 
-                            JOptionPane.INFORMATION_MESSAGE);
-                    }
-                    
-
-                } catch (Exception er) {
-                	 JOptionPane.showMessageDialog(null, 
-                             "Erro inesperado ao buscar usuário: " + er.getMessage(), 
-                             "Erro", 
-                             JOptionPane.ERROR_MESSAGE);
-                         er.printStackTrace();
-                }
+                	
+                      
             }
         });
+        
         contentPane.add(btnBuscarCPF);
 
 
@@ -390,7 +378,6 @@ public class TelaAdministradorEditarMedico extends JFrame {
             
             int idusuario = 0;
             
-            // 1. Buscar ID do usuário pelo CPF
             String sqlIdusuario = "SELECT id_usuario FROM usuarios WHERE cpf=?";
             psIdusuario = conexao.prepareStatement(sqlIdusuario);
             psIdusuario.setString(1, FieldCpf.getText());
@@ -402,8 +389,7 @@ public class TelaAdministradorEditarMedico extends JFrame {
                 throw new SQLException("Usuário não encontrado com o CPF informado");
             }
             
-            // 2. Atualizar tabela usuarios
-            String sqlusuario = "UPDATE usuarios SET Email=?, Senha=?, Nome=?, CPF=?, "
+            String sqlusuario = "UPDATE usuarios SET Email=?,Senha=?, Nome=?, CPF=?, "
                               + "Data_Nasc=?, Bairro=?, Rua=?, Num_Casa=?, Cidade=?, "
                               + "Uf=?, Plano_De_Saude=?, CEP=?, Telefone=? "
                               + "WHERE id_usuario=?";
@@ -412,7 +398,9 @@ public class TelaAdministradorEditarMedico extends JFrame {
             
             psusuario.setString(1, FieldEmail.getText());
             String senha = new String(FieldSENHA.getPassword());
-            psusuario.setString(2, senha);
+            Criptografia criptografia = new Criptografia(senha,"MD5");
+
+            psusuario.setString(2, criptografia.getInformacao());
             psusuario.setString(3, FieldNome.getText());
             psusuario.setString(4, FieldCpf.getText());
             
@@ -571,8 +559,6 @@ public class TelaAdministradorEditarMedico extends JFrame {
                     FieldRua.setText(rsusuario.getString("Rua"));
                     FieldEstado.setText(rsusuario.getString("Uf"));
                     FieldNum.setText(rsusuario.getString("Num_Casa"));
-                    FieldSENHA.setText(rsusuario.getString("Senha"));
-                    FieldConfirmarSenha.setText(rsusuario.getString("Senha"));
                     
                     this.Id_Usuario = rsusuario.getInt("Id_Usuario");
                     
@@ -596,6 +582,11 @@ public class TelaAdministradorEditarMedico extends JFrame {
                             String especialidadeBanco = rsEspecialidade.getString("Nome_Especialidade");
                             BoxEspecialidades.setSelectedItem(especialidadeBanco);
                         }
+                        JOptionPane.showMessageDialog(null, 
+                                "Médico carregado com sucesso", 
+                                "Sucesso", 
+                                JOptionPane.INFORMATION_MESSAGE);
+
                     } else {
                         JOptionPane.showMessageDialog(null, "Médico não encontrado na tabela médico", "Erro", JOptionPane.ERROR_MESSAGE);
                     }
