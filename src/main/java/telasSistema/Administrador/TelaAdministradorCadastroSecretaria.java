@@ -703,5 +703,7 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
 				popup.show(e.getComponent(), e.getX(), e.getY());
 			}
 		});
+		
+		
 	}
 }

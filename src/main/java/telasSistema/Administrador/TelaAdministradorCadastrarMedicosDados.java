@@ -814,5 +814,7 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
                 popup.show(e.getComponent(), e.getX(), e.getY());
             }
         });
+    
+        
     }
 }

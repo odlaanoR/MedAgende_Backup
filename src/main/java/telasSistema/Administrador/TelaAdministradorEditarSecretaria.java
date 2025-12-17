@@ -336,6 +336,7 @@ public class TelaAdministradorEditarSecretaria extends JFrame {
             }
         });
         contentPane.add(btnVoltar);
+     
         
     }
 }
