@@ -28,12 +28,9 @@ import javax.swing.text.MaskFormatter;
 
 import com.toedter.calendar.JDateChooser;
 
-import Back.Médico;
-import Back.Usuarios;
+import Back.Especialidade;
 import conexao.ConnectionFactory;
-import dao.EspecialidadeDAO;
 import model.Criptografia;
-import model.Usuario;
 
 public class TelaAdministradorEditarMedico extends JFrame {
 
@@ -58,11 +55,8 @@ public class TelaAdministradorEditarMedico extends JFrame {
     private JTextField FieldPlanoSaude;
     private JComboBox<String> BoxEspecialidades;
     private JDateChooser dcDataNascimento;
-    private Usuario usuarioAtual;
 	private int Id_Usuario;
 	private int Especialidade;
-	private int idusuario;
-
 
     /**
      * Launch the application.
@@ -84,12 +78,7 @@ public class TelaAdministradorEditarMedico extends JFrame {
     /**
      * Create the frame.
      */
-    
-
-    
     public TelaAdministradorEditarMedico() {
-    	
-        
     	
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 888, 550);
@@ -131,16 +120,11 @@ public class TelaAdministradorEditarMedico extends JFrame {
         btnBuscarCPF.setBounds(502, 98, 90, 25);
         btnBuscarCPF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
-                    verificar();
-                	
-                      
+                    verificar();      
             }
         });
         
         contentPane.add(btnBuscarCPF);
-
-
         // --- DADOS PESSOAIS ---
         
         // Nome
@@ -220,20 +204,25 @@ public class TelaAdministradorEditarMedico extends JFrame {
         FieldPlanoSaude = new JTextField();
         FieldPlanoSaude.setBounds(281, 277, 138, 20);
         contentPane.add(FieldPlanoSaude);
-        FieldPlanoSaude.setColumns(10);
+        FieldPlanoSaude.setColumns(10);	
 
         // Especialidade
-        DefaultComboBoxModel<String> modeloespecialidades = EspecialidadeDAO.getespecialidades();
-        JLabel lblEsp = new JLabel("Especialidade:");
-        lblEsp.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
-        lblEsp.setBounds(21, 308, 100, 14);
-        contentPane.add(lblEsp);
-
+        DefaultComboBoxModel<String> modeloespecialidades;
+        try {
+            Especialidade especialidades = new Especialidade();
+            modeloespecialidades = especialidades.buscaEspecialidades();
+          
+        } 
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar especialidades");
+            modeloespecialidades = new DefaultComboBoxModel<>();
+            e.printStackTrace();
+        }
         BoxEspecialidades = new JComboBox<>();
         BoxEspecialidades.setModel(modeloespecialidades);
         BoxEspecialidades.setBounds(21, 329, 206, 22);
         contentPane.add(BoxEspecialidades);
-
+        
         // --- SEGURANÇA (SENHA) ---
         JLabel labelSENHA = new JLabel("Nova Senha:");
         labelSENHA.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
@@ -343,8 +332,6 @@ public class TelaAdministradorEditarMedico extends JFrame {
         btnAtualizar.addActionListener(e -> {
         	validarDados();
         	atualizar();
-            
-        
         });
 
         btnAtualizar.setBounds(678, 459, 145, 35);
@@ -614,10 +601,6 @@ public class TelaAdministradorEditarMedico extends JFrame {
         }
     }
     
-    
-    
-    
-    
     private boolean validarDados() {
         StringBuilder erros = new StringBuilder();
         
@@ -691,8 +674,4 @@ public class TelaAdministradorEditarMedico extends JFrame {
         
         return true;
     }
-    
-    
-    
-    
 }
