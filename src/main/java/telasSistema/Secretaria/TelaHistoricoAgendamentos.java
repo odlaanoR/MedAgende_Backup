@@ -65,7 +65,7 @@ public class TelaHistoricoAgendamentos extends JFrame {
         btnVoltar.setBounds(98, 349, 84, 20);
         panel.add(btnVoltar);
 
-        // ===== Painel 1 =====
+      
         JPanel panel1 = new JPanel();
         panel1.setBounds(81, 142, 572, 54);
         panel.add(panel1);
@@ -76,7 +76,7 @@ public class TelaHistoricoAgendamentos extends JFrame {
         lblConfirmacao.setFont(new Font("Segoe UI", Font.PLAIN, 10));
         panel1.add(lblConfirmacao);
 
-        // ===== Painel 2 =====
+       
         JPanel panel2 = new JPanel();
         panel2.setLayout(null);
         panel2.setBounds(81, 220, 572, 54);
@@ -87,7 +87,7 @@ public class TelaHistoricoAgendamentos extends JFrame {
         lblClinicaOlindaEspecialidade.setFont(new Font("Segoe UI", Font.PLAIN, 10));
         panel2.add(lblClinicaOlindaEspecialidade);
 
-        // ===== Painel 3 =====
+      
         JPanel panel3 = new JPanel();
         panel3.setLayout(null);
         panel3.setBounds(81, 285, 572, 54);
