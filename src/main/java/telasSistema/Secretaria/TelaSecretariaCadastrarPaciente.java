@@ -389,6 +389,7 @@ public class TelaSecretariaCadastrarPaciente extends JFrame {
         contentPane.add(FieldComorbidade);
         
         FieldTelefone = new JTextField();
+        FieldTelefone.setText("(81)");
         FieldTelefone.setColumns(10);
         FieldTelefone.setBounds(279, 198, 206, 20);
         contentPane.add(FieldTelefone);
@@ -730,5 +731,6 @@ public class TelaSecretariaCadastrarPaciente extends JFrame {
 				popup.show(e.getComponent(), e.getX(), e.getY());
 			}
 		});
+	
 	}
 }

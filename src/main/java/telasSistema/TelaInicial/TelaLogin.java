@@ -156,7 +156,7 @@ public class TelaLogin extends JFrame {
 		lblRealizarLogin.setBounds(95, 84, 189, 19);
 		panel.add(lblRealizarLogin);
 
-		JLabel logarComo = new JLabel("Logar como:");
+		JLabel logarComo = new JLabel("");
 		logarComo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		logarComo.setBounds(136, 273, 97, 19);
 		panel.add(logarComo);
@@ -190,7 +190,7 @@ public class TelaLogin extends JFrame {
 		gerenciamento.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
 		gerenciamento.setBounds(20, 46, 349, 39);
 		contentPane.add(gerenciamento);
-
+		
 	} // FECHA O CONSTRUTOR TelaLogin()
 
 	public void logar() {

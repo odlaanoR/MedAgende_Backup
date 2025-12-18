@@ -409,6 +409,7 @@ public class TelaSecretariaEditarPaciente extends JFrame {
         contentPane.add(FieldComorbidade);
         
         FieldTelefone = new JTextField();
+        FieldTelefone.setText("(81)");
         FieldTelefone.setColumns(10);
         FieldTelefone.setBounds(272, 249, 206, 20);
         contentPane.add(FieldTelefone);

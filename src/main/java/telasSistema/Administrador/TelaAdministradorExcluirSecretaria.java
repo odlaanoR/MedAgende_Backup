@@ -166,6 +166,7 @@ public class TelaAdministradorExcluirSecretaria extends JFrame {
         contentPane.add(lblTelefone);
 
         FieldTelefone = new JTextField();
+        FieldTelefone.setText("(81)");
         FieldTelefone.setBounds(252, 222, 167, 20);
         contentPane.add(FieldTelefone);
         FieldTelefone.setColumns(10);

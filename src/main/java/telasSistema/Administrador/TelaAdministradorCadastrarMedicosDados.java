@@ -144,7 +144,7 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
         }
 
         FieldCpf = new JFormattedTextField();
-        FieldCpf.setBounds(281, 140, 100, 25);
+        FieldCpf.setBounds(270, 140, 100, 25);
         contentPane.add(FieldCpf);
         FieldCpf.setColumns(10);
         
@@ -250,21 +250,21 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
         
         JLabel rua = new JLabel("Rua:");
         rua.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        rua.setBounds(717, 260, 46, 14);
+        rua.setBounds(620, 325, 46, 14);
         contentPane.add(rua);
         
         FieldRua = new JTextField(); 
-        FieldRua.setBounds(716, 284, 148, 20);
+        FieldRua.setBounds(620, 340, 203, 20);
         contentPane.add(FieldRua);
         FieldRua.setColumns(10);
         
         JLabel numero = new JLabel("Número:");
         numero.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        numero.setBounds(740, 315, 72, 14);
+        numero.setBounds(730, 260, 72, 14);
         contentPane.add(numero);
         
         FieldNum = new JTextField(); 
-        FieldNum.setBounds(740, 339, 59, 20);
+        FieldNum.setBounds(726, 285, 59, 20);
         contentPane.add(FieldNum);
         FieldNum.setColumns(10);
         
@@ -274,7 +274,7 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
         contentPane.add(lblBairro);
         
         FieldBairro = new JTextField(); 
-        FieldBairro.setBounds(609, 284, 86, 20);
+        FieldBairro.setBounds(609, 284, 107, 20);
         contentPane.add(FieldBairro);
         FieldBairro.setColumns(10);
         
@@ -319,6 +319,7 @@ public class TelaAdministradorCadastrarMedicosDados extends JFrame {
         contentPane.add(lblDigiteOTelefone);
         
         FieldTelefone = new JTextField();
+        FieldTelefone.setText("(81)");
         FieldTelefone.setBounds(21, 284, 206, 20);
         contentPane.add(FieldTelefone);
         FieldTelefone.setColumns(10);

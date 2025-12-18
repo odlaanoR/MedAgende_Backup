@@ -124,6 +124,7 @@ public class TelaProntuarioPaciente extends JFrame {
 		contentPane.add(lblTelefone);
 		
 		txtTelefone = new JTextField();
+		txtTelefone.setText("(81)");
 		txtTelefone.setColumns(10);
 		txtTelefone.setBounds(728, 124, 86, 20);
 		contentPane.add(txtTelefone);

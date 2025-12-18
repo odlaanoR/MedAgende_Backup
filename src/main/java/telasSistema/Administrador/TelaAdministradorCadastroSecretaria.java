@@ -341,7 +341,7 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
         
         JLabel lblDigiteOTelefone = new JLabel("Digite o Telefone:");
         lblDigiteOTelefone.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
-        lblDigiteOTelefone.setBounds(40, 253, 189, 14);
+        lblDigiteOTelefone.setBounds(21, 254, 189, 14);
         contentPane.add(lblDigiteOTelefone);
         
         JLabel lblDigiteOPlano = new JLabel("Digite o Plano de saúde:");
@@ -355,6 +355,7 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
         textPlano.setColumns(10);
         
         textTelefone = new JTextField();
+        textTelefone.setText("(81)");
         textTelefone.setToolTipText("Digite o telefone");
         textTelefone.setBounds(21, 284, 156, 18);
         contentPane.add(textTelefone);
@@ -448,7 +449,6 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
             return;
         }
         
-        // Verificar se senhas coincidem
         String senha = new String(((JPasswordField) textSenha).getPassword());
         String confirmacao = new String(textConfirmarSenha.getPassword());
         
@@ -464,18 +464,12 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
  
         }
    
-    //private void abrirTelaLogin() {
-       //  TelaLogin tela = new TelaLogin();
-       // tela.setLocationRelativeTo(null);
-       // tela.setVisible(true);
-       // dispose();
-  //  }
+ 
     
   
     private PasswordStrength checkPasswordStrength(String password) {
         int score = 0;
         
-        // Verifica se está vazia
         if (password.length() == 0) {
             return PasswordStrength.WEAK;
         }
