@@ -391,6 +391,7 @@ public class TelaAdministradorExcluirMedico extends JFrame {
             public void actionPerformed(ActionEvent e) {
             	validarDados();
                 excluir();
+                limparCampos();
             }
         });
         btnExcluir.setBounds(678, 459, 145, 35);
@@ -599,6 +600,25 @@ public class TelaAdministradorExcluirMedico extends JFrame {
             }
         });
     }
+    private void limparCampos() {
+        FieldNome.setText("");
+        FieldCpf.setText("");
+        FieldEmail.setText("");
+        dcDataNascimento.setDate(null);
+        FieldTelefone.setText("");
+        FieldCep.setText("");
+        FieldRua.setText("");
+        FieldNum.setText("");
+        FieldBairro.setText("");
+        FieldMunicipio.setText("");
+        FieldEstado.setText("");
+        FieldCrm.setText("");
+        FieldRqe.setText("");
+        FieldPlanoSaude.setText("");
+        BoxEspecialidades.setSelectedIndex(0);
+        
+     
+    }
     public void excluir() {
         Connection conexao = null;
         PreparedStatement psVerificaUsuario = null;
@@ -686,7 +706,7 @@ public class TelaAdministradorExcluirMedico extends JFrame {
                     "Erro",
                     JOptionPane.ERROR_MESSAGE);
             }
-            
+            limparCampos();
         } catch (SQLException e) {
             try {
                 if (conexao != null) {
@@ -732,7 +752,6 @@ public class TelaAdministradorExcluirMedico extends JFrame {
             return;
         }
         
-        // Mostra cursor de carregamento
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         
         SwingWorker<ViaCEPResponse, Void> worker = new SwingWorker<ViaCEPResponse, Void>() {

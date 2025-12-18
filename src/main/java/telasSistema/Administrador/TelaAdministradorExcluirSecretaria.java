@@ -261,7 +261,7 @@ public class TelaAdministradorExcluirSecretaria extends JFrame {
                         Secretaria secretaria = new Secretaria();
                         secretaria.deletarSecretaria(usuarioAtual.getIdUsuario());
                         JOptionPane.showMessageDialog(null, "Secretária excluída com sucesso");
-                        dispose();
+                       
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null, "Erro ao excluir secretária");
                         ex.printStackTrace();
