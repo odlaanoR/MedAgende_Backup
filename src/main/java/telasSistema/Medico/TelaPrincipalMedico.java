@@ -102,6 +102,7 @@ public class TelaPrincipalMedico extends JFrame {
 			}
 		});
 		
+		
 		btnEmitirPrescricao.setAlignmentY(0.0f);
 		btnEmitirPrescricao.setBounds(214, 263, 182, 76);
 		contentPane.add(btnEmitirPrescricao);
