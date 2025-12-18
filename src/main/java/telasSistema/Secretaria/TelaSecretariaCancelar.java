@@ -26,6 +26,7 @@ public class TelaSecretariaCancelar extends JFrame {
     private JTextField FieldCpf;
     private JTextField FieldNomePaciente;
     private JLabel lblNomeEncontrado;
+    private JButton btnBuscar; // Adicionado para controle
 
     public TelaSecretariaCancelar() {
         initialize();
@@ -103,8 +104,8 @@ public class TelaSecretariaCancelar extends JFrame {
         lblNomeEncontrado.setBounds(238, 210, 280, 20);
         panel.add(lblNomeEncontrado);
         
-        // Botão para buscar manualmente
-        JButton btnBuscar = new JButton("Buscar");
+        // Botão para buscar manualmente - MODIFICADO
+        btnBuscar = new JButton("Buscar");
         btnBuscar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         btnBuscar.setBounds(530, 140, 80, 25);
         btnBuscar.addActionListener(new ActionListener() {
@@ -152,7 +153,11 @@ public class TelaSecretariaCancelar extends JFrame {
         String cpf = FieldCpf.getText().trim();
         
         if (cpf.isEmpty()) {
-            limparCampos();
+            JOptionPane.showMessageDialog(this,
+                "Por favor, digite um CPF para buscar.",
+                "CPF Vazio",
+                JOptionPane.WARNING_MESSAGE);
+            FieldCpf.requestFocus();
             return;
         }
         
@@ -167,6 +172,10 @@ public class TelaSecretariaCancelar extends JFrame {
             return;
         }
         
+        // Desabilitar botão durante a busca
+        btnBuscar.setEnabled(false);
+        btnBuscar.setText("Buscando...");
+        
         Connection conexao = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -178,28 +187,44 @@ public class TelaSecretariaCancelar extends JFrame {
                     "Erro ao conectar ao banco de dados.",
                     "Erro de Conexão",
                     JOptionPane.ERROR_MESSAGE);
+                btnBuscar.setEnabled(true);
+                btnBuscar.setText("Buscar");
                 return;
             }
             
-            // Buscar paciente pelo CPF
-            String sql = "SELECT nome FROM usuarios WHERE cpf = ?";
+            // Buscar paciente pelo CPF - AJUSTADO para tabela PACIENTE
+            String sql = "SELECT Nome, Id_Paciente FROM paciente WHERE CPF = ?";
             ps = conexao.prepareStatement(sql);
             ps.setString(1, cpf);
             rs = ps.executeQuery();
             
             if (rs.next()) {
-                String nomePaciente = rs.getString("nome");
+                String nomePaciente = rs.getString("Nome");
+                int idPaciente = rs.getInt("Id_Paciente");
                 FieldNomePaciente.setText(nomePaciente);
-                lblNomeEncontrado.setText("Paciente encontrado");
+                lblNomeEncontrado.setText("Paciente encontrado - ID: " + idPaciente);
                 lblNomeEncontrado.setForeground(new Color(0, 150, 0)); // Verde escuro
                 
                 // Verificar se existem consultas agendadas
-                verificarConsultasAgendadas(cpf);
+                verificarConsultasAgendadas(idPaciente);
                 
             } else {
                 FieldNomePaciente.setText("");
                 lblNomeEncontrado.setText("Paciente não encontrado");
                 lblNomeEncontrado.setForeground(Color.RED);
+                
+                // Perguntar se deseja cadastrar
+                int opcao = JOptionPane.showConfirmDialog(this,
+                    "CPF não encontrado no sistema!\n\n" +
+                    "Deseja cadastrar este paciente?",
+                    "Paciente Não Encontrado",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+                
+                if (opcao == JOptionPane.YES_OPTION) {
+                    // Abrir tela de cadastro de paciente
+                    abrirTelaCadastroPaciente(cpf);
+                }
             }
             
         } catch (SQLException e) {
@@ -209,6 +234,10 @@ public class TelaSecretariaCancelar extends JFrame {
                 JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         } finally {
+            // Reabilitar botão
+            btnBuscar.setEnabled(true);
+            btnBuscar.setText("Buscar");
+            
             // Fechar recursos
             try {
                 if (rs != null) rs.close();
@@ -220,7 +249,43 @@ public class TelaSecretariaCancelar extends JFrame {
         }
     }
     
-    private void verificarConsultasAgendadas(String cpf) {
+    private void abrirTelaCadastroPaciente(String cpf) {
+        try {
+            // Fechar a tela atual
+            dispose();
+            
+          
+           
+            TelaSecretariaCadastrarPaciente telaSecretariaCadastrar = new TelaSecretariaCadastrarPaciente();
+			telaSecretariaCadastrar.setLocationRelativeTo(null);
+			telaSecretariaCadastrar.setVisible(true);
+			 dispose();
+            
+            JOptionPane.showMessageDialog(this,
+                "Funcionalidade de cadastro será implementada aqui.\n" +
+                "CPF para cadastro: " + formatarCPF(cpf),
+                "Cadastro de Paciente",
+                JOptionPane.INFORMATION_MESSAGE);
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "Erro ao abrir tela de cadastro: " + e.getMessage(),
+                "Erro",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private String formatarCPF(String cpf) {
+        if (cpf.length() == 11) {
+            return cpf.substring(0, 3) + "." + 
+                   cpf.substring(3, 6) + "." + 
+                   cpf.substring(6, 9) + "-" + 
+                   cpf.substring(9, 11);
+        }
+        return cpf;
+    }
+    
+    private void verificarConsultasAgendadas(int idPaciente) {
         Connection conexao = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -228,16 +293,14 @@ public class TelaSecretariaCancelar extends JFrame {
         try {
             conexao = ConnectionFactory.getConnection();
             
-            // Buscar consultas futuras do paciente
-            // Ajuste esta consulta conforme sua estrutura de banco
+            
             String sql = "SELECT COUNT(*) as total_consultas " +
-                        "FROM agenda a " +
-                        "JOIN usuarios u ON a.id_paciente = u.id_usuario " +
-                        "WHERE u.cpf = ? AND a.data_consulta >= CURDATE() " +
-                        "AND a.status = 'agendada'";
+                        "FROM agenda " +
+                        "WHERE Id_Paciente = ? AND Data_Consulta >= CURDATE() " +
+                        "AND Status = 'agendada'";
             
             ps = conexao.prepareStatement(sql);
-            ps.setString(1, cpf);
+            ps.setInt(1, idPaciente);
             rs = ps.executeQuery();
             
             if (rs.next()) {
@@ -245,11 +308,14 @@ public class TelaSecretariaCancelar extends JFrame {
                 if (totalConsultas > 0) {
                     lblNomeEncontrado.setText("Paciente encontrado - " + totalConsultas + 
                                              " consulta(s) agendada(s)");
+                } else {
+                    lblNomeEncontrado.setText("Paciente encontrado - Nenhuma consulta agendada");
+                    lblNomeEncontrado.setForeground(Color.ORANGE);
                 }
             }
             
         } catch (SQLException e) {
-            // Não mostrar erro se esta consulta falhar
+            
             System.err.println("Erro ao verificar consultas: " + e.getMessage());
         } finally {
             try {
@@ -270,7 +336,7 @@ public class TelaSecretariaCancelar extends JFrame {
     }
     
     private void validarEProximo() {
-        // Validar campos obrigatórios
+      
         StringBuilder erros = new StringBuilder();
         
         String cpf = FieldCpf.getText().trim();
@@ -289,7 +355,7 @@ public class TelaSecretariaCancelar extends JFrame {
             erros.append("• Paciente não encontrado. Verifique o CPF\n");
         }
         
-        // Se houver erros, mostrar mensagem
+       
         if (erros.length() > 0) {
             JOptionPane.showMessageDialog(this,
                 "Por favor, corrija os seguintes erros:\n\n" + erros.toString(),
@@ -299,7 +365,8 @@ public class TelaSecretariaCancelar extends JFrame {
         }
         
         // Verificar se o paciente tem consultas para cancelar
-        if (!verificarSeTemConsultas(cpf)) {
+        String cpfFormatado = FieldCpf.getText().replaceAll("[^0-9]", "");
+        if (!verificarSeTemConsultas(cpfFormatado)) {
             int resposta = JOptionPane.showConfirmDialog(this,
                 "Este paciente não possui consultas agendadas.\n" +
                 "Deseja prosseguir mesmo assim?",
@@ -312,8 +379,8 @@ public class TelaSecretariaCancelar extends JFrame {
             }
         }
         
-        // Passar para próxima tela com os dados
-        passarParaHistorico(cpf);
+        
+        passarParaHistorico(cpfFormatado);
     }
     
     private boolean verificarSeTemConsultas(String cpf) {
@@ -324,20 +391,32 @@ public class TelaSecretariaCancelar extends JFrame {
         try {
             conexao = ConnectionFactory.getConnection();
             
-            // Consulta para verificar se existem consultas agendadas
-            // Ajuste conforme sua estrutura de banco
-            String sql = "SELECT COUNT(*) as total " +
-                        "FROM agenda a " +
-                        "JOIN usuarios u ON a.id_paciente = u.id_usuario " +
-                        "WHERE u.cpf = ? AND a.status = 'agendada' " +
-                        "AND a.data_consulta >= CURDATE()";
             
-            ps = conexao.prepareStatement(sql);
+            String sqlBuscarId = "SELECT Id_Paciente FROM paciente WHERE CPF = ?";
+            ps = conexao.prepareStatement(sqlBuscarId);
             ps.setString(1, cpf);
             rs = ps.executeQuery();
             
             if (rs.next()) {
-                return rs.getInt("total") > 0;
+                int idPaciente = rs.getInt("Id_Paciente");
+                
+               
+                rs.close();
+                ps.close();
+                
+                
+                String sqlConsultas = "SELECT COUNT(*) as total " +
+                                    "FROM agenda " +
+                                    "WHERE Id_Paciente = ? AND Status = 'agendada' " +
+                                    "AND Data_Consulta >= CURDATE()";
+                
+                ps = conexao.prepareStatement(sqlConsultas);
+                ps.setInt(1, idPaciente);
+                rs = ps.executeQuery();
+                
+                if (rs.next()) {
+                    return rs.getInt("total") > 0;
+                }
             }
             
         } catch (SQLException e) {
@@ -357,11 +436,20 @@ public class TelaSecretariaCancelar extends JFrame {
     
     private void passarParaHistorico(String cpf) {
         try {
-            // Passar o CPF para a próxima tela
-            TelaPrincipalSecretaria tela = new TelaPrincipalSecretaria();
-            tela.setLocationRelativeTo(this);
-            tela.setVisible(true);
+            
+        	TelaHistoricoAgendamentos telaHistoricoAgendamentos = new TelaHistoricoAgendamentos();
+			telaHistoricoAgendamentos.setLocationRelativeTo(this);
+			telaHistoricoAgendamentos.setVisible(true);
+           
+			JOptionPane.showMessageDialog(this,
+                "Funcionalidade 'Próximo' - Abriria a tela de consultas agendadas\n" +
+                "para o CPF: " + formatarCPF(cpf),
+                "Próximo Passo",
+                JOptionPane.INFORMATION_MESSAGE);
+            
+          
             dispose();
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                 "Erro ao abrir histórico de agendamentos: " + e.getMessage(),
