@@ -1,10 +1,14 @@
 package telasSistema.Administrador;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -21,19 +25,82 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.MaskFormatter;
 
+import com.google.gson.Gson;
 import com.toedter.calendar.JDateChooser;
 
 import Back.Especialidade;
 import conexao.ConnectionFactory;
 import model.Criptografia;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 
 public class TelaAdministradorEditarMedico extends JFrame {
+	private enum PasswordStrength {
+        WEAK, // Fraca
+        MEDIUM, // Média
+        STRONG // Forte
+    }
 
+    private static class ViaCEPResponse {
+        private String cep;
+        private String logradouro;
+        private String complemento;
+        private String bairro;
+        private String localidade;
+        private String uf;
+        private String ibge;
+        private String gia;
+        private String ddd;
+        private String siafi;
+        private boolean erro;
+        
+        // Getters e Setters
+        public String getCep() { return cep; }
+        public void setCep(String cep) { this.cep = cep; }
+        
+        public String getLogradouro() { return logradouro; }
+        public void setLogradouro(String logradouro) { this.logradouro = logradouro; }
+        
+        public String getBairro() { return bairro; }
+        public void setBairro(String bairro) { this.bairro = bairro; }
+        
+        public String getLocalidade() { return localidade; }
+        public void setLocalidade(String localidade) { this.localidade = localidade; }
+        
+        public String getUf() { return uf; }
+        public void setUf(String uf) { this.uf = uf; }
+        
+        public String getComplemento() { return complemento; }
+        public void setComplemento(String complemento) { this.complemento = complemento; }
+        
+        public String getIbge() { return ibge; }
+        public void setIbge(String ibge) { this.ibge = ibge; }
+        
+        public String getGia() { return gia; }
+        public void setGia(String gia) { this.gia = gia; }
+        
+        public String getDdd() { return ddd; }
+        public void setDdd(String ddd) { this.ddd = ddd; }
+        
+        public String getSiafi() { return siafi; }
+        public void setSiafi(String siafi) { this.siafi = siafi; }
+        
+        public boolean temErro() { return erro; }
+        public void setErro(boolean erro) { this.erro = erro; }
+    }
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JTextField FieldNome;
@@ -57,7 +124,12 @@ public class TelaAdministradorEditarMedico extends JFrame {
     private JDateChooser dcDataNascimento;
 	private int Id_Usuario;
 	private int Especialidade;
-
+	
+	 private OkHttpClient httpClient;
+	    private Gson gson;
+	    private JTextField textPlano;
+	    private JTextField textTelefone;
+	    private JPasswordField textSenha;
     /**
      * Launch the application.
      */
@@ -80,6 +152,9 @@ public class TelaAdministradorEditarMedico extends JFrame {
      */
     public TelaAdministradorEditarMedico() {
     	
+    	httpClient = new OkHttpClient();
+		gson = new Gson();
+		
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 888, 550);
         contentPane = new JPanel();
@@ -269,7 +344,7 @@ public class TelaAdministradorEditarMedico extends JFrame {
         btnBuscarCEP.setBounds(740, 165, 83, 22);
         btnBuscarCEP.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // TODO: Adicionar lógica de busca de CEP
+            	buscarEnderecoPorCEP();
             }
         });
         contentPane.add(btnBuscarCEP);
@@ -349,7 +424,11 @@ public class TelaAdministradorEditarMedico extends JFrame {
             }
         });
         contentPane.add(btnVoltar);
-    
+     // chamando o método que implementa O DocumentListener
+        implementPasswordStrengthCheck();
+        
+        // ADICIONA LISTENER PARA BUSCA AUTOMÁTICA DE CEP
+        implementCEPAutoComplete();
     
 }
     public void atualizar() {
@@ -674,4 +753,226 @@ public class TelaAdministradorEditarMedico extends JFrame {
         
         return true;
     }
+    private PasswordStrength checkPasswordStrength(String password) {
+        int score = 0;
+        
+        // Verifica se está vazia
+        if (password.length() == 0) {
+            return PasswordStrength.WEAK;
+        }
+        
+        // Pontua por comprimento
+        if (password.length() >= 8) {
+            score++;
+        }
+        if (password.length() >= 12) {
+            score++;
+        }
+        
+        // Pelo menos uma minúscula
+        if (password.matches(".*[a-z].*")) { 
+            score++;
+        }
+        // Pelo menos uma maiúscula
+        if (password.matches(".*[A-Z].*")) { 
+            score++;
+        }
+        // Pelo menos um número
+        if (password.matches(".*[0-9].*")) { 
+            score++;
+        }
+        // Pelo menos um símbolo/caractere especial 
+        if (password.matches(".*[^a-zA-Z0-9].*")) { 
+            score++;
+        }
+        
+        // Define a força com base na pontuação total
+        if (score >= 5) {
+            return PasswordStrength.STRONG;
+        } else if (score >= 3) {
+            return PasswordStrength.MEDIUM;
+        } else {
+            return PasswordStrength.WEAK;
+        }
+    }
+
+   
+    private void implementPasswordStrengthCheck() {
+        FieldSENHA.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                checkAndUpdateUI();
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                checkAndUpdateUI();
+            }
+            
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                // Não usado para JPasswordField
+            }
+
+            private void checkAndUpdateUI() {
+                String password = new String(FieldSENHA.getPassword());
+                
+                if (password.isEmpty()) {
+                    lblStrengthFeedbackNIVELSENHA.setText("Nível da Senha:");
+                    lblStrengthFeedbackNIVELSENHA.setForeground(Color.BLACK);
+                    progressBarBARRAdoNIVELSENHA.setValue(0);
+                    progressBarBARRAdoNIVELSENHA.setString("");
+                    return;
+                }
+                
+                PasswordStrength strength = checkPasswordStrength(password);
+                
+                // Atualiza a interface
+                switch (strength) {
+                    case WEAK:
+                        lblStrengthFeedbackNIVELSENHA.setText("Nível da Senha:");
+                        lblStrengthFeedbackNIVELSENHA.setForeground(Color.RED);
+                        progressBarBARRAdoNIVELSENHA.setValue(1);
+                        progressBarBARRAdoNIVELSENHA.setForeground(Color.RED);
+                        progressBarBARRAdoNIVELSENHA.setString("Fraca");
+                        break;
+                    case MEDIUM:
+                        lblStrengthFeedbackNIVELSENHA.setText("Nível da Senha:");
+                        lblStrengthFeedbackNIVELSENHA.setForeground(Color.ORANGE.darker());
+                        progressBarBARRAdoNIVELSENHA.setValue(3);
+                        progressBarBARRAdoNIVELSENHA.setForeground(Color.ORANGE.darker());
+                        progressBarBARRAdoNIVELSENHA.setString("Média");
+                        break;
+                    case STRONG:
+                        lblStrengthFeedbackNIVELSENHA.setText("Nível da Senha:");
+                        lblStrengthFeedbackNIVELSENHA.setForeground(Color.GREEN.darker());
+                        progressBarBARRAdoNIVELSENHA.setValue(5);
+                        progressBarBARRAdoNIVELSENHA.setForeground(Color.GREEN.darker());
+                        progressBarBARRAdoNIVELSENHA.setString("Forte");
+                        break;
+                }
+            }
+        });
+    }
+    
+    /**
+     * Implementa a busca automática de CEP
+     */
+    private void implementCEPAutoComplete() {
+        FieldCep.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                buscarQuandoCompleto();
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+            }
+            
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                buscarQuandoCompleto();
+            }
+            
+            private void buscarQuandoCompleto() {
+                String cep = FieldCep.getText().replaceAll("[^0-9]", "");
+                if (cep.length() == 8) {
+                    Timer timer = new Timer(500, e2 -> buscarEnderecoPorCEP());
+                    timer.setRepeats(false);
+                    timer.start();
+                }
+            }
+        });
+    }
+    
+    /**
+     */
+    private void buscarEnderecoPorCEP() {
+        String cep = FieldCep.getText().trim().replaceAll("[^0-9]", "");
+        
+        if (cep.length() != 8) {
+            JOptionPane.showMessageDialog(this, "CEP deve conter 8 dígitos!", "CEP Inválido", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Mostra cursor de carregamento
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        
+        SwingWorker<ViaCEPResponse, Void> worker = new SwingWorker<ViaCEPResponse, Void>() {
+            @Override
+            protected ViaCEPResponse doInBackground() throws Exception {
+                try {
+                    String url = "https://viacep.com.br/ws/" + cep + "/json/";
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .build();
+                    
+                    Response response = httpClient.newCall(request).execute();
+                    String json = response.body().string();
+                    
+                    ViaCEPResponse viaCEPResponse = gson.fromJson(json, ViaCEPResponse.class);
+                    return viaCEPResponse;
+                    
+                } catch (Exception e) {
+                	e.printStackTrace();
+                    return null;
+                }
+            }
+            
+            @Override
+            protected void done() {
+                setCursor(Cursor.getDefaultCursor());
+                
+                try {
+                    ViaCEPResponse endereco = get();
+                    
+                    if (endereco == null || endereco.temErro()) {
+                        JOptionPane.showMessageDialog(TelaAdministradorEditarMedico.this, 
+                            "CEP não encontrado!\nVerifique o CEP digitado.", 
+                            "CEP não encontrado", 
+                            JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    
+                    FieldMunicipio.setText(endereco.getLocalidade());
+                    FieldEstado.setText(endereco.getUf());
+                    FieldRua.setText(endereco.getLogradouro());
+                    FieldBairro.setText(endereco.getBairro());
+                    
+                    // Foca no campo Número automaticamente
+                    SwingUtilities.invokeLater(() -> {
+                        FieldNum.requestFocus();
+                    });
+                    
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(TelaAdministradorEditarMedico.this,
+                        "Erro na consulta ao CEP: " + e.getMessage(),
+                        "Erro na Consulta",
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        };
+        
+        worker.execute();
+    }
+
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+    
+    
+}
 }
