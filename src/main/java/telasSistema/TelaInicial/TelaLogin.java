@@ -108,18 +108,16 @@ public class TelaLogin extends JFrame {
 		panel.add(passwordField);
 		ButtonGroup grupoBotoes = new ButtonGroup();
 
-		// BOTAO LOGIN:
+		
 		JButton btnLogin = new JButton("LOGIN");
 		btnLogin.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//System.out.println("[DEBUG telalogin] Botão de logar apertadp");
-				// condição para não deixar ele passar se estiver em branco
+				
 				String mensagemDeErro = "Por favor, preencha os seguintes campos obrigatórios:\n";
 				int camposEmBranco = 0;
 
-				// Agora, estas variáveis estão acessíveis!
 				if (textFieldEmail.getText().trim().isEmpty()) {
 					camposEmBranco++;
 					mensagemDeErro += "- E-mail\n";
@@ -135,8 +133,7 @@ public class TelaLogin extends JFrame {
 					JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-				// Aqui você chamaria o método logar() e faria a verificação
-				// logar();
+				
 				logar();
 
 			}
@@ -193,11 +190,11 @@ public class TelaLogin extends JFrame {
 		contentPane.add(gerenciamento);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(TelaLogin.class.getResource("/esteto4.png")));
+		
 		lblNewLabel.setBounds(30, 90, 304, 319);
 		contentPane.add(lblNewLabel);
 		
-	} // FECHA O CONSTRUTOR TelaLogin()
+	} 
 
 	public void logar() {
 	    String sql = "SELECT * FROM usuarios WHERE Email=? AND Senha=?";
@@ -205,18 +202,13 @@ public class TelaLogin extends JFrame {
 	        pst = connection.prepareStatement(sql);
 	        pst.setString(1, textFieldEmail.getText().trim());
 	        
-	        // 1. Captura a senha digitada
 	        String senhaDigitada = new String(passwordField.getPassword());
 	        
-	        // 2. Criptografa a senha digitada (mesmo processo do cadastro)
 	        Criptografia criptografia = new Criptografia(senhaDigitada, "md5");
 	        String senhaCriptografada = criptografia.getInformacao();
 	        
-	        // 3. Compara com o hash armazenado no banco
 	        pst.setString(2, senhaCriptografada);
-	        //System.out.println("[DUBUG Logar] Senha criptografada: " + senhaCriptografada);
 	        
-	        // 4. Executa a consulta
 	        rs = pst.executeQuery();
 	        
 	        if (rs.next()) {
@@ -246,6 +238,7 @@ public class TelaLogin extends JFrame {
 					TelaPrincipalMedico tela = new TelaPrincipalMedico();
 					tela.setLocationRelativeTo(null);
 					tela.setVisible(true);
+					
 					dispose();
 				}	        } else {
 	            JOptionPane.showMessageDialog(null, 

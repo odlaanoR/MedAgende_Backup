@@ -50,13 +50,13 @@ public class TelaPrincipalMedico extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JLabel lblBemVindoMedico = new JLabel("Bem vinda(o), Dr. xxxxxxxx!!!!");
+		JLabel lblBemVindoMedico = new JLabel("Bem vinda(o), Doutor(a). !");
 		lblBemVindoMedico.setBounds(276, 10, 414, 35);
 		lblBemVindoMedico.setFont(new Font("Arial Black", Font.BOLD, 24));
 		contentPane.add(lblBemVindoMedico);
 		
 		JButton btnViewProntuario = new JButton("Visualizar Prontuário");
-		btnViewProntuario.setBounds(151, 174, 154, 62);
+		btnViewProntuario.setBounds(123, 160, 182, 76);
 		btnViewProntuario.setAlignmentY(0.0f);
 		btnViewProntuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -78,7 +78,7 @@ public class TelaPrincipalMedico extends JFrame {
 			}
 		});
 		btnSolicitarExame.setAlignmentY(0.0f);
-		btnSolicitarExame.setBounds(357, 174, 154, 62);
+		btnSolicitarExame.setBounds(341, 160, 170, 76);
 		contentPane.add(btnSolicitarExame);
 		
 		JButton btnEmitirAtestado = new JButton("Emitir atestado");
@@ -90,24 +90,25 @@ public class TelaPrincipalMedico extends JFrame {
 			}
 		});
 		btnEmitirAtestado.setAlignmentY(0.0f);
-		btnEmitirAtestado.setBounds(572, 174, 154, 62);
+		btnEmitirAtestado.setBounds(544, 160, 182, 76);
 		contentPane.add(btnEmitirAtestado);
 		
 		JButton btnEmitirPrescricao = new JButton("Emitir prescrição");
 		btnEmitirPrescricao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TelaEmitirPrescrição telaemitirprescicao = new TelaEmitirPrescrição();
+				EmitirPrescricao telaemitirprescicao = new EmitirPrescricao();
 				telaemitirprescicao.setVisible(true);
 				dispose();
 			}
 		});
 		
 		btnEmitirPrescricao.setAlignmentY(0.0f);
-		btnEmitirPrescricao.setBounds(242, 277, 154, 62);
+		btnEmitirPrescricao.setBounds(214, 263, 182, 76);
 		contentPane.add(btnEmitirPrescricao);
 		
 		JLabel lblOqueDeseja = new JLabel("O que deseja realizar?");
-		lblOqueDeseja.setBounds(418, 84, 188, 14);
+		lblOqueDeseja.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblOqueDeseja.setBounds(357, 84, 215, 25);
 		contentPane.add(lblOqueDeseja);
 		
 		JButton btnNewButton = new JButton("Voltar");
@@ -119,12 +120,12 @@ public class TelaPrincipalMedico extends JFrame {
 			}
 		});
 		btnNewButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnNewButton.setBounds(85, 385, 84, 20);
+		btnNewButton.setBounds(85, 385, 95, 35);
 		contentPane.add(btnNewButton);
 		
 		JButton btnPrximo = new JButton("Próximo");
 		btnPrximo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnPrximo.setBounds(658, 386, 84, 20);
+		btnPrximo.setBounds(647, 386, 95, 35);
 		contentPane.add(btnPrximo);
 		
 		JButton btnAgenda = new JButton("Configurar agenda");
@@ -135,7 +136,7 @@ public class TelaPrincipalMedico extends JFrame {
 				dispose();
 			}
 		});
-		btnAgenda.setBounds(449, 277, 155, 62);
+		btnAgenda.setBounds(450, 263, 182, 76);
 		contentPane.add(btnAgenda);
 
 	}

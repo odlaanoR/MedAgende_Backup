@@ -276,21 +276,21 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
         
         JLabel lblNewLabel_1 = new JLabel("Rua:");
         lblNewLabel_1.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblNewLabel_1.setBounds(739, 230, 46, 14);
+        lblNewLabel_1.setBounds(619, 288, 46, 14);
         contentPane.add(lblNewLabel_1);
         
         textRua = new JTextField(); // Rua
-        textRua.setBounds(739, 256, 125, 20);
+        textRua.setBounds(619, 311, 125, 20);
         contentPane.add(textRua);
         textRua.setColumns(10);
         
         JLabel lblNewLabel_2 = new JLabel("Número:");
         lblNewLabel_2.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblNewLabel_2.setBounds(740, 286, 72, 14);
+        lblNewLabel_2.setBounds(740, 230, 72, 14);
         contentPane.add(lblNewLabel_2);
         
-        textNumero = new JTextField(); // Número
-        textNumero.setBounds(740, 311, 59, 20);
+        textNumero = new JTextField(); 
+        textNumero.setBounds(740, 255, 59, 20);
         contentPane.add(textNumero);
         textNumero.setColumns(10);
         
@@ -299,7 +299,7 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
         lblBairro.setBounds(619, 230, 46, 14);
         contentPane.add(lblBairro);
         
-        textBairro = new JTextField(); // Bairro
+        textBairro = new JTextField(); 
         textBairro.setBounds(619, 255, 100, 20);
         contentPane.add(textBairro);
         textBairro.setColumns(10);
@@ -309,7 +309,7 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
         lblMunicipio.setBounds(740, 173, 72, 14);
         contentPane.add(lblMunicipio);
         
-        textMunicipio = new JTextField(); // Município
+        textMunicipio = new JTextField(); 
         textMunicipio.setBounds(740, 198, 86, 20);
         contentPane.add(textMunicipio);
         textMunicipio.setColumns(10);
@@ -319,12 +319,11 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
         lblEstadoUF.setBounds(619, 173, 72, 14);
         contentPane.add(lblEstadoUF);
         
-        textEstado = new JTextField(); // Estado(UF)
+        textEstado = new JTextField(); 
         textEstado.setBounds(619, 198, 46, 20);
         contentPane.add(textEstado);
         textEstado.setColumns(10);
         
-        // BOTÃO PARA BUSCAR CEP
         JButton btnBuscarCEP = new JButton("Buscar");
         btnBuscarCEP.setBounds(729, 141, 83, 20);
         btnBuscarCEP.addActionListener(new ActionListener() {
@@ -403,7 +402,6 @@ public class TelaAdministradorCadastroSecretaria extends JFrame {
     	
     	try {
     	    dao.create(u);
-    	    JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso.");
     	} 
     	catch (Exception e) {
     	    JOptionPane.showMessageDialog(null, 
