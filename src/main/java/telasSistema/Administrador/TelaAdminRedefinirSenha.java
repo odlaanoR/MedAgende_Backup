@@ -440,7 +440,7 @@ public class TelaAdminRedefinirSenha extends JFrame {
         dialogProcessando.getContentPane().add(panel);
         dialogProcessando.setVisible(true);
         
-        Timer timer = new Timer(2000, new ActionListener() {
+        Timer timer = new Timer(15, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dialogProcessando.dispose();
