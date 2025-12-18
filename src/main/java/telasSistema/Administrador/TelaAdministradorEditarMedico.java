@@ -380,22 +380,22 @@ public class TelaAdministradorEditarMedico extends JFrame {
 
         JLabel lblRua = new JLabel("Rua:");
         lblRua.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblRua.setBounds(740, 256, 46, 14);
+        lblRua.setBounds(644, 312, 46, 14);
         contentPane.add(lblRua);
 
         FieldRua = new JTextField();
-        FieldRua.setBounds(740, 281, 86, 20);
+        FieldRua.setBounds(644, 330, 179, 20);
         contentPane.add(FieldRua);
         FieldRua.setColumns(10);
 
         // Número
         JLabel lblNum = new JLabel("Número:");
         lblNum.setFont(new Font("Trebuchet MS", Font.PLAIN, 10));
-        lblNum.setBounds(740, 312, 72, 14);
+        lblNum.setBounds(750, 256, 72, 14);
         contentPane.add(lblNum);
 
         FieldNum = new JTextField();
-        FieldNum.setBounds(740, 337, 59, 20);
+        FieldNum.setBounds(753, 281, 59, 20);
         contentPane.add(FieldNum);
         FieldNum.setColumns(10);
 
