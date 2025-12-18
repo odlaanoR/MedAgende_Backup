@@ -5,6 +5,10 @@ import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.ListSelectionModel;
 
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -19,6 +23,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import conexao.ConnectionFactory;
 import javax.swing.SwingConstants;
+import javax.swing.JSeparator;
+import java.awt.SystemColor;
 
 public class TelaSecretariaCancelar extends JFrame {
 
@@ -26,39 +32,44 @@ public class TelaSecretariaCancelar extends JFrame {
     private JTextField FieldCpf;
     private JTextField FieldNomePaciente;
     private JLabel lblNomeEncontrado;
-    private JButton btnBuscar; // Adicionado para controle
+    private JButton btnBuscar;
+    private JTable tableConsultas;
+    private DefaultTableModel tableModel;
+    private JButton btnCancelarConsulta;
+    private int pacienteId = -1;
 
     public TelaSecretariaCancelar() {
         initialize();
     }
 
     private void initialize() {
-        setBounds(100, 100, 742, 454);
+        setBounds(100, 100, 900, 600);
         getContentPane().setBackground(new Color(170, 255, 255));
         getContentPane().setLayout(null);
         setTitle("Cancelamento de Consulta - Sistema Clínica");
         
         JPanel panel = new JPanel();
         panel.setBackground(new Color(204, 253, 255));
-        panel.setBounds(0, 1, 729, 417);
+        panel.setBounds(0, 1, 886, 562);
         getContentPane().add(panel);
         panel.setLayout(null);
         
         setupTitle(panel);
         setupFormFields(panel);
+        setupConsultasTable(panel);
         setupButtons(panel);
     }
     
     private void setupTitle(JPanel panel) {
         JLabel lblCancelarConsulta = new JLabel("Cancelar Consulta");
         lblCancelarConsulta.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        lblCancelarConsulta.setBounds(250, 30, 250, 50);
+        lblCancelarConsulta.setBounds(300, 30, 280, 50);
         lblCancelarConsulta.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(lblCancelarConsulta);
         
-        JLabel lblPreenchaDados = new JLabel("Preencha os dados do paciente");
+        JLabel lblPreenchaDados = new JLabel("Busque o paciente para ver e cancelar consultas agendadas");
         lblPreenchaDados.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        lblPreenchaDados.setBounds(260, 80, 230, 20);
+        lblPreenchaDados.setBounds(250, 80, 400, 20);
         lblPreenchaDados.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(lblPreenchaDados);
     }
@@ -83,13 +94,12 @@ public class TelaSecretariaCancelar extends JFrame {
         });
         panel.add(FieldCpf);
         
-        // Nome Label (static)
+        // Nome Label
         JLabel lblNomePaciente = new JLabel("Nome do paciente:");
         lblNomePaciente.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         lblNomePaciente.setBounds(108, 180, 120, 20);
         panel.add(lblNomePaciente);
         
-        // Campo de texto para nome (apenas leitura)
         FieldNomePaciente = new JTextField();
         FieldNomePaciente.setEditable(false);
         FieldNomePaciente.setBounds(238, 180, 280, 25);
@@ -104,7 +114,7 @@ public class TelaSecretariaCancelar extends JFrame {
         lblNomeEncontrado.setBounds(238, 210, 280, 20);
         panel.add(lblNomeEncontrado);
         
-        // Botão para buscar manualmente - MODIFICADO
+        // Botão para buscar manualmente
         btnBuscar = new JButton("Buscar");
         btnBuscar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         btnBuscar.setBounds(530, 140, 80, 25);
@@ -114,28 +124,6 @@ public class TelaSecretariaCancelar extends JFrame {
             }
         });
         panel.add(btnBuscar);
-    }
-    
-    private void setupButtons(JPanel panel) {
-        JButton btnVoltar = new JButton("Voltar");
-        btnVoltar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnVoltar.setBounds(100, 300, 100, 30);
-        btnVoltar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                voltarParaTelaPrincipal();
-            }
-        });
-        panel.add(btnVoltar);
-        
-        JButton btnProximo = new JButton("Próximo");
-        btnProximo.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnProximo.setBounds(530, 300, 100, 30);
-        btnProximo.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                validarEProximo();
-            }
-        });
-        panel.add(btnProximo);
         
         // Botão de limpar
         JButton btnLimpar = new JButton("Limpar");
@@ -147,6 +135,85 @@ public class TelaSecretariaCancelar extends JFrame {
             }
         });
         panel.add(btnLimpar);
+        
+        JSeparator separator = new JSeparator();
+        separator.setBounds(108, 240, 670, 2);
+        panel.add(separator);
+    }
+    
+    private void setupConsultasTable(JPanel panel) {
+        JLabel lblConsultasAgendadas = new JLabel("Consultas Agendadas para Cancelamento:");
+        lblConsultasAgendadas.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblConsultasAgendadas.setBounds(108, 250, 300, 25);
+        panel.add(lblConsultasAgendadas);
+        
+        // Modelo da tabela
+        String[] colunas = {"ID", "Data", "Hora", "Médico", "Especialidade", "Status"};
+        tableModel = new DefaultTableModel(colunas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        tableConsultas = new JTable(tableModel);
+        tableConsultas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tableConsultas.getTableHeader().setReorderingAllowed(false);
+        tableConsultas.setRowHeight(25);
+        tableConsultas.getColumnModel().getColumn(0).setPreferredWidth(50);
+        tableConsultas.getColumnModel().getColumn(1).setPreferredWidth(80);
+        tableConsultas.getColumnModel().getColumn(2).setPreferredWidth(60);
+        tableConsultas.getColumnModel().getColumn(3).setPreferredWidth(150);
+        tableConsultas.getColumnModel().getColumn(4).setPreferredWidth(120);
+        tableConsultas.getColumnModel().getColumn(5).setPreferredWidth(80);
+        
+        JScrollPane scrollPane = new JScrollPane(tableConsultas);
+        scrollPane.setBounds(108, 280, 670, 200);
+        panel.add(scrollPane);
+    }
+    
+    private void setupButtons(JPanel panel) {
+        JSeparator separator = new JSeparator();
+        separator.setBounds(108, 490, 670, 2);
+        panel.add(separator);
+        
+        // Botão Cancelar Consulta (funcional)
+        btnCancelarConsulta = new JButton("Cancelar Consulta Selecionada");
+        btnCancelarConsulta.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnCancelarConsulta.setBackground(Color.RED);
+        btnCancelarConsulta.setForeground(Color.WHITE);
+        btnCancelarConsulta.setBounds(108, 500, 220, 30);
+        btnCancelarConsulta.setEnabled(false);
+        btnCancelarConsulta.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cancelarConsultaSelecionada();
+            }
+        });
+        panel.add(btnCancelarConsulta);
+        
+        // Botão Atualizar Lista
+        JButton btnAtualizar = new JButton("Atualizar Lista");
+        btnAtualizar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        btnAtualizar.setBounds(340, 500, 120, 30);
+        btnAtualizar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (pacienteId != -1) {
+                    carregarConsultasPaciente(pacienteId);
+                }
+            }
+        });
+        panel.add(btnAtualizar);
+        
+        // Botão Voltar
+        JButton btnVoltar = new JButton("Voltar");
+        btnVoltar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnVoltar.setBounds(580, 500, 100, 30);
+        btnVoltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                voltarParaTelaPrincipal();
+            }
+        });
+        panel.add(btnVoltar);
     }
     
     private void buscarPacientePorCPF() {
@@ -169,6 +236,7 @@ public class TelaSecretariaCancelar extends JFrame {
             FieldNomePaciente.setText("");
             lblNomeEncontrado.setText("CPF inválido (deve ter 11 dígitos)");
             lblNomeEncontrado.setForeground(Color.RED);
+            limparTabelaConsultas();
             return;
         }
         
@@ -192,28 +260,30 @@ public class TelaSecretariaCancelar extends JFrame {
                 return;
             }
             
-            // Buscar paciente pelo CPF - AJUSTADO para tabela PACIENTE
-            String sql = "SELECT Nome, Id_Paciente FROM paciente WHERE CPF = ?";
+            String sql = "SELECT Id_Paciente, Nome FROM paciente WHERE CPF = ?";
             ps = conexao.prepareStatement(sql);
             ps.setString(1, cpf);
             rs = ps.executeQuery();
             
             if (rs.next()) {
+                pacienteId = rs.getInt("Id_Paciente");
                 String nomePaciente = rs.getString("Nome");
-                int idPaciente = rs.getInt("Id_Paciente");
-                FieldNomePaciente.setText(nomePaciente);
-                lblNomeEncontrado.setText("Paciente encontrado - ID: " + idPaciente);
-                lblNomeEncontrado.setForeground(new Color(0, 150, 0)); // Verde escuro
                 
-                // Verificar se existem consultas agendadas
-                verificarConsultasAgendadas(idPaciente);
+                FieldNomePaciente.setText(nomePaciente);
+                FieldCpf.setText(formatarCPF(cpf));
+                
+                carregarConsultasPaciente(pacienteId);
+                
+                lblNomeEncontrado.setText("Paciente encontrado - ID: " + pacienteId);
+                lblNomeEncontrado.setForeground(new Color(0, 150, 0));
                 
             } else {
+                pacienteId = -1;
                 FieldNomePaciente.setText("");
+                limparTabelaConsultas();
                 lblNomeEncontrado.setText("Paciente não encontrado");
                 lblNomeEncontrado.setForeground(Color.RED);
                 
-                // Perguntar se deseja cadastrar
                 int opcao = JOptionPane.showConfirmDialog(this,
                     "CPF não encontrado no sistema!\n\n" +
                     "Deseja cadastrar este paciente?",
@@ -222,7 +292,6 @@ public class TelaSecretariaCancelar extends JFrame {
                     JOptionPane.QUESTION_MESSAGE);
                 
                 if (opcao == JOptionPane.YES_OPTION) {
-                    // Abrir tela de cadastro de paciente
                     abrirTelaCadastroPaciente(cpf);
                 }
             }
@@ -234,13 +303,214 @@ public class TelaSecretariaCancelar extends JFrame {
                 JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         } finally {
-            // Reabilitar botão
             btnBuscar.setEnabled(true);
             btnBuscar.setText("Buscar");
             
-            // Fechar recursos
             try {
                 if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conexao != null) conexao.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    private void carregarConsultasPaciente(int idPaciente) {
+        limparTabelaConsultas();
+        btnCancelarConsulta.setEnabled(false);
+        
+        Connection conexao = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            conexao = ConnectionFactory.getConnection();
+            if (conexao == null) return;
+            
+            String sql = "SELECT a.Id_Agenda, DATE_FORMAT(a.Data_Consulta, '%d/%m/%Y') as Data, " +
+                        "TIME_FORMAT(a.Hora_Consulta, '%H:%i') as Hora, " +
+                        "m.Nome as Medico, m.Especialidade, a.Status " +
+                        "FROM agenda a " +
+                        "INNER JOIN medico m ON a.Id_Medico = m.Id_Medico " +
+                        "WHERE a.Id_Paciente = ? AND a.Status = 'agendada' " +
+                        "AND (a.Data_Consulta > CURDATE() OR " +
+                        "(a.Data_Consulta = CURDATE() AND a.Hora_Consulta > CURTIME())) " +
+                        "ORDER BY a.Data_Consulta, a.Hora_Consulta";
+            
+            ps = conexao.prepareStatement(sql);
+            ps.setInt(1, idPaciente);
+            rs = ps.executeQuery();
+            
+            int count = 0;
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getInt("Id_Agenda"),
+                    rs.getString("Data"),
+                    rs.getString("Hora"),
+                    rs.getString("Medico"),
+                    rs.getString("Especialidade"),
+                    rs.getString("Status")
+                };
+                tableModel.addRow(row);
+                count++;
+            }
+            
+            if (count > 0) {
+                lblNomeEncontrado.setText("Paciente encontrado - " + count + " consulta(s) agendada(s)");
+                btnCancelarConsulta.setEnabled(true);
+            } else {
+                lblNomeEncontrado.setText("Paciente encontrado - Nenhuma consulta futura agendada");
+                lblNomeEncontrado.setForeground(Color.ORANGE);
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Erro ao carregar consultas: " + e.getMessage());
+            JOptionPane.showMessageDialog(this,
+                "Erro ao carregar consultas: " + e.getMessage(),
+                "Erro",
+                JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conexao != null) conexao.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    private void cancelarConsultaSelecionada() {
+        int selectedRow = tableConsultas.getSelectedRow();
+        
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this,
+                "Por favor, selecione uma consulta na tabela para cancelar.",
+                "Nenhuma Consulta Selecionada",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int consultaId = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
+        String data = tableModel.getValueAt(selectedRow, 1).toString();
+        String hora = tableModel.getValueAt(selectedRow, 2).toString();
+        String medico = tableModel.getValueAt(selectedRow, 3).toString();
+        
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Deseja realmente cancelar esta consulta?\n\n" +
+            "Data: " + data + "\n" +
+            "Hora: " + hora + "\n" +
+            "Médico: " + medico + "\n\n" +
+            "Esta ação não pode ser desfeita!",
+            "Confirmar Cancelamento",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
+        
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+        // Perguntar motivo do cancelamento
+        String motivo = JOptionPane.showInputDialog(this,
+            "Informe o motivo do cancelamento (opcional):",
+            "Motivo do Cancelamento",
+            JOptionPane.QUESTION_MESSAGE);
+        
+        if (motivo == null) {
+            motivo = "Cancelado pelo paciente/secretária";
+        }
+        
+        Connection conexao = null;
+        PreparedStatement ps = null;
+        
+        try {
+            conexao = ConnectionFactory.getConnection();
+            
+            // Atualizar o status da consulta para 'cancelada'
+            String sql = "UPDATE agenda SET Status = 'cancelada', Observacoes = ? WHERE Id_Agenda = ?";
+            ps = conexao.prepareStatement(sql);
+            ps.setString(1, motivo);
+            ps.setInt(2, consultaId);
+            
+            int rowsAffected = ps.executeUpdate();
+            
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Consulta cancelada com sucesso!\n" +
+                    "ID da consulta: " + consultaId + "\n" +
+                    "Motivo: " + motivo,
+                    "Cancelamento Realizado",
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+                // Atualizar a tabela
+                tableModel.setValueAt("cancelada", selectedRow, 5);
+                
+                // Desabilitar o botão se não houver mais consultas ativas
+                verificarConsultasAtivas();
+                
+                // Registrar no histórico
+                registrarHistoricoCancelamento(consultaId, motivo);
+                
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Erro ao cancelar consulta. Consulte o administrador.",
+                    "Erro no Cancelamento",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                "Erro ao cancelar consulta: " + e.getMessage(),
+                "Erro",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (conexao != null) conexao.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    private void verificarConsultasAtivas() {
+        boolean hasActiveConsultas = false;
+        
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            String status = tableModel.getValueAt(i, 5).toString();
+            if ("agendada".equals(status)) {
+                hasActiveConsultas = true;
+                break;
+            }
+        }
+        
+        btnCancelarConsulta.setEnabled(hasActiveConsultas);
+    }
+    
+    private void registrarHistoricoCancelamento(int consultaId, String motivo) {
+        Connection conexao = null;
+        PreparedStatement ps = null;
+        
+        try {
+            conexao = ConnectionFactory.getConnection();
+            
+            // Inserir no histórico de cancelamentos (se tiver uma tabela específica)
+            // Ou apenas atualizar a consulta com data de cancelamento
+            String sql = "INSERT INTO historico_cancelamentos (Id_Agenda, Data_Cancelamento, Motivo, Usuario) " +
+                        "VALUES (?, NOW(), ?, 'Secretaria')";
+            
+            ps = conexao.prepareStatement(sql);
+            ps.setInt(1, consultaId);
+            ps.setString(2, motivo);
+            ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.err.println("Erro ao registrar histórico: " + e.getMessage());
+            // Não mostrar erro para o usuário, pois o cancelamento já foi feito
+        } finally {
+            try {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException e) {
@@ -254,15 +524,11 @@ public class TelaSecretariaCancelar extends JFrame {
             // Fechar a tela atual
             dispose();
             
-          
-           
             TelaSecretariaCadastrarPaciente telaSecretariaCadastrar = new TelaSecretariaCadastrarPaciente();
-			telaSecretariaCadastrar.setLocationRelativeTo(null);
-			telaSecretariaCadastrar.setVisible(true);
-			 dispose();
+            telaSecretariaCadastrar.setLocationRelativeTo(null);
+            telaSecretariaCadastrar.setVisible(true);
             
             JOptionPane.showMessageDialog(this,
-                "Funcionalidade de cadastro será implementada aqui.\n" +
                 "CPF para cadastro: " + formatarCPF(cpf),
                 "Cadastro de Paciente",
                 JOptionPane.INFORMATION_MESSAGE);
@@ -285,178 +551,18 @@ public class TelaSecretariaCancelar extends JFrame {
         return cpf;
     }
     
-    private void verificarConsultasAgendadas(int idPaciente) {
-        Connection conexao = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        
-        try {
-            conexao = ConnectionFactory.getConnection();
-            
-            
-            String sql = "SELECT COUNT(*) as total_consultas " +
-                        "FROM agenda " +
-                        "WHERE Id_Paciente = ? AND Data_Consulta >= CURDATE() " +
-                        "AND Status = 'agendada'";
-            
-            ps = conexao.prepareStatement(sql);
-            ps.setInt(1, idPaciente);
-            rs = ps.executeQuery();
-            
-            if (rs.next()) {
-                int totalConsultas = rs.getInt("total_consultas");
-                if (totalConsultas > 0) {
-                    lblNomeEncontrado.setText("Paciente encontrado - " + totalConsultas + 
-                                             " consulta(s) agendada(s)");
-                } else {
-                    lblNomeEncontrado.setText("Paciente encontrado - Nenhuma consulta agendada");
-                    lblNomeEncontrado.setForeground(Color.ORANGE);
-                }
-            }
-            
-        } catch (SQLException e) {
-            
-            System.err.println("Erro ao verificar consultas: " + e.getMessage());
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (conexao != null) conexao.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
     private void limparCampos() {
         FieldCpf.setText("");
         FieldNomePaciente.setText("");
         lblNomeEncontrado.setText("");
+        limparTabelaConsultas();
+        pacienteId = -1;
+        btnCancelarConsulta.setEnabled(false);
         FieldCpf.requestFocus();
     }
     
-    private void validarEProximo() {
-      
-        StringBuilder erros = new StringBuilder();
-        
-        String cpf = FieldCpf.getText().trim();
-        if (cpf.isEmpty()) {
-            erros.append("• CPF do paciente é obrigatório\n");
-        } else {
-            // Validar formato do CPF
-            cpf = cpf.replaceAll("[^0-9]", "");
-            if (cpf.length() != 11) {
-                erros.append("• CPF deve conter 11 dígitos\n");
-            }
-        }
-        
-        String nomePaciente = FieldNomePaciente.getText().trim();
-        if (nomePaciente.isEmpty()) {
-            erros.append("• Paciente não encontrado. Verifique o CPF\n");
-        }
-        
-       
-        if (erros.length() > 0) {
-            JOptionPane.showMessageDialog(this,
-                "Por favor, corrija os seguintes erros:\n\n" + erros.toString(),
-                "Validação",
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        // Verificar se o paciente tem consultas para cancelar
-        String cpfFormatado = FieldCpf.getText().replaceAll("[^0-9]", "");
-        if (!verificarSeTemConsultas(cpfFormatado)) {
-            int resposta = JOptionPane.showConfirmDialog(this,
-                "Este paciente não possui consultas agendadas.\n" +
-                "Deseja prosseguir mesmo assim?",
-                "Sem Consultas Agendadas",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-            
-            if (resposta != JOptionPane.YES_OPTION) {
-                return;
-            }
-        }
-        
-        
-        passarParaHistorico(cpfFormatado);
-    }
-    
-    private boolean verificarSeTemConsultas(String cpf) {
-        Connection conexao = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        
-        try {
-            conexao = ConnectionFactory.getConnection();
-            
-            
-            String sqlBuscarId = "SELECT Id_Paciente FROM paciente WHERE CPF = ?";
-            ps = conexao.prepareStatement(sqlBuscarId);
-            ps.setString(1, cpf);
-            rs = ps.executeQuery();
-            
-            if (rs.next()) {
-                int idPaciente = rs.getInt("Id_Paciente");
-                
-               
-                rs.close();
-                ps.close();
-                
-                
-                String sqlConsultas = "SELECT COUNT(*) as total " +
-                                    "FROM agenda " +
-                                    "WHERE Id_Paciente = ? AND Status = 'agendada' " +
-                                    "AND Data_Consulta >= CURDATE()";
-                
-                ps = conexao.prepareStatement(sqlConsultas);
-                ps.setInt(1, idPaciente);
-                rs = ps.executeQuery();
-                
-                if (rs.next()) {
-                    return rs.getInt("total") > 0;
-                }
-            }
-            
-        } catch (SQLException e) {
-            System.err.println("Erro ao verificar consultas: " + e.getMessage());
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (conexao != null) conexao.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        return false;
-    }
-    
-    private void passarParaHistorico(String cpf) {
-        try {
-            
-        	TelaHistoricoAgendamentos telaHistoricoAgendamentos = new TelaHistoricoAgendamentos();
-			telaHistoricoAgendamentos.setLocationRelativeTo(this);
-			telaHistoricoAgendamentos.setVisible(true);
-           
-			JOptionPane.showMessageDialog(this,
-                "Funcionalidade 'Próximo' - Abriria a tela de consultas agendadas\n" +
-                "para o CPF: " + formatarCPF(cpf),
-                "Próximo Passo",
-                JOptionPane.INFORMATION_MESSAGE);
-            
-          
-            dispose();
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                "Erro ao abrir histórico de agendamentos: " + e.getMessage(),
-                "Erro",
-                JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
+    private void limparTabelaConsultas() {
+        tableModel.setRowCount(0);
     }
     
     private void voltarParaTelaPrincipal() {

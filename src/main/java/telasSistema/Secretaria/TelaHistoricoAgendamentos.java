@@ -10,8 +10,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,35 +29,36 @@ public class TelaHistoricoAgendamentos extends JFrame {
     private JButton btnLimparBusca;
 
     public TelaHistoricoAgendamentos() {
-        setBounds(100, 100, 742, 500); // Aumentei a altura para acomodar os novos componentes
+        setTitle("Histórico de Consultas");
+        setBounds(100, 100, 800, 550);
         getContentPane().setBackground(new Color(170, 255, 255));
         getContentPane().setLayout(null);
 
         JPanel panel = new JPanel();
         panel.setBackground(new Color(204, 253, 255));
-        panel.setBounds(0, 1, 729, 463); // Aumentei a altura do painel principal
+        panel.setBounds(0, 1, 786, 513);
         getContentPane().add(panel);
         panel.setLayout(null);
 
         JLabel lblTitulo = new JLabel("Histórico de Consultas");
         lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        lblTitulo.setBounds(215, 20, 350, 54); // Ajustei a posição Y
+        lblTitulo.setBounds(250, 20, 350, 54);
         panel.add(lblTitulo);
 
         // Adicionando campo de busca por CPF
         JLabel lblBuscaCPF = new JLabel("Buscar por CPF:");
         lblBuscaCPF.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        lblBuscaCPF.setBounds(81, 85, 100, 20);
+        lblBuscaCPF.setBounds(100, 85, 100, 20);
         panel.add(lblBuscaCPF);
 
         txtCPFBusca = new JTextField();
-        txtCPFBusca.setBounds(160, 85, 180, 25);
+        txtCPFBusca.setBounds(180, 85, 200, 25);
         txtCPFBusca.setColumns(10);
         panel.add(txtCPFBusca);
 
         btnBuscarCPF = new JButton("Buscar");
         btnBuscarCPF.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        btnBuscarCPF.setBounds(350, 85, 80, 25);
+        btnBuscarCPF.setBounds(390, 85, 80, 25);
         btnBuscarCPF.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 buscarConsultasPorCPF();
@@ -69,7 +68,7 @@ public class TelaHistoricoAgendamentos extends JFrame {
 
         btnLimparBusca = new JButton("Limpar");
         btnLimparBusca.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        btnLimparBusca.setBounds(440, 85, 80, 25);
+        btnLimparBusca.setBounds(480, 85, 80, 25);
         btnLimparBusca.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 limparBusca();
@@ -80,7 +79,7 @@ public class TelaHistoricoAgendamentos extends JFrame {
         lblStatusBusca = new JLabel("");
         lblStatusBusca.setFont(new Font("Segoe UI", Font.ITALIC, 10));
         lblStatusBusca.setForeground(Color.BLUE);
-        lblStatusBusca.setBounds(160, 110, 400, 20);
+        lblStatusBusca.setBounds(180, 110, 400, 20);
         panel.add(lblStatusBusca);
 
         JButton btnConfirmar = new JButton("Confirmar");
@@ -91,7 +90,7 @@ public class TelaHistoricoAgendamentos extends JFrame {
             dispose();
         });
         btnConfirmar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnConfirmar.setBounds(533, 400, 95, 20); // Ajustei a posição Y
+        btnConfirmar.setBounds(600, 450, 95, 25);
         panel.add(btnConfirmar);
 
         JButton btnVoltar = new JButton("Voltar");
@@ -102,51 +101,53 @@ public class TelaHistoricoAgendamentos extends JFrame {
             dispose();
         });
         btnVoltar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnVoltar.setBounds(98, 400, 84, 20); // Ajustei a posição Y
+        btnVoltar.setBounds(100, 450, 84, 25);
         panel.add(btnVoltar);
 
         // Painel 1
         JPanel panel1 = new JPanel();
-        panel1.setBounds(81, 140, 572, 54); // Ajustei a posição Y
+        panel1.setBounds(100, 140, 600, 60);
         panel.add(panel1);
         panel1.setLayout(null);
 
         lblConsulta1 = new JLabel();
-        lblConsulta1.setBounds(10, 10, 550, 34);
+        lblConsulta1.setBounds(10, 10, 580, 40);
         lblConsulta1.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         panel1.add(lblConsulta1);
 
         // Painel 2
         JPanel panel2 = new JPanel();
         panel2.setLayout(null);
-        panel2.setBounds(81, 210, 572, 54); // Ajustei a posição Y
+        panel2.setBounds(100, 210, 600, 60);
         panel.add(panel2);
 
         lblConsulta2 = new JLabel();
-        lblConsulta2.setBounds(10, 10, 550, 34);
+        lblConsulta2.setBounds(10, 10, 580, 40);
         lblConsulta2.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         panel2.add(lblConsulta2);
 
         // Painel 3
         JPanel panel3 = new JPanel();
         panel3.setLayout(null);
-        panel3.setBounds(81, 280, 572, 54); // Ajustei a posição Y
+        panel3.setBounds(100, 280, 600, 60);
         panel.add(panel3);
 
         lblConsulta3 = new JLabel();
-        lblConsulta3.setBounds(10, 10, 550, 34);
+        lblConsulta3.setBounds(10, 10, 580, 40);
         lblConsulta3.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         panel3.add(lblConsulta3);
 
-        // Adicionar listener para busca automática ao perder foco
-        txtCPFBusca.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (!txtCPFBusca.getText().trim().isEmpty()) {
-                    buscarConsultasPorCPF();
-                }
-            }
-        });
+        // Painel 4 (para mais consultas)
+        JPanel panel4 = new JPanel();
+        panel4.setLayout(null);
+        panel4.setBounds(100, 350, 600, 60);
+        panel.add(panel4);
+
+        JLabel lblMaisConsultas = new JLabel("<html><i>Para ver todas as consultas, busque por um CPF específico</i></html>");
+        lblMaisConsultas.setBounds(10, 10, 580, 40);
+        lblMaisConsultas.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblMaisConsultas.setForeground(Color.GRAY);
+        panel4.add(lblMaisConsultas);
 
         // Carregar histórico geral inicial
         carregarHistorico();
@@ -173,7 +174,7 @@ public class TelaHistoricoAgendamentos extends JFrame {
             
             if (cpfFiltro != null && !cpfFiltro.trim().isEmpty()) {
                 // Buscar paciente pelo CPF primeiro para obter o ID
-                String cpfFormatado = cpfFiltro.replaceAll("[^0-9]", "");
+                String cpfFormatado = formatarCPFNumeros(cpfFiltro);
                 
                 // Verificar se o paciente existe
                 String sqlPaciente = "SELECT Id_Paciente, Nome FROM paciente WHERE CPF = ?";
@@ -189,29 +190,30 @@ public class TelaHistoricoAgendamentos extends JFrame {
                     rs.close();
                     ps.close();
                     
-                    // Agora buscar as consultas deste paciente
+                    // Agora buscar as consultas deste paciente (todas, não apenas 3)
                     sql = "SELECT " +
-                          "p.Nome AS paciente, " +
-                          "u.Nome AS medico, " +
-                          "e.Nome_Especialidade AS especialidade, " +
-                          "c.Data, " +
-                          "c.Hora, " +
-                          "c.Status " +
+                          "p.Nome AS paciente_nome, " +
+                          "u.Nome AS medico_nome, " +
+                          "e.Nome_Especialidade AS especialidade_nome, " +
+                          "c.Data_Consulta AS data_consulta, " +
+                          "c.Horario_Consulta AS horario_consulta, " +
+                          "c.Situacao AS situacao_consulta, " +
+                          "c.Cidade_Consulta AS cidade_consulta " +
                           "FROM consultas c " +
-                          "JOIN paciente p ON c.Id_Paciente = p.Id_Paciente " +
-                          "JOIN medico m ON c.Matricula_Med = m.Matricula " +
-                          "JOIN usuarios u ON m.Id_Usuario = u.Id_Usuario " +
-                          "JOIN especialidades e ON m.Especialidade = e.Id_Especialidade " +
+                          "INNER JOIN paciente p ON c.Fk_Id_Paciente = p.Id_Paciente " +
+                          "INNER JOIN medico m ON c.Fk_Matricula_Medico = m.Matricula " +
+                          "INNER JOIN usuarios u ON m.Id_Usuario = u.Id_Usuario " +
+                          "INNER JOIN especialidades e ON m.Especialidade = e.Id_Especialidade " +
                           "WHERE p.Id_Paciente = ? " +
-                          "ORDER BY c.Data DESC, c.Hora DESC " +
-                          "LIMIT 3";
+                          "ORDER BY c.Data_Consulta DESC, c.Horario_Consulta DESC " +
+                          "LIMIT 10";
                     
                     ps = con.prepareStatement(sql);
                     ps.setInt(1, idPaciente);
                     rs = ps.executeQuery();
                     
                     lblStatusBusca.setText("Mostrando consultas para: " + nomePaciente + " (CPF: " + formatarCPF(cpfFormatado) + ")");
-                    lblStatusBusca.setForeground(new Color(0, 100, 0)); // Verde escuro
+                    lblStatusBusca.setForeground(new Color(0, 100, 0));
                     
                 } else {
                     // Paciente não encontrado
@@ -222,20 +224,22 @@ public class TelaHistoricoAgendamentos extends JFrame {
                     return;
                 }
             } else {
-                // Histórico geral (sem filtro)
+                // Histórico geral (sem filtro) - mostrar apenas últimas consultas
                 sql = "SELECT " +
-                      "p.Nome AS paciente, " +
-                      "u.Nome AS medico, " +
-                      "e.Nome_Especialidade AS especialidade, " +
-                      "c.Data, " +
-                      "c.Hora, " +
-                      "c.Status " +
+                      "p.Nome AS paciente_nome, " +
+                      "u.Nome AS medico_nome, " +
+                      "e.Nome_Especialidade AS especialidade_nome, " +
+                      "c.Data_Consulta AS data_consulta, " +
+                      "c.Horario_Consulta AS horario_consulta, " +
+                      "c.Situacao AS situacao_consulta, " +
+                      "c.Cidade_Consulta AS cidade_consulta, " +
+                      "p.CPF AS paciente_cpf " +
                       "FROM consultas c " +
-                      "JOIN paciente p ON c.Id_Paciente = p.Id_Paciente " +
-                      "JOIN medico m ON c.Matricula_Med = m.Matricula " +
-                      "JOIN usuarios u ON m.Id_Usuario = u.Id_Usuario " +
-                      "JOIN especialidades e ON m.Especialidade = e.Id_Especialidade " +
-                      "ORDER BY c.Data DESC, c.Hora DESC " +
+                      "INNER JOIN paciente p ON c.Fk_Id_Paciente = p.Id_Paciente " +
+                      "INNER JOIN medico m ON c.Fk_Matricula_Medico = m.Matricula " +
+                      "INNER JOIN usuarios u ON m.Id_Usuario = u.Id_Usuario " +
+                      "INNER JOIN especialidades e ON m.Especialidade = e.Id_Especialidade " +
+                      "ORDER BY c.Data_Consulta DESC, c.Horario_Consulta DESC " +
                       "LIMIT 3";
                 
                 ps = con.prepareStatement(sql);
@@ -249,35 +253,71 @@ public class TelaHistoricoAgendamentos extends JFrame {
             int i = 0;
             
             while (rs.next() && i < labels.length) {
-                String status = rs.getString("Status");
-                Color corStatus = Color.BLACK;
+                String situacao = rs.getString("situacao_consulta");
+                Color corSituacao = Color.BLACK;
                 
-                // Definir cor baseada no status
-                if ("agendada".equalsIgnoreCase(status)) {
-                    corStatus = new Color(0, 100, 0); // Verde
-                } else if ("cancelada".equalsIgnoreCase(status)) {
-                    corStatus = Color.RED;
-                } else if ("realizada".equalsIgnoreCase(status)) {
-                    corStatus = Color.BLUE;
+                // Definir cor baseada na situação
+                if (situacao != null) {
+                    String situacaoLower = situacao.toLowerCase();
+                    if (situacaoLower.contains("agenda") || situacaoLower.contains("marcada")) {
+                        corSituacao = new Color(0, 100, 0); // Verde escuro
+                    } else if (situacaoLower.contains("cancela") || situacaoLower.contains("cancelada")) {
+                        corSituacao = Color.RED;
+                    } else if (situacaoLower.contains("realiza") || situacaoLower.contains("concluída") || 
+                               situacaoLower.contains("finalizada")) {
+                        corSituacao = Color.BLUE;
+                    } else if (situacaoLower.contains("pendente") || situacaoLower.contains("aguardando")) {
+                        corSituacao = Color.ORANGE;
+                    }
                 }
                 
-                labels[i].setText(
+                String pacienteNome = rs.getString("paciente_nome");
+                String medicoNome = rs.getString("medico_nome");
+                String especialidade = rs.getString("especialidade_nome");
+                String dataConsulta = rs.getDate("data_consulta") != null ? 
+                    rs.getDate("data_consulta").toString() : "N/A";
+                
+                String horario = "N/A";
+                if (rs.getTime("horario_consulta") != null) {
+                    String horaCompleta = rs.getTime("horario_consulta").toString();
+                    horario = horaCompleta.length() >= 5 ? horaCompleta.substring(0, 5) : horaCompleta;
+                }
+                
+                String cidade = rs.getString("cidade_consulta");
+                if (cidade == null || cidade.trim().isEmpty()) {
+                    cidade = "Não informada";
+                }
+                
+                String textoConsulta = String.format(
                     "<html>" +
-                    "<b>Paciente:</b> " + rs.getString("paciente") +
-                    " | <b>Especialidade:</b> " + rs.getString("especialidade") +
-                    " | <b>Médico:</b> " + rs.getString("medico") +
-                    " | <b>Data:</b> " + rs.getDate("Data") +
-                    " | <b>Hora:</b> " + rs.getTime("Hora") +
-                    " | <b>Status:</b> <font color='" + getColorHex(corStatus) + "'>" + status + "</font>" +
-                    "</html>"
+                    "<b>Paciente:</b> %s" +
+                    " | <b>Especialidade:</b> %s" +
+                    " | <b>Médico:</b> %s" +
+                    "<br/><b>Data:</b> %s" +
+                    " | <b>Hora:</b> %s" +
+                    " | <b>Cidade:</b> %s" +
+                    " | <b>Situação:</b> <font color='%s'>%s</font>" +
+                    "</html>",
+                    pacienteNome,
+                    especialidade,
+                    medicoNome,
+                    dataConsulta,
+                    horario,
+                    cidade,
+                    getColorHex(corSituacao),
+                    (situacao != null ? situacao : "Não informada")
                 );
                 
+                labels[i].setText(textoConsulta);
                 labels[i].setForeground(Color.BLACK);
                 i++;
             }
 
-            if (i == 0) {
-                lblConsulta1.setText("Nenhuma consulta encontrada.");
+            if (i == 0 && cpfFiltro != null) {
+                lblConsulta1.setText("Nenhuma consulta encontrada para este CPF.");
+                lblConsulta1.setForeground(Color.GRAY);
+            } else if (i == 0) {
+                lblConsulta1.setText("Nenhuma consulta encontrada no sistema.");
                 lblConsulta1.setForeground(Color.GRAY);
             }
 
@@ -313,13 +353,23 @@ public class TelaHistoricoAgendamentos extends JFrame {
         }
         
         // Formatar CPF (remover caracteres não numéricos)
-        String cpfFormatado = cpf.replaceAll("[^0-9]", "");
+        String cpfFormatado = formatarCPFNumeros(cpf);
         
         // Validar formato do CPF
         if (cpfFormatado.length() != 11) {
             JOptionPane.showMessageDialog(this,
                 "CPF inválido! Deve conter 11 dígitos.\n" +
                 "Exemplo: 123.456.789-01",
+                "CPF Inválido",
+                JOptionPane.WARNING_MESSAGE);
+            txtCPFBusca.requestFocus();
+            return;
+        }
+        
+        // Validar se todos os dígitos são iguais (CPF inválido)
+        if (cpfFormatado.matches("(\\d)\\1{10}")) {
+            JOptionPane.showMessageDialog(this,
+                "CPF inválido!",
                 "CPF Inválido",
                 JOptionPane.WARNING_MESSAGE);
             txtCPFBusca.requestFocus();
@@ -336,6 +386,9 @@ public class TelaHistoricoAgendamentos extends JFrame {
         // Reabilitar botão
         btnBuscarCPF.setEnabled(true);
         btnBuscarCPF.setText("Buscar");
+        
+        // Formatar visualmente o CPF no campo
+        txtCPFBusca.setText(formatarCPF(cpfFormatado));
     }
 
     private void limparBusca() {
@@ -353,6 +406,10 @@ public class TelaHistoricoAgendamentos extends JFrame {
                    cpf.substring(9, 11);
         }
         return cpf;
+    }
+    
+    private String formatarCPFNumeros(String cpf) {
+        return cpf.replaceAll("[^0-9]", "");
     }
 
     private String getColorHex(Color color) {
